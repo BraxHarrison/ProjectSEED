@@ -6,6 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+//Test
 public class BattleLogicTests {
 
     private DamageCalculator damageCalc;
