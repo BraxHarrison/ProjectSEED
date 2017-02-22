@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-//Test numero dos
+
 public class BattleLogicTests {
 
     private DamageCalculator damageCalc;
@@ -18,7 +18,7 @@ public class BattleLogicTests {
 
     @Test
     public void TestDamageCalcGeneral(){
-        Assert.assertEquals(2,damageCalc.calculateDamage());
+        Assert.assertEquals(2.0,damageCalc.calculateByStats(),0.0f);
     }
 
     @Test

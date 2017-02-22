@@ -8,10 +8,10 @@ public class DamageCalculator {
     }
 
     private float calculateElementalAffinity(){
-        //if attacker.selectedMove.element == attacker.element;
+        //if attacker.selectedMove.element == character.element;
         //      return 2.0;
         //else return 1;
-        return 2;
+        return 2.0f;
     }
 
     private float calculateElementalWeakness(){
@@ -20,7 +20,7 @@ public class DamageCalculator {
         //else if attack.selectedMove.element == defender.element.resistances
         //      return .5;
         //return;
-        return 2;
+        return 2.0f;
     }
 
     private float calculateByStats(){
@@ -32,11 +32,11 @@ public class DamageCalculator {
         //      defensePercent = defender.enDefense/100
         //      return attacker.enAttack*defensePercent ??
 
-        return 2;
+        return 2.0f;
     }
 
     private float calculateArmor(){
-        return 2;
+        return 2.0f;
 
     }
 
