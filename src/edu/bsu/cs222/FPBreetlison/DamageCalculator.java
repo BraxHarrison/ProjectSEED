@@ -29,6 +29,7 @@ public class DamageCalculator {
         //if attacker.selectedMove.type = "PhyAtk"
         //      defensePercent = defender.defense/100
         //      return attacker.attack*defensePercent ??
+        //Figuring this out--------------------------------------
         // else if attacker.selectedMove.type = "EnAtk"
         //      defensePercent = defender.enDefense/100
         //      return attacker.enAttack*defensePercent ??
