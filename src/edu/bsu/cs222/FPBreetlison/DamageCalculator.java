@@ -23,7 +23,7 @@ public class DamageCalculator {
         return 2.0f;
     }
 
-    private float calculateByStats(){
+    public float calculateByStats(){
         //float defensePercent = 0.0;
         //if attacker.selectedMove.type = "PhyAtk"
         //      defensePercent = defender.defense/100
