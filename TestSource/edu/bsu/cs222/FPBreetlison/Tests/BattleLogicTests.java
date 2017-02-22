@@ -23,7 +23,7 @@ public class BattleLogicTests {
 
     @Test
     public void TestAffinityGeneral(){
-
+        Assert.assertEquals(2, damageCalc.calculateDamage());
     }
 
 }
