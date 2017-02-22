@@ -8,7 +8,7 @@ public class DamageCalculator {
     }
 
     private float calculateElementalAffinity(){
-        //if attacker.selectedMove.element == attacker.element;
+        //if attacker.selectedMove.element == character.element;
         //      return 2.0;
         //else return 1;
         return 2.0f;
@@ -20,17 +20,17 @@ public class DamageCalculator {
         //else if attack.selectedMove.element == defender.element.resistances
         //      return .5;
         //return;
-        return 1.0f;
+        return 2.0f;
     }
 
     public float calculateByStats(){
         //float defensePercent = 0.0;
         //Defense
         //if attacker.selectedMove.type = "PhyAtk"
-              //float defensePercent = 40.0f/300.0f; (THIS WORKS)
-              //System.out.print(50.0f*defensePercent);
+        //      defensePercent = defender.defense/100
+        //      return attacker.attack*defensePercent ??
         // else if attacker.selectedMove.type = "EnAtk"
-        //      defensePercent = defender.enDefense/300
+        //      defensePercent = defender.enDefense/100
         //      return attacker.enAttack*defensePercent ??
 
         return 2.0f;
