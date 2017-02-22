@@ -25,6 +25,7 @@ public class DamageCalculator {
 
     public float calculateByStats(){
         //float defensePercent = 0.0;
+        //Defense
         //if attacker.selectedMove.type = "PhyAtk"
               //float defensePercent = 40.0f/300.0f; (THIS WORKS)
               //System.out.print(50.0f*defensePercent);
