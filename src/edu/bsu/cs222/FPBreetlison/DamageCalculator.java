@@ -2,6 +2,7 @@ package edu.bsu.cs222.FPBreetlison;
 
 public class DamageCalculator {
 
+    //This class needs to die. Its contents can be moved to Battler.
 
     public int calculateDamage(){
         return 2;

@@ -6,7 +6,7 @@ public class GameData {
 
     public static GameData gameData;
 
-    private ArrayList<Character> team;
+    private ArrayList<Battler> team;
 
     public static GameData getData(){
         if(gameData == null){
@@ -21,17 +21,17 @@ public class GameData {
     }
 
     public void init(){
-        team = new ArrayList<Character>();
-        team.add(new Character("Eve",2,2,2,2,2));
-        team.add(new Character("Quinn",2,2,2,2,2));
+        team = new ArrayList<Battler>();
+        team.add(new Battler("Eve",2,2,2,2,2));
+        team.add(new Battler("Quinn",2,2,2,2,2));
         System.out.print("Initializing...");
     }
 
-    public ArrayList<Character> getTeam() {
+    public ArrayList<Battler> getTeam() {
         return team;
     }
 
-    public void setTeam(ArrayList<Character> team) {
+    public void setTeam(ArrayList<Battler> team) {
         this.team = team;
     }
 

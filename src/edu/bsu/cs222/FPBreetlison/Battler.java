@@ -1,6 +1,6 @@
 package edu.bsu.cs222.FPBreetlison;
 
-public class Character {
+public class Battler {
 
     private String Name;
     private int Attack;
@@ -9,7 +9,7 @@ public class Character {
     private int EnDefense;
     private int Agility;
 
-    public Character(String name, int attack, int defense, int enAttack, int enDefense, int agility){
+    public Battler(String name, int attack, int defense, int enAttack, int enDefense, int agility){
         Name = name;
         Attack = attack;
         Defense = defense;

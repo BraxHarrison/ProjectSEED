@@ -1,6 +1,6 @@
 package GUI;
 
-import edu.bsu.cs222.FPBreetlison.Character;
+import edu.bsu.cs222.FPBreetlison.Battler;
 import edu.bsu.cs222.FPBreetlison.GameController;
 import edu.bsu.cs222.FPBreetlison.GameData;
 import javafx.collections.ObservableList;
@@ -11,7 +11,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class OverworldController {
@@ -50,7 +49,7 @@ public class OverworldController {
         pushMessage("Two enemy Jags appear!");
     }
     private void setCharacterButtons() {
-        ArrayList<Character> team = gameData.getTeam();
+        ArrayList<Battler> team = gameData.getTeam();
         ObservableList<Node> buttons = characterMenu.getChildren();
         hideAllButtons(buttons);
         for(int i = 0; i < team.size();i++){
