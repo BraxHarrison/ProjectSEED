@@ -18,7 +18,7 @@ public class BattleLogicTests {
 
     @Test
     public void TestDamageCalcGeneral(){
-        Assert.assertEquals(2.0,damageCalc.calculateByStats(),0.0f);
+        Assert.assertEquals(6.6666669845581055,damageCalc.calculateByStats(),0.0f);
     }
 
     @Test

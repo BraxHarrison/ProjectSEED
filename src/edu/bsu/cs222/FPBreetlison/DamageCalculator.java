@@ -27,14 +27,14 @@ public class DamageCalculator {
         //float defensePercent = 0.0;
         //Defense
         //if attacker.selectedMove.type = "PhyAtk"
-        //      defensePercent = defender.defense/100
-        //      return attacker.attack*defensePercent ??
+        float defensePercent = 40.0f/300.0f;
+        System.out.print(50.0f*defensePercent);
+        return 50.0f*defensePercent;
         //Figuring this out--------------------------------------
         // else if attacker.selectedMove.type = "EnAtk"
         //      defensePercent = defender.enDefense/100
         //      return attacker.enAttack*defensePercent ??
 
-        return 2.0f;
     }
 
     private float calculateArmor(){

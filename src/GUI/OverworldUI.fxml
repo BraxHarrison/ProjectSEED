@@ -1,0 +1,29 @@
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.GridPane?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.HBox?>
+<GridPane fx:controller="GUI.OverworldController" xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="1" vgap="1">
+    <ScrollPane GridPane.rowIndex="20" prefHeight="250" prefWidth="400" >
+        <Label fx:id="mainDisplay" wrapText="true" text="The Battle Begins!"/>
+    </ScrollPane>
+    <HBox fx:id="characterMenu" prefWidth="400" GridPane.rowIndex="50" spacing="10">
+        <Button fx:id="character1" visible="false" onAction="#selectCharacter1"/>
+        <Button fx:id="character2" visible="false" onAction="#selectCharacter2"/>
+        <Button fx:id="character3" visible="false" onAction="#selectCharacter3"/>
+        <Button fx:id="character4" visible="false" onAction="#selectCharacter4"/>
+    </HBox>
+    <ScrollPane fx:id="objectsMenu" prefHeight="100" prefWidth="400" GridPane.rowIndex="30">
+
+    </ScrollPane>
+    <HBox fx:id="actionMenu" prefWidth="400" GridPane.rowIndex="150">
+        <Button fx:id="attack" visible="false" text="Attack" onAction="#selectAttack"/>
+        <Button fx:id="skills" visible="false" text="Skills" onAction="#selectSkill"/>
+        <Button fx:id="items" visible="false" text="Items" onAction="#selectItems"/>
+        <Button fx:id="flee" visible="false" text="Flee" onAction="#selectFlee"/>
+    </HBox>
+
+
+</GridPane>
