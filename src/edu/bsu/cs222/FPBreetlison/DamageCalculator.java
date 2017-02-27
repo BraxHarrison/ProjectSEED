@@ -2,9 +2,8 @@ package edu.bsu.cs222.FPBreetlison;
 
 public class DamageCalculator {
 
-    //This class needs to die. Its contents can be moved to Battler.
-
-    public int calculateDamage(){
+    public int calculateDamage(Battler target, Battler attacker){
+        //return (int)calculateByStats(target,attacker);
         return 2;
     }
 
@@ -24,13 +23,12 @@ public class DamageCalculator {
         return 2.0f;
     }
 
-    public float calculateByStats(){
+    public float calculateByStats(Battler target, Battler attacker){
         //float defensePercent = 0.0;
         //Defense
         //if attacker.selectedMove.type = "PhyAtk"
-        float defensePercent = 40.0f/300.0f;
-        System.out.print(50.0f*defensePercent);
-        return 50.0f*defensePercent;
+        float defensePercent = target.getDefense()/300.0f;
+        return attacker.getAttack()*defensePercent;
         //Figuring this out--------------------------------------
         // else if attacker.selectedMove.type = "EnAtk"
         //      defensePercent = defender.enDefense/100
