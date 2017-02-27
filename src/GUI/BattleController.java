@@ -51,6 +51,7 @@ public class BattleController {
     public Label mainDisplay;
     //endregion
     //region Utility Functions
+    //Generic functions that are useful in many cases
     private void delayFunction(long time){
         try {
             TimeUnit.MILLISECONDS.sleep(time);
@@ -120,14 +121,6 @@ public class BattleController {
     }
 
     //endregion
-
-    private void showActionMenu() {
-        actionMenu.setVisible(true);
-        characterMenu.setVisible(false);
-        pushMessage("What will " + gameData.getTeam().get(selectedCharacter).getName() + " do?" );
-
-    }
-
     //region Button Logic
     public void selectCharacter1(ActionEvent actionEvent) {
         selectedCharacter=0;
@@ -212,6 +205,12 @@ public class BattleController {
             Button button = (Button)buttons.get(i);
             button.setVisible(false);
         }
+    }
+    private void showActionMenu() {
+        actionMenu.setVisible(true);
+        characterMenu.setVisible(false);
+        pushMessage("What will " + gameData.getTeam().get(selectedCharacter).getName() + " do?" );
+
     }
 
     //endregion
