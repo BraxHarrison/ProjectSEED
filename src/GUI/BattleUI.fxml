@@ -7,28 +7,31 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <GridPane fx:controller="GUI.BattleController" xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="1" vgap="1">
-    <Button fx:id="continueButton" GridPane.rowIndex="10" text="Continue" onAction="#advanceText"/>
-    <ScrollPane fx:id="mainScroller" GridPane.rowIndex="20" prefHeight="250" prefWidth="400" >
-        <Label fx:id="mainDisplay" wrapText="true" text="The Battle Begins!" GridPane.rowIndex="20"/>
+<VBox spacing="20" >
+    <Label fx:id="mainDisplay" wrapText="true"   maxHeight="10"  style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"/>
+
+    <ScrollPane fx:id="historyScroller"  prefHeight="100" prefWidth="400" >
+        <Label fx:id="historyDisplay" wrapText="true"/>
     </ScrollPane>
-    <HBox fx:id="characterMenu" prefWidth="400" GridPane.rowIndex="50" spacing="10">
+
+
+    <ScrollPane fx:id="selectorMenu" prefHeight="100" prefWidth="400"  vvalue="1">
+        <HBox fx:id="selectorArea" spacing="30"/>
+    </ScrollPane>
+    <HBox fx:id="characterMenu" prefWidth="400"  spacing="10">
         <Button fx:id="character1" visible="false" onAction="#selectCharacter1"/>
         <Button fx:id="character2" visible="false" onAction="#selectCharacter2"/>
         <Button fx:id="character3" visible="false" onAction="#selectCharacter3"/>
         <Button fx:id="character4" visible="false" onAction="#selectCharacter4"/>
     </HBox>
-    <ScrollPane fx:id="selectorMenu" prefHeight="100" prefWidth="400" GridPane.rowIndex="30" vvalue="1">
-        <HBox fx:id="selectorArea" spacing="30"/>
-    </ScrollPane>
-    <HBox fx:id="actionMenu" prefWidth="400" visible="false" GridPane.rowIndex="50" spacing="10">
+    <HBox fx:id="actionMenu" prefWidth="400" visible="false"  spacing="10">
         <Button fx:id="attack" text="Attack" onAction="#selectAttack"/>
         <Button fx:id="skills" text="Skills" onAction="#selectSkill"/>
         <Button fx:id="items" text="Items" onAction="#selectItems"/>
         <Button fx:id="flee" text="Flee" onAction="#selectFlee"/>
-        <Button fx:id="back" text="Back" onAction="#backToCharacterSelect"/>
     </HBox>
-    <HBox fx:id="allCharacterVitals" prefWidth="500" GridPane.rowIndex="60" spacing="50"/>
-    <HBox fx:id="allEnemyVitals" prefWidth="500" spacing="50"/>
+    <HBox fx:id="allCharacterVitals" prefWidth="500" GridPane.rowIndex="1" spacing="50"/>
+    <HBox fx:id="allEnemyVitals"     prefWidth="500"  GridPane.rowIndex="2" spacing="50" />
 
-
+</VBox>
 </GridPane>

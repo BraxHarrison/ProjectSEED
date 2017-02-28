@@ -2,7 +2,7 @@ package edu.bsu.cs222.FPBreetlison;
 
 import java.util.ArrayList;
 
-public class Battler {
+public class Fighter {
 
     private String Name;
     private int HP;
@@ -15,7 +15,7 @@ public class Battler {
 
     private ArrayList<Skill> Skills;
 
-    public Battler(String name,int hp, int attack, int defense, int enAttack, int enDefense, int agility){
+    public Fighter(String name, int hp, int attack, int defense, int enAttack, int enDefense, int agility){
 
         Skills = new ArrayList<Skill>();
 
@@ -29,29 +29,26 @@ public class Battler {
         Agility = agility;
     }
 
-    public String getName() {
-        return Name;
-    }
-    public void setName(String name) {
-        Name = name;
-    }
-    public void doBasicAttack(Battler target){
-       DamageCalculator damageCalculator = new DamageCalculator();
-       target.takeDamage(damageCalculator.calculateDamage(this, target));
 
+    public void doBasicAttack(Fighter target){
+       DamageCalculator damageCalculator = new DamageCalculator(this, target);
+       target.takeDamage(damageCalculator.calculateDamage());
     }
+
     public void takeDamage(int damage){
         HP-=damage;
         if(HP < 0){
             HP = 0;
         }
     }
+
     public void recoverHealth(int heal){
         HP+=heal;
         if(HP > MaxHP){
             HP = MaxHP;
         }
     }
+
     public void sufferEffect(){
 
     }
@@ -66,6 +63,13 @@ public class Battler {
     }
 
     //region Setters and Getters
+
+    public String getName() {
+        return Name;
+    }
+    public void setName(String name) {
+        Name = name;
+    }
     public void setHP(int hp) {
         HP = hp;
     }

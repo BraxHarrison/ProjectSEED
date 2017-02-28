@@ -6,9 +6,9 @@ public class GameData {
 
     public static GameData gameData;
 
-    private ArrayList<Battler> team;
-    private ArrayList<Battler> enemyTeam;
-    private Battler target;
+    private ArrayList<Fighter> team;
+    private ArrayList<Fighter> enemyTeam;
+    private Fighter target;
 
     public static GameData getData(){
         if(gameData == null){
@@ -23,40 +23,40 @@ public class GameData {
     }
 
     private void init(){
-        team = new ArrayList<Battler>();
-        enemyTeam = new ArrayList<Battler>();
+        team = new ArrayList<Fighter>();
+        enemyTeam = new ArrayList<Fighter>();
         addHeroes();
         addEnemies();
         System.out.print("Initializing...");
     }
 
     private void addHeroes(){
-        team.add(new Battler("Eve",20,2,2,2,2,2));
-        team.add(new Battler("Quinn", 30, 2,2,2,2,2));
-        team.add(new Battler("Jones", 35, 2,2,2,2,2));
+        team.add(new Fighter("Eve",20,3,2,2,2,2));
+        team.add(new Fighter("Quinn", 30, 4,2,2,2,2));
+        team.add(new Fighter("Jones", 35, 5,2,22,2,2));
     }
 
     private void addEnemies(){
-        enemyTeam.add(new Battler("Jag", 30,2,2,2,2,2));
-        enemyTeam.add(new Battler("Jag", 30,2,2,2,2,2));
+        enemyTeam.add(new Fighter("Jag", 30,4,3,3,3,3));
+        enemyTeam.add(new Fighter("Jag", 30,2,2,2,2,2));
     }
 
-    public ArrayList<Battler> getTeam() {
+    public ArrayList<Fighter> getTeam() {
         return team;
     }
-    public void setTeam(ArrayList<Battler> team) {
+    public void setTeam(ArrayList<Fighter> team) {
         this.team = team;
     }
-    public ArrayList<Battler> getEnemyTeam() {
+    public ArrayList<Fighter> getEnemyTeam() {
         return enemyTeam;
     }
-    public void setEnemyTeam(ArrayList<Battler> enemyTeam) {
+    public void setEnemyTeam(ArrayList<Fighter> enemyTeam) {
         this.enemyTeam = enemyTeam;
     }
-    public Battler getTarget() {
+    public Fighter getTarget() {
         return target;
     }
-    public void setTarget(Battler target) {
+    public void setTarget(Fighter target) {
         this.target = target;
     }
 }
