@@ -1,10 +1,7 @@
 package GUI;
 
 import edu.bsu.cs222.FPBreetlison.Fighter;
-import edu.bsu.cs222.FPBreetlison.GameController;
 import edu.bsu.cs222.FPBreetlison.GameData;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -94,7 +91,7 @@ public class BattleController {
         ArrayList<Fighter> team = gameData.getTeam();
         for(int i = 0; i < team.size();i++){
             Label name = new Label(team.get(i).getName());
-            Label hp = new Label("HP: "+team.get(i).getHP());
+            Label hp = new Label("HP: "+team.get(i).getHp());
 
             VBox characterVitals = new VBox();
             characterVitals.getChildren().add(name);
@@ -106,7 +103,7 @@ public class BattleController {
         ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i < enemyTeam.size();i++){
             Label name = new Label(enemyTeam.get(i).getName());
-            Label hp = new Label("HP: "+ enemyTeam.get(i).getHP());
+            Label hp = new Label("HP: "+ enemyTeam.get(i).getHp());
 
             VBox enemyVitals = new VBox();
             enemyVitals.getChildren().add(name);
@@ -173,7 +170,7 @@ public class BattleController {
         for(int i = 0; i<allEnemyVitals.getChildren().size();i++){
             VBox enemyVital = (VBox) allEnemyVitals.getChildren().get(i);
             Label enemyHP = (Label)enemyVital.getChildren().get(1);
-            enemyHP.setText("HP: " + enemyTeam.get(i).getHP());
+            enemyHP.setText("HP: " + enemyTeam.get(i).getHp());
         }
     }
     private void updateTP(){
