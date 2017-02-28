@@ -8,7 +8,7 @@ public class Skill {
     public Skill(String skillType){
         SkillType = skillType;
     }
-    public void activate(Battler target){
+    public void activate(Fighter target){
         if(SkillType.equals("buff")){
             triggerBuff(target);
         }
@@ -23,16 +23,16 @@ public class Skill {
         }
     }
 
-    private void triggerStatus(Battler target) {
+    private void triggerStatus(Fighter target) {
 
     }
 
-    private void triggerAttack(Battler target) {
+    private void triggerAttack(Fighter target) {
     }
 
-    private void triggerHeal(Battler target) {
+    private void triggerHeal(Fighter target) {
     }
 
-    private void triggerBuff(Battler target) {
+    private void triggerBuff(Fighter target) {
     }
 }

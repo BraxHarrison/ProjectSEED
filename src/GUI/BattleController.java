@@ -1,8 +1,10 @@
 package GUI;
 
-import edu.bsu.cs222.FPBreetlison.Battler;
+import edu.bsu.cs222.FPBreetlison.Fighter;
 import edu.bsu.cs222.FPBreetlison.GameController;
 import edu.bsu.cs222.FPBreetlison.GameData;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,18 +37,17 @@ public class BattleController {
     public HBox allCharacterVitals;
     public HBox allEnemyVitals;
     public ScrollPane objectsMenu;
-    public ScrollPane mainScroller;
     public HBox selectorArea;
+    public Label historyDisplay;
 
     private int selectedCharacter;
     private int selectedAction;
     private int selectedItem;
     private int selectedAttack;
     private boolean canAdvanceText;
-    private ArrayList<String> textForConsole;
+    private ObservableList<Node> buttons;
 
     GameData gameData = GameData.getData();
-    GameController game = new GameController();
 
     public Label mainDisplay;
     //endregion
@@ -60,35 +61,29 @@ public class BattleController {
         }
     }
     private void pushMessage(String message){
-        textForConsole.add(message);
-        advanceText();
-    }
-    public void advanceText() {
-        String text = "";
-        for(int i = 0; i<textForConsole.size();i++){
-            text += "\n" + textForConsole.get(i) + "\n";
-        }
-        mainDisplay.setText(mainDisplay.getText() + text);
-        mainScroller.setVvalue(1.0);
-        textForConsole.clear();
+        historyDisplay.setText(mainDisplay.getText() + "\n\n" + historyDisplay.getText());
 
-    }
+        mainDisplay.setText(message);
 
+       // historyDisplay.setVvalue(mainScroller.getVmax());
+    }
 
     //endregion
     //region Initialization Functions
     @FXML
     public void initialize(){
-        textForConsole = new ArrayList<>();
         setCharacterButtons();
         createCharacterVitals();
         createEnemyVitals();
         pushMessage("Two enemy Jags appear!");
     }
+//    private void bindScroller(){
+//        DoubleProperty vProperty = new SimpleDoubleProperty();
+//        vProperty.bind(mainDisplay.hmaxProperty());
+//    }
     private void setCharacterButtons() {
-        ArrayList<Battler> team = gameData.getTeam();
-        ObservableList<Node> buttons = characterMenu.getChildren();
-        hideAllButtons(buttons);
+        ArrayList<Fighter> team = gameData.getTeam();
+        buttons = characterMenu.getChildren();
         for(int i = 0; i < team.size();i++){
             Button button = (Button)buttons.get(i);
             button.setText(team.get(i).getName());
@@ -96,7 +91,7 @@ public class BattleController {
         }
     }
     private void createCharacterVitals(){
-        ArrayList<Battler> team = gameData.getTeam();
+        ArrayList<Fighter> team = gameData.getTeam();
         for(int i = 0; i < team.size();i++){
             Label name = new Label(team.get(i).getName());
             Label hp = new Label("HP: "+team.get(i).getHP());
@@ -108,7 +103,7 @@ public class BattleController {
         }
     }
     private void createEnemyVitals(){
-        ArrayList<Battler> enemyTeam = gameData.getEnemyTeam();
+        ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i < enemyTeam.size();i++){
             Label name = new Label(enemyTeam.get(i).getName());
             Label hp = new Label("HP: "+ enemyTeam.get(i).getHP());
@@ -123,6 +118,7 @@ public class BattleController {
     //endregion
     //region Button Logic
     public void selectCharacter1(ActionEvent actionEvent) {
+
         selectedCharacter=0;
         showActionMenu();
     }
@@ -146,7 +142,7 @@ public class BattleController {
 
     private void showEnemySelectors() {
         selectorArea.getChildren().clear();
-        ArrayList<Battler> enemyTeam = gameData.getEnemyTeam();
+        ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i<enemyTeam.size();i++){
             Button enemy = new Button("Jag");
             enemy.setId(Integer.toString(i));
@@ -166,14 +162,14 @@ public class BattleController {
     }
 
     private void triggerAttack(int id) {
-        Battler attacker = gameData.getTeam().get(selectedCharacter);
+        Fighter attacker = gameData.getTeam().get(selectedCharacter);
         attacker.doBasicAttack(gameData.getEnemyTeam().get(id));
         pushMessage(attacker.generateAttackDescription());
         updateEnemyVitals();
     }
 
     private void updateEnemyVitals() {
-        ArrayList<Battler> enemyTeam = gameData.getEnemyTeam();
+        ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i<allEnemyVitals.getChildren().size();i++){
             VBox enemyVital = (VBox) allEnemyVitals.getChildren().get(i);
             Label enemyHP = (Label)enemyVital.getChildren().get(1);
@@ -196,22 +192,21 @@ public class BattleController {
 
     }
 
-    public void backToCharacterSelect(ActionEvent actionEvent) {
-        actionMenu.setVisible(false);
-        characterMenu.setVisible(true);
-    }
-    private void hideAllButtons(ObservableList<Node> buttons){
+    private void setCharacterButtonOpacity(){
         for(int i = 0; i < buttons.size(); i++){
             Button button = (Button)buttons.get(i);
-            button.setVisible(false);
+            button.setOpacity(.5);
         }
+        buttons.get(selectedCharacter).setOpacity(1);
+
     }
     private void showActionMenu() {
         actionMenu.setVisible(true);
-        characterMenu.setVisible(false);
+        setCharacterButtonOpacity();
         pushMessage("What will " + gameData.getTeam().get(selectedCharacter).getName() + " do?" );
-
     }
+
+
 
     //endregion
 
