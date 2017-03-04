@@ -3,12 +3,9 @@ package GUI;
 import edu.bsu.cs222.FPBreetlison.Fighter;
 import edu.bsu.cs222.FPBreetlison.GameController;
 import edu.bsu.cs222.FPBreetlison.GameData;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -34,8 +31,8 @@ public class BattleController {
     public Button skills;
     public Button items;
     public Button flee;
-    public HBox allCharacterVitals;
-    public HBox allEnemyVitals;
+    public VBox allCharacterVitals;
+    public VBox allEnemyVitals;
     public ScrollPane objectsMenu;
     public HBox selectorArea;
     public Label historyDisplay;
@@ -47,7 +44,9 @@ public class BattleController {
     private boolean canAdvanceText;
     private ObservableList<Node> buttons;
 
-    GameData gameData = GameData.getData();
+    GameData gameData;
+    GameController game;
+
 
     public Label mainDisplay;
     //endregion
@@ -70,17 +69,21 @@ public class BattleController {
 
     //endregion
     //region Initialization Functions
-    @FXML
-    public void initialize(){
+
+    public void initialize(GameController game){
+        this.game = game;
+        this.gameData = game.getGameData();
+        setupBattle();
+    }
+
+    private void setupBattle(){
         setCharacterButtons();
         createCharacterVitals();
         createEnemyVitals();
-        pushMessage("Two enemy Jags appear!");
+        pushMessage("An enemy group led by " + gameData.getEnemyTeam().get(0).getName()
+                + " appears!");
     }
-//    private void bindScroller(){
-//        DoubleProperty vProperty = new SimpleDoubleProperty();
-//        vProperty.bind(mainDisplay.hmaxProperty());
-//    }
+
     private void setCharacterButtons() {
         ArrayList<Fighter> team = gameData.getTeam();
         buttons = characterMenu.getChildren();
@@ -90,6 +93,7 @@ public class BattleController {
             button.setVisible(true);
         }
     }
+
     private void createCharacterVitals(){
         ArrayList<Fighter> team = gameData.getTeam();
         for(int i = 0; i < team.size();i++){
@@ -102,6 +106,7 @@ public class BattleController {
             allCharacterVitals.getChildren().add(characterVitals);
         }
     }
+
     private void createEnemyVitals(){
         ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i < enemyTeam.size();i++){
@@ -144,7 +149,7 @@ public class BattleController {
         selectorArea.getChildren().clear();
         ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i<enemyTeam.size();i++){
-            Button enemy = new Button("Jag");
+            Button enemy = new Button(enemyTeam.get(i).getName());
             enemy.setId(Integer.toString(i));
             enemy.setOnAction(new EventHandler<ActionEvent>() {
                 @Override

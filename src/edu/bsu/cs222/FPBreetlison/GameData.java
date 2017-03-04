@@ -1,5 +1,11 @@
 package edu.bsu.cs222.FPBreetlison;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameData {
@@ -9,10 +15,15 @@ public class GameData {
     private ArrayList<Fighter> team;
     private ArrayList<Fighter> enemyTeam;
     private Fighter target;
+    private Stage stage;
+    private String noodles = "Nooooodles?";
+
+    private GameController game;
 
     public static GameData getData(){
         if(gameData == null){
             gameData = new GameData();
+            return gameData;
         }
         return gameData;
 
@@ -20,6 +31,13 @@ public class GameData {
 
     public GameData(){
         init();
+
+    }
+    public String getNoodles(){
+        return noodles;
+    }
+    public void setNoodles(){
+        noodles = "Noodles.";
     }
 
     private void init(){
@@ -27,18 +45,20 @@ public class GameData {
         enemyTeam = new ArrayList<Fighter>();
         addHeroes();
         addEnemies();
-        System.out.print("Initializing...");
+        System.out.println("Initializing...");
+
     }
 
     private void addHeroes(){
-        team.add(new Fighter("Eve",20,3,2,2,2,2));
-        team.add(new Fighter("Quinn", 30, 4,2,2,2,2));
-        team.add(new Fighter("Jones", 35, 5,2,22,2,2));
+        team.add(new Fighter("Prota",30,7,5,2,5,7));
+        team.add(new Fighter("Roxy", 20, 5,7,6,9,12));
+        team.add(new Fighter("Smitty", 45, 10,12,1,4,5));
     }
 
     private void addEnemies(){
-        enemyTeam.add(new Fighter("Jag", 30,4,3,3,3,3));
-        enemyTeam.add(new Fighter("Jag", 30,2,2,2,2,2));
+        enemyTeam.add(new Fighter("Jag", 25,10,3,3,3,7));
+        enemyTeam.add(new Fighter("Blisterbulb", 30,6,6,7,7,3));
+        enemyTeam.add(new Fighter("Harshmallow", 20,3,4,9,11,4));
     }
 
     public ArrayList<Fighter> getTeam() {
@@ -58,5 +78,17 @@ public class GameData {
     }
     public void setTarget(Fighter target) {
         this.target = target;
+    }
+    public GameController getGame() {
+        return game;
+    }
+    public void setGame(GameController game) {
+        this.game = game;
+    }
+    public Stage getStage() {
+        return stage;
+    }
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }
