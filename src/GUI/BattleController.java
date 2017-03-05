@@ -1,5 +1,6 @@
 package GUI;
 
+import edu.bsu.cs222.FPBreetlison.BattleManager;
 import edu.bsu.cs222.FPBreetlison.Fighter;
 import edu.bsu.cs222.FPBreetlison.GameController;
 import edu.bsu.cs222.FPBreetlison.GameData;
@@ -37,15 +38,11 @@ public class BattleController {
     public HBox selectorArea;
     public Label historyDisplay;
 
-    private int selectedCharacter;
-    private int selectedAction;
-    private int selectedItem;
-    private int selectedAttack;
-    private boolean canAdvanceText;
     private ObservableList<Node> buttons;
 
     GameData gameData;
     GameController game;
+    BattleManager battleLogic;
 
 
     public Label mainDisplay;
@@ -59,7 +56,7 @@ public class BattleController {
             e.printStackTrace();
         }
     }
-    private void pushMessage(String message){
+    public void pushMessage(String message){
         historyDisplay.setText(mainDisplay.getText() + "\n\n" + historyDisplay.getText());
 
         mainDisplay.setText(message);
@@ -71,8 +68,10 @@ public class BattleController {
     //region Initialization Functions
 
     public void initialize(GameController game){
+        System.out.println("Initializing Battle...");
         this.game = game;
         this.gameData = game.getGameData();
+        this.battleLogic = game.getBattleLogic();
         setupBattle();
     }
 
@@ -98,7 +97,7 @@ public class BattleController {
         ArrayList<Fighter> team = gameData.getTeam();
         for(int i = 0; i < team.size();i++){
             Label name = new Label(team.get(i).getName());
-            Label hp = new Label("HP: "+team.get(i).getHP());
+            Label hp = new Label("HP: "+team.get(i).getHp());
 
             VBox characterVitals = new VBox();
             characterVitals.getChildren().add(name);
@@ -111,7 +110,7 @@ public class BattleController {
         ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i < enemyTeam.size();i++){
             Label name = new Label(enemyTeam.get(i).getName());
-            Label hp = new Label("HP: "+ enemyTeam.get(i).getHP());
+            Label hp = new Label("HP: "+ enemyTeam.get(i).getHp());
 
             VBox enemyVitals = new VBox();
             enemyVitals.getChildren().add(name);
@@ -124,24 +123,24 @@ public class BattleController {
     //region Button Logic
     public void selectCharacter1(ActionEvent actionEvent) {
 
-        selectedCharacter=0;
+        gameData.setSelectedUser(0);
         showActionMenu();
     }
     public void selectCharacter2(ActionEvent actionEvent) {
-        selectedCharacter=1;
+        gameData.setSelectedUser(1);
         showActionMenu();
     }
     public void selectCharacter3(ActionEvent actionEvent) {
-        selectedCharacter=2;
+        gameData.setSelectedUser(2);
         showActionMenu();
     }
     public void selectCharacter4(ActionEvent actionEvent) {
-        selectedCharacter=3;
+        gameData.setSelectedUser(3);
         showActionMenu();
     }
 
     public void selectAttack(ActionEvent actionEvent) {
-        pushMessage("Who will " + gameData.getTeam().get(selectedCharacter).getName() + " attack?");
+        pushMessage("Who will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " attack?");
         showEnemySelectors();
     }
 
@@ -162,15 +161,15 @@ public class BattleController {
     }
 
     private void selectEnemy(Button selected) {
-        int id = Integer.parseInt(selected.getId());
-        triggerAttack(id);
+        gameData.setSelectedTarget(Integer.parseInt(selected.getId()));
+        triggerAttack();
     }
 
-    private void triggerAttack(int id) {
-        Fighter attacker = gameData.getTeam().get(selectedCharacter);
-        attacker.doBasicAttack(gameData.getEnemyTeam().get(id));
-        pushMessage(attacker.generateAttackDescription());
+    private void triggerAttack() {
+
+        battleLogic.tryBasicAttack();
         updateEnemyVitals();
+
     }
 
     private void updateEnemyVitals() {
@@ -178,11 +177,12 @@ public class BattleController {
         for(int i = 0; i<allEnemyVitals.getChildren().size();i++){
             VBox enemyVital = (VBox) allEnemyVitals.getChildren().get(i);
             Label enemyHP = (Label)enemyVital.getChildren().get(1);
-            enemyHP.setText("HP: " + enemyTeam.get(i).getHP());
+            enemyHP.setText("HP: " + enemyTeam.get(i).getHp());
         }
     }
-    private void updateTP(){
 
+    private void updateTP(){
+        //Update progress bar with current TP amount
     }
 
     public void selectSkill(ActionEvent actionEvent) {
@@ -202,13 +202,13 @@ public class BattleController {
             Button button = (Button)buttons.get(i);
             button.setOpacity(.5);
         }
-        buttons.get(selectedCharacter).setOpacity(1);
+        buttons.get(gameData.getSelectedUser()).setOpacity(1);
 
     }
     private void showActionMenu() {
         actionMenu.setVisible(true);
         setCharacterButtonOpacity();
-        pushMessage("What will " + gameData.getTeam().get(selectedCharacter).getName() + " do?" );
+        pushMessage("What will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " do?" );
     }
 
 

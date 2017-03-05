@@ -17,8 +17,8 @@ public class BattleLogicTests {
 
     @Before
     public void setUp(){
-        attacker = new Fighter("Attacker",2,2,2,2,2,2);
-        defender = new Fighter("Attacker",2,2,2,2,2,2);
+        attacker = new Fighter("Attacker,2,2,2,2,2,2");
+        defender = new Fighter("Attacker,2,2,2,2,2,2");
         damageCalc = new DamageCalculator(attacker, defender);
 
     }
@@ -32,6 +32,13 @@ public class BattleLogicTests {
     @Test
     public void TestAffinityGeneral(){
         Assert.assertEquals(2, damageCalc.calculateDamage());
+    }
+
+    @Test
+    public void TestCharacterStringParser(){
+        Fighter fighter = new Fighter("Elmira,10,2,2,2,2,2,2");
+        Assert.assertEquals("Elmira",fighter.getName());
+        Assert.assertEquals(2,fighter.getAttack());
     }
 
 }

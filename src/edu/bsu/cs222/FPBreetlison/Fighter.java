@@ -1,51 +1,61 @@
 package edu.bsu.cs222.FPBreetlison;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Fighter {
 
-    private String Name;
-    private int HP;
-    private int MaxHP;
-    private int Attack;
-    private int Defense;
-    private int EnAttack;
-    private int EnDefense;
-    private int Agility;
+    private String name;
+    private int hp;
+    private int maxHP;
+    private int attack;
+    private int defense;
+    private int enAttack;
+    private int enDefense;
+    private int agility;
+    private int tpCost;
 
-    private ArrayList<Skill> Skills;
+    private ArrayList<Skill> skills;
 
-    public Fighter(String name, int hp, int attack, int defense, int enAttack, int enDefense, int agility){
+    public Fighter(String info){
 
-        Skills = new ArrayList<Skill>();
+        skills = new ArrayList<Skill>();
+        List<String> characterInfo = stringParser(info);
 
-        Name = name;
-        HP = hp;
-        MaxHP = hp;
-        Attack = attack;
-        Defense = defense;
-        EnAttack = enAttack;
-        EnDefense = enDefense;
-        Agility = agility;
+        this.name = characterInfo.get(0);
+        this.maxHP = Integer.parseInt(characterInfo.get(1));
+        this.hp = maxHP;
+        this.attack = Integer.parseInt(characterInfo.get(2));
+        this.defense = Integer.parseInt(characterInfo.get(3));
+        this.enAttack = Integer.parseInt(characterInfo.get(4));
+        this.enDefense = Integer.parseInt(characterInfo.get(5));
+        this.agility = Integer.parseInt(characterInfo.get(6));
+        this.tpCost = Integer.parseInt(characterInfo.get(7));
     }
 
+    //region In-Battle Functionality
 
     public void doBasicAttack(Fighter target){
        DamageCalculator damageCalculator = new DamageCalculator(this, target);
        target.takeDamage(damageCalculator.calculateDamage());
     }
 
+    //endregion
+
+    //region Reaction Functionality
+
     public void takeDamage(int damage){
-        HP-=damage;
-        if(HP < 0){
-            HP = 0;
+        hp -=damage;
+        if(hp < 0){
+            hp = 0;
         }
     }
 
     public void recoverHealth(int heal){
-        HP+=heal;
-        if(HP > MaxHP){
-            HP = MaxHP;
+        hp +=heal;
+        if(hp > maxHP){
+            hp = maxHP;
         }
     }
 
@@ -53,67 +63,85 @@ public class Fighter {
 
     }
 
+    //endregion
+
+    //region Text-Related Functionality
+
     public String generateAttackDescription(){
         //Expand this to include randomized descriptions
-        return Name + " struck the enemy!";
+        return name + " struck the enemy!";
     }
 
+    private List<String> stringParser(String info){
+
+        List<String> attributes = Arrays.asList(info.split(","));
+        return attributes;
+    }
+
+    //endregion
+
     public void learnSkill(Skill skill){
-        Skills.add(skill);
+        skills.add(skill);
     }
 
     //region Setters and Getters
 
     public String getName() {
-        return Name;
+        return name;
     }
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
-    public void setHP(int hp) {
-        HP = hp;
+    public void setHp(int hp) {
+        this.hp = hp;
     }
-    public int getHP() {
-        return HP;
+    public int getHp() {
+        return hp;
     }
     public int getMaxHP() {
-        return MaxHP;
+        return maxHP;
     }
     public void setMaxHP(int maxHP) {
-        MaxHP = maxHP;
+        this.maxHP = maxHP;
     }
     public int getAttack() {
-        return Attack;
+        return attack;
     }
     public void setAttack(int attack) {
-        Attack = attack;
+        this.attack = attack;
     }
     public int getDefense() {
-        return Defense;
+        return defense;
     }
     public void setDefense(int defense) {
-        Defense = defense;
+        this.defense = defense;
     }
     public int getEnAttack() {
-        return EnAttack;
+        return enAttack;
     }
     public void setEnAttack(int enAttack) {
-        EnAttack = enAttack;
+        this.enAttack = enAttack;
     }
     public int getEnDefense() {
-        return EnDefense;
+        return enDefense;
     }
     public void setEnDefense(int enDefense) {
-        EnDefense = enDefense;
+        this.enDefense = enDefense;
     }
     public int getAgility() {
-        return Agility;
+        return agility;
     }
     public void setAgility(int agility) {
-        Agility = agility;
+        this.agility = agility;
+    }
+    public int getTpCost() {
+        return tpCost;
+    }
+    public void setTpCost(int tpCost) {
+        this.tpCost = tpCost;
     }
     public ArrayList<Skill> getSkills(){
-        return Skills;
+        return skills;
     }
     //endregion
 

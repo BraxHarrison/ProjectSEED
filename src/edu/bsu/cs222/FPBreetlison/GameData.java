@@ -16,28 +16,15 @@ public class GameData {
     private ArrayList<Fighter> enemyTeam;
     private Fighter target;
     private Stage stage;
-    private String noodles = "Nooooodles?";
+    private int tp;
+    private int selectedUser;
+    private int selectedTarget;
 
     private GameController game;
-
-    public static GameData getData(){
-        if(gameData == null){
-            gameData = new GameData();
-            return gameData;
-        }
-        return gameData;
-
-    }
 
     public GameData(){
         init();
 
-    }
-    public String getNoodles(){
-        return noodles;
-    }
-    public void setNoodles(){
-        noodles = "Noodles.";
     }
 
     private void init(){
@@ -46,19 +33,20 @@ public class GameData {
         addHeroes();
         addEnemies();
         System.out.println("Initializing...");
+        tp = 10;
 
     }
 
     private void addHeroes(){
-        team.add(new Fighter("Prota",30,7,5,2,5,7));
-        team.add(new Fighter("Roxy", 20, 5,7,6,9,12));
-        team.add(new Fighter("Smitty", 45, 10,12,1,4,5));
+        team.add(new Fighter("Prota,30,7,5,2,5,7,3"));
+        team.add(new Fighter("Roxy,20,5,7,6,9,12,2"));
+        team.add(new Fighter("Smitty,45,10,12,1,4,5,5"));
     }
 
     private void addEnemies(){
-        enemyTeam.add(new Fighter("Jag", 25,10,3,3,3,7));
-        enemyTeam.add(new Fighter("Blisterbulb", 30,6,6,7,7,3));
-        enemyTeam.add(new Fighter("Harshmallow", 20,3,4,9,11,4));
+        enemyTeam.add(new Fighter("Jag,25,10,3,3,3,7,2"));
+        enemyTeam.add(new Fighter("Blisterbulb,30,6,6,7,7,3,6"));
+        enemyTeam.add(new Fighter("Harshmallow,20,3,4,9,11,4,4"));
     }
 
     public ArrayList<Fighter> getTeam() {
@@ -90,5 +78,27 @@ public class GameData {
     }
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+    public int getTp() {
+        return tp;
+    }
+    public int getSelectedUser() {
+        return selectedUser;
+    }
+    public void setSelectedUser(int selectedUser) {
+        this.selectedUser = selectedUser;
+    }
+    public int getSelectedTarget() {
+        return selectedTarget;
+    }
+    public void setSelectedTarget(int selectedTarget) {
+        this.selectedTarget = selectedTarget;
+    }
+
+    public void subtractTp(int cost) {
+        tp -= cost;
+        if(tp < 0){
+            tp = 0;
+        }
     }
 }

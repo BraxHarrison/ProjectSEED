@@ -9,14 +9,12 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-import static edu.bsu.cs222.FPBreetlison.GameData.gameData;
-
 public class GameController {
 
     private GameData gameData;
-    private BattleManager battleManager;
+    private BattleManager battleLogic;
     private OverworldController overworld;
-    private BattleController battle;
+    private BattleController battleControl;
     Stage currentStage;
 
     public void init(GameData gameData){
@@ -52,8 +50,8 @@ public class GameController {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        battle = fxmlLoader.getController();
-        battle.initialize(this);
+        battleControl = fxmlLoader.getController();
+        battleControl.initialize(this);
     }
     private void setBattleAsStage(Parent root){
         currentStage.setTitle("Battle!");
@@ -68,18 +66,22 @@ public class GameController {
     }
 
     public void startBattle(){
-        battleManager = new BattleManager();
+        battleLogic = new BattleManager();
         setUpBattle();
-        battleManager.startBattle();
-    }
-    public void quit(){
-        System.out.println("Game has been quit.");
+        battleLogic.getGameInfo(this);
+        battleLogic.start();
     }
 
     public GameData getGameData(){
         return gameData;
     }
-
-
-
+    public OverworldController getOverworld() {
+        return overworld;
+    }
+    public BattleController getBattleControl() {
+        return battleControl;
+    }
+    public BattleManager getBattleLogic() {
+        return battleLogic;
+    }
 }
