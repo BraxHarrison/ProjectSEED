@@ -7,12 +7,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.control.ProgressBar?>
 <GridPane fx:controller="GUI.BattleController" xmlns:fx="http://javafx.com/fxml" hgap="1" vgap="1" alignment="CENTER">
     <VBox fx:id="allCharacterVitals" maxWidth="200" spacing="50"/>
     <VBox fx:id="allEnemyVitals" maxWidth="200" GridPane.columnIndex="250" spacing="50" />
     <VBox spacing="20" maxWidth="300" GridPane.columnIndex="100">
 
-        <Label fx:id="mainDisplay" wrapText="true" maxHeight="10" style="-fx-border-color:black; -fx-border-width: 1; -fx-border-style: solid;"/>
+        <Label fx:id="mainDisplay" wrapText="true" maxHeight="10"/>
 
         <ScrollPane fx:id="historyScroller"  prefHeight="100" maxWidth="300" >
         <Label fx:id="historyDisplay" wrapText="true"/>
@@ -34,9 +35,13 @@
             <Button fx:id="skills" text="Skills" onAction="#selectSkill"/>
             <Button fx:id="items" text="Items" onAction="#selectItems"/>
             <Button fx:id="flee" text="Flee" onAction="#selectFlee"/>
+            <Button fx:id="endTurn" text="End Turn" onAction="#selectEndTurn"/>
         </HBox>
 
     </VBox>
+    <Label fx:id="tpDisplay" text="TP:" GridPane.rowIndex="20" GridPane.columnIndex="95" maxWidth="50" minWidth="50" />
+    <ProgressBar fx:id="tpBar" GridPane.rowIndex="20" GridPane.columnIndex="100" maxWidth="300" />
+
 
 </GridPane>
 

@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class GameController {
+public class GameManager {
 
     private GameData gameData;
     private BattleManager battleLogic;
@@ -17,6 +17,7 @@ public class GameController {
     private BattleController battleControl;
     Stage currentStage;
 
+    //region Initialization
     public void init(GameData gameData){
         this.gameData = gameData;
         currentStage = gameData.getStage();
@@ -24,8 +25,6 @@ public class GameController {
         setUpOverworld();
 
     }
-
-    //region Stage Initialization
     private void setUpOverworld() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         try {
@@ -42,7 +41,25 @@ public class GameController {
         currentStage.setScene(new Scene(root, 900, 500));
         currentStage.show();
     }
-    private void setUpBattle(){
+    //endregion
+
+    public void play(){
+        System.out.println("Game is running");
+        this.gameData = gameData;
+    }
+
+    public void createBattle(){
+        createBattleLogic();
+        //battleLogic.start();
+        createBattleController();
+
+    }
+
+    private void createBattleLogic(){
+        battleLogic = new BattleManager();
+    }
+
+    private void createBattleController(){
         FXMLLoader fxmlLoader = new FXMLLoader();
         try {
             Parent root = fxmlLoader.load(getClass().getResource("/GUI/BattleUI.fxml").openStream());
@@ -53,23 +70,11 @@ public class GameController {
         battleControl = fxmlLoader.getController();
         battleControl.initialize(this);
     }
+
     private void setBattleAsStage(Parent root){
         currentStage.setTitle("Battle!");
         currentStage.setScene(new Scene(root, 900,500));
 
-    }
-    //endregion
-
-    public void play(){
-        System.out.println("Game is running");
-        this.gameData = gameData;
-    }
-
-    public void startBattle(){
-        battleLogic = new BattleManager();
-        setUpBattle();
-        battleLogic.getGameInfo(this);
-        battleLogic.start();
     }
 
     public GameData getGameData(){

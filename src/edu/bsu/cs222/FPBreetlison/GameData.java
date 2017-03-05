@@ -1,11 +1,7 @@
 package edu.bsu.cs222.FPBreetlison;
 
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameData {
@@ -17,10 +13,11 @@ public class GameData {
     private Fighter target;
     private Stage stage;
     private int tp;
+    private int maxTP;
     private int selectedUser;
     private int selectedTarget;
 
-    private GameController game;
+    private GameManager game;
 
     public GameData(){
         init();
@@ -33,7 +30,8 @@ public class GameData {
         addHeroes();
         addEnemies();
         System.out.println("Initializing...");
-        tp = 10;
+        maxTP = 10;
+        tp = maxTP;
 
     }
 
@@ -47,6 +45,10 @@ public class GameData {
         enemyTeam.add(new Fighter("Jag,25,10,3,3,3,7,2"));
         enemyTeam.add(new Fighter("Blisterbulb,30,6,6,7,7,3,6"));
         enemyTeam.add(new Fighter("Harshmallow,20,3,4,9,11,4,4"));
+    }
+
+    public void resetHeroTP(){
+        tp = maxTP;
     }
 
     public ArrayList<Fighter> getTeam() {
@@ -67,10 +69,10 @@ public class GameData {
     public void setTarget(Fighter target) {
         this.target = target;
     }
-    public GameController getGame() {
+    public GameManager getGame() {
         return game;
     }
-    public void setGame(GameController game) {
+    public void setGame(GameManager game) {
         this.game = game;
     }
     public Stage getStage() {
@@ -79,7 +81,10 @@ public class GameData {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
-    public int getTp() {
+    public int getMaxTP() {
+        return maxTP;
+    }
+    public int getCurrentTp() {
         return tp;
     }
     public int getSelectedUser() {

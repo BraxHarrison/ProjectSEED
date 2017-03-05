@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 
-public class BattleLogicTests {
+public class BattleTests {
 
     private DamageCalculator damageCalc;
     private Fighter attacker;
@@ -17,8 +17,8 @@ public class BattleLogicTests {
 
     @Before
     public void setUp(){
-        attacker = new Fighter("Attacker,2,2,2,2,2,2");
-        defender = new Fighter("Attacker,2,2,2,2,2,2");
+        attacker = new Fighter("Attacker,2,2,2,2,2,2,2");
+        defender = new Fighter("Attacker,2,2,2,2,2,2,2");
         damageCalc = new DamageCalculator(attacker, defender);
 
     }
@@ -26,7 +26,7 @@ public class BattleLogicTests {
     @Test
     public void TestDamageCalcGeneral(){
 
-        Assert.assertEquals(6.6666669845581055,damageCalc.calculateDamage(),0.0f);
+        Assert.assertEquals(2,damageCalc.calculateDamage());
     }
 
     @Test

@@ -2,7 +2,7 @@ package GUI;
 
 import edu.bsu.cs222.FPBreetlison.BattleManager;
 import edu.bsu.cs222.FPBreetlison.Fighter;
-import edu.bsu.cs222.FPBreetlison.GameController;
+import edu.bsu.cs222.FPBreetlison.GameManager;
 import edu.bsu.cs222.FPBreetlison.GameData;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -10,6 +10,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -37,11 +38,13 @@ public class BattleController {
     public ScrollPane objectsMenu;
     public HBox selectorArea;
     public Label historyDisplay;
+    public ProgressBar tpBar;
+    public Label tpDisplay;
 
     private ObservableList<Node> buttons;
 
     GameData gameData;
-    GameController game;
+    GameManager game;
     BattleManager battleLogic;
 
 
@@ -49,13 +52,7 @@ public class BattleController {
     //endregion
     //region Utility Functions
     //Generic functions that are useful in many cases
-    private void delayFunction(long time){
-        try {
-            TimeUnit.MILLISECONDS.sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+
     public void pushMessage(String message){
         historyDisplay.setText(mainDisplay.getText() + "\n\n" + historyDisplay.getText());
 
@@ -63,15 +60,24 @@ public class BattleController {
 
        // historyDisplay.setVvalue(mainScroller.getVmax());
     }
+    public void delayFunction(long time){
+        try {
+            TimeUnit.MILLISECONDS.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 
     //endregion
     //region Initialization Functions
 
-    public void initialize(GameController game){
+    public void initialize(GameManager game){
         System.out.println("Initializing Battle...");
         this.game = game;
         this.gameData = game.getGameData();
         this.battleLogic = game.getBattleLogic();
+        //I don't really like this. I feel like this should be done from GameManager
+        battleLogic.getGameInfo(game);
         setupBattle();
     }
 
@@ -81,6 +87,8 @@ public class BattleController {
         createEnemyVitals();
         pushMessage("An enemy group led by " + gameData.getEnemyTeam().get(0).getName()
                 + " appears!");
+        battleLogic.start();
+        battleLogic.updateTP();
     }
 
     private void setCharacterButtons() {
@@ -211,6 +219,9 @@ public class BattleController {
         pushMessage("What will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " do?" );
     }
 
+    public void selectEndTurn(ActionEvent actionEvent) {
+        battleLogic.endPlayerTurn();
+    }
 
 
     //endregion
