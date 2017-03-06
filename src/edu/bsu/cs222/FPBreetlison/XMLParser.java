@@ -6,11 +6,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import javax.lang.model.util.Elements;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -20,14 +22,11 @@ public class XMLParser {
 
     Document document;
     NodeList nodeList;
+    ArrayList<Fighter> fighters;
 
 
-    public ArrayList<Fighter> parseFighterInfo() throws ParserConfigurationException, IOException, SAXException {
-        createDoc();
-        findElement();
-        return createFighterList();
 
-    }
+    //region Initialization Functions
 
     private void createDoc() throws ParserConfigurationException, IOException, SAXException {
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("GameInfo.xml");
@@ -36,14 +35,46 @@ public class XMLParser {
         this.document = builder.parse(inputStream);
     }
 
-    private void findElement(){
-        nodeList = this.document.getElementsByTagName("chara");
+    //endregion
+
+
+    public ArrayList<Fighter> parseFighterInfo() throws ParserConfigurationException, IOException, SAXException {
+        createDoc();
+        fighters = createFighterList();
+        setBattleDescriptions();
+        return fighters;
+    }
+
+    private void setBattleDescriptions (){
+        for(int i = 0; i < fighters.size();i++){
+            Fighter fighter = fighters.get(i);
+            ArrayList<String> battleDescriptions = loadBattleDescriptions(fighter);
+            fighter.setBattleStrings(battleDescriptions);
+        }
+    }
+
+    private ArrayList<String> loadBattleDescriptions(Fighter fighter) {
+        StringBuilder strBuilder = new StringBuilder();
+        strBuilder.append(fighter.getName());
+        strBuilder.append("BattleString");
+        String elementName = strBuilder.toString();
+        ArrayList<String> strings = new ArrayList<String>();
+        nodeList = this.document.getElementsByTagName(elementName);
+        for(int i = 0; i<nodeList.getLength();i++){
+            Element battleDesc = (Element)nodeList.item(i);
+            strings.add(battleDesc.getAttribute("string"));
+
+        }
+        return strings;
 
     }
 
+
     private ArrayList<Fighter> createFighterList(){
         ArrayList<Fighter> fighters = new ArrayList<Fighter>();
+        nodeList = this.document.getElementsByTagName("chara");
         for(int i = 0; i< nodeList.getLength();i++){
+
             Node battleInfo = nodeList.item(i);
             Element battler = (Element)battleInfo;
             Fighter fighter = new Fighter(createFighterString(battler));

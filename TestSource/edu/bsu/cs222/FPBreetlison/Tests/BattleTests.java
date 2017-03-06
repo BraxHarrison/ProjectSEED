@@ -18,6 +18,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
@@ -72,6 +73,13 @@ public class BattleTests {
         Fighter fighter = fighters.get(0);
         Assert.assertEquals("Prota",fighter.getName());
 
+    }
+
+    @Test
+    public void TestCharacterBattleDescriptions() throws IOException, SAXException, ParserConfigurationException {
+        ArrayList<Fighter> fighters = parser.parseFighterInfo();
+        ArrayList<String> battleDesc = fighters.get(0).getBattleStrings();
+        Assert.assertEquals("You fire a quick shot at the enemy. It grazes them.",battleDesc.get(0));
     }
 
 }

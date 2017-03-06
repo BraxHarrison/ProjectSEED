@@ -2,7 +2,10 @@ package edu.bsu.cs222.FPBreetlison;
 
 import GUI.BattleController;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import static java.lang.Thread.sleep;
 
 public class BattleManager {
 
@@ -47,13 +50,26 @@ public class BattleManager {
     }
 
     private void triggerEnemyAttack() {
-        battleControl.pushMessage("The enemy team attacks!");
-        //Delay currently doesn't work. Find alternative
-        //Code for AI(target selection, move selection, etc) goes here
-        battleControl.pushMessage("Enemy turn concluded");
+        for(int i = 0; i<gameData.getEnemyTeam().size();i++){
+            Fighter user = gameData.getEnemyTeam().get(i);
+            Fighter target = gameData.getTeam().get(selectRandom(gameData.getTeam().size()));
+            user.doBasicAttack(target);
+            battleControl.pushMessage(user.getName() + " strikes " + target.getName() + " !");
+            battleControl.updateHeroVitals();
+        }
         updateTurn("hero");
-
     }
+
+
+    private int selectRandom(int bound) {
+        Random random = new Random();
+        return random.nextInt(bound);
+    }
+
+    private void aiSelectTarget() {
+    }
+
+
 
     private void checkSpeeds() {
         //Check compare the fastest members from each team to see which team goes first
@@ -99,10 +115,6 @@ public class BattleManager {
         battleControl.tpBar.setProgress((double)gameData.getCurrentTp()/(double)gameData.getMaxTP());
         battleControl.tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getMaxTP());
         checkPlayerTP();
-    }
-
-    public void checkEnemyTP(){
-
     }
 
     public void endPlayerTurn() {

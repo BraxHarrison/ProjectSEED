@@ -189,6 +189,15 @@ public class BattleController {
         }
     }
 
+    public void updateHeroVitals(){
+        ArrayList<Fighter> heroTeam = gameData.getTeam();
+        for(int i = 0; i<allCharacterVitals.getChildren().size();i++){
+            VBox heroVital = (VBox) allCharacterVitals.getChildren().get(i);
+            Label heroHP = (Label)heroVital.getChildren().get(1);
+            heroHP.setText("HP: " + heroTeam.get(i).getHp());
+        }
+    }
+
     private void updateTP(){
         //Update progress bar with current TP amount
     }

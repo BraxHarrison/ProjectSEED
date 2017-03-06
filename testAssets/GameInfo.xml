@@ -1,31 +1,17 @@
 <GameInfo>
     <CharacterBattleInfo>
-        <chara name="Prota" maxHP="20" attack="1" defense="1" enAttack="1" enDefense="1" agility="1" tpCost="1" />
+        <chara name="Prota" maxHP="20" attack="1" defense="1" enAttack="1" enDefense="1" agility="1" tpCost="1"/>
         <chara name="Roxy" maxHP="20" attack="1" defense="1" enAttack="1" enDefense="1" agility="1" tpCost="1" />
+        <chara name="Smitty" maxHP="20" attack="1" defense="1" enAttack="1" enDefense="1" agility="1" tpCost="1" />
     </CharacterBattleInfo>
 
-
     <CharacterBattleStrings>
-        <Prota>
-            <StandardAttacks>
-                <standAtk string="You fire a quick shot at %e. It grazes them."/>
-                <standAtk string="You slide your club along the ground and hit %e low."/>
-
-            </StandardAttacks>
-
-            <Skills>
-                <Healing>
-
-                </Healing>
-
-                <Attack>
-
-
-                </Attack>
-
-
-            </Skills>
-        </Prota>
+                <ProtaBattleString string="You fire a quick shot at the enemy. It grazes them."/>
+                <ProtaBattleString string="You take a second to aim at the enemy. You fire. The shot connects."/>
+                <RoxyBattleString string="Roxy springs forward, kicks the enemy in the gut, and bounces back."/>
+                <RoxyBattleString string="Roxy bounces high into the air. Her metal heels come crashing down on the enemy's head."/>
+                <SmittyBattleString string="Smitty quickly sweeps under the enemy with his hammer. They trip and fall."/>
+                <SmittyBattleString string="Smitty clips the ground with his hammer, flinging a heavy field of rubble at the enemy."/>
     </CharacterBattleStrings>
 
 

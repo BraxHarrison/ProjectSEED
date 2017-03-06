@@ -17,6 +17,8 @@ public class Fighter {
     private int tpCost;
 
     private ArrayList<Skill> skills;
+    private ArrayList<String> battleStrings;
+    private String actionString;
 
     public Fighter(String info){
 
@@ -39,6 +41,7 @@ public class Fighter {
     public void doBasicAttack(Fighter target){
        DamageCalculator damageCalculator = new DamageCalculator(this, target);
        target.takeDamage(damageCalculator.calculateDamage());
+       chooseActionString();
     }
 
     //endregion
@@ -67,9 +70,8 @@ public class Fighter {
 
     //region Text-Related Functionality
 
-    public String generateAttackDescription(){
-        //Expand this to include randomized descriptions
-        return name + " struck the enemy!";
+    private void chooseActionString(){
+
     }
 
     private List<String> stringParser(String info){
@@ -140,8 +142,14 @@ public class Fighter {
     public void setTpCost(int tpCost) {
         this.tpCost = tpCost;
     }
-    public ArrayList<Skill> getSkills(){
+    public ArrayList<Skill> getSkills() {
         return skills;
+    }
+    public ArrayList<String> getBattleStrings() {
+        return battleStrings;
+    }
+    public void setBattleStrings(ArrayList<String> battleStrings) {
+        this.battleStrings = battleStrings;
     }
     //endregion
 
