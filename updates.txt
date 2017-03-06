@@ -19,7 +19,5 @@ To-Do's:
 -We need to come up with a way of knowing which enemy will attack and which target
 they will select (Maybe randoms for now?)
 
--The XML Parser that's been implemented needs to find all of the entries under each element tag and return a list
-of the corresponding object
 
 
