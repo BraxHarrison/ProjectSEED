@@ -1,0 +1,32 @@
+<GameInfo>
+    <CharacterBattleInfo>
+        <chara name="Prota" maxHP="20" attack="1" defense="1" enAttack="1" enDefense="1" agility="1" tpCost="1" />
+        <chara name="Roxy" maxHP="20" attack="1" defense="1" enAttack="1" enDefense="1" agility="1" tpCost="1" />
+    </CharacterBattleInfo>
+
+
+    <CharacterBattleStrings>
+        <Prota>
+            <StandardAttacks>
+                <standAtk string="You fire a quick shot at %e. It grazes them."/>
+                <standAtk string="You slide your club along the ground and hit %e low."/>
+
+            </StandardAttacks>
+
+            <Skills>
+                <Healing>
+
+                </Healing>
+
+                <Attack>
+
+
+                </Attack>
+
+
+            </Skills>
+        </Prota>
+    </CharacterBattleStrings>
+
+
+</GameInfo>

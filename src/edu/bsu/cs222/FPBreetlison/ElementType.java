@@ -1,12 +1,12 @@
 package edu.bsu.cs222.FPBreetlison;
 
-public class Element {
+public class ElementType {
 
     //We need a way to construct it with information pointing to weaknesses
     //and strengths
 
 
-    public Element(String name){
+    public ElementType(String name){
 
     }
 
