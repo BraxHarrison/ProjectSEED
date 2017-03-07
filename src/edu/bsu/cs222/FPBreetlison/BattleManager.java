@@ -3,7 +3,6 @@ package edu.bsu.cs222.FPBreetlison;
 import GUI.BattleController;
 
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import static java.lang.Thread.sleep;
 
@@ -52,7 +51,7 @@ public class BattleManager {
     private void triggerEnemyAttack() {
         for(int i = 0; i<gameData.getEnemyTeam().size();i++){
             Fighter user = gameData.getEnemyTeam().get(i);
-            Fighter target = gameData.getTeam().get(selectRandom(gameData.getTeam().size()));
+            Fighter target = gameData.getTeam().get(makeRandom(gameData.getTeam().size()));
             user.doBasicAttack(target);
             battleControl.pushMessage(user.getName() + " strikes " + target.getName() + " !");
             battleControl.updateHeroVitals();
@@ -61,14 +60,10 @@ public class BattleManager {
     }
 
 
-    private int selectRandom(int bound) {
+    private int makeRandom(int bound) {
         Random random = new Random();
         return random.nextInt(bound);
     }
-
-    private void aiSelectTarget() {
-    }
-
 
 
     private void checkSpeeds() {
