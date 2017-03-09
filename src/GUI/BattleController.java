@@ -22,11 +22,8 @@ public class BattleController {
 
 
     //region Variables
-    public HBox characterMenu;
-    public Button character1;
-    public Button character2;
-    public Button character3;
-    public Button character4;
+
+    public HBox characterSelectorArea;
 
     public HBox actionMenu;
     public Button attack;
@@ -36,12 +33,10 @@ public class BattleController {
     public VBox allCharacterVitals;
     public VBox allEnemyVitals;
     public ScrollPane objectsMenu;
-    public HBox selectorArea;
+    public HBox enemySelectorArea;
     public Label historyDisplay;
     public ProgressBar tpBar;
     public Label tpDisplay;
-
-    private ObservableList<Node> buttons;
 
     GameData gameData;
     GameManager game;
@@ -51,7 +46,6 @@ public class BattleController {
     public Label mainDisplay;
     //endregion
     //region Utility Functions
-    //Generic functions that are useful in many cases
 
     public void pushMessage(String message){
         historyDisplay.setText(mainDisplay.getText() + "\n\n" + historyDisplay.getText());
@@ -82,23 +76,42 @@ public class BattleController {
     }
 
     private void setupBattle(){
-        setCharacterButtons();
+        createCharacterButtons();
         createCharacterVitals();
         createEnemyVitals();
+        createEnemySelectors();
         pushMessage("An enemy group led by " + gameData.getEnemyTeam().get(0).getName()
                 + " appears!");
         battleLogic.start();
-        battleLogic.updateTP();
     }
 
-    private void setCharacterButtons() {
+    private void createCharacterButtons() {
+
         ArrayList<Fighter> team = gameData.getTeam();
-        buttons = characterMenu.getChildren();
-        for(int i = 0; i < team.size();i++){
-            Button button = (Button)buttons.get(i);
-            button.setText(team.get(i).getName());
-            button.setVisible(true);
+        for(int i = 0; i<team.size();i++){
+            Button character = new Button(team.get(i).getName());
+            character.setText(team.get(i).getName());
+            character.setId(Integer.toString(i));
+            character.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    selectCharacter(character);
+                }
+            });
+            characterSelectorArea.getChildren().add(character);
         }
+//        ArrayList<Fighter> team = gameData.getTeam();
+//        ObservableList<Node> characterButtons = characterSelectors.getChildren();
+//        for(int i = 0; i < team.size();i++){
+//            Button button = (Button) characterButtons.get(i);
+//            button.setText(team.get(i).getName());
+//            button.setVisible(true);
+//        }
+    }
+
+    private void selectCharacter(Button character) {
+        gameData.setSelectedUser(Integer.parseInt(character.getId()));
+        showActionMenu();
     }
 
     private void createCharacterVitals(){
@@ -129,31 +142,13 @@ public class BattleController {
 
     //endregion
     //region Button Logic
-    public void selectCharacter1(ActionEvent actionEvent) {
-
-        gameData.setSelectedUser(0);
-        showActionMenu();
-    }
-    public void selectCharacter2(ActionEvent actionEvent) {
-        gameData.setSelectedUser(1);
-        showActionMenu();
-    }
-    public void selectCharacter3(ActionEvent actionEvent) {
-        gameData.setSelectedUser(2);
-        showActionMenu();
-    }
-    public void selectCharacter4(ActionEvent actionEvent) {
-        gameData.setSelectedUser(3);
-        showActionMenu();
-    }
 
     public void selectAttack(ActionEvent actionEvent) {
         pushMessage("Who will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " attack?");
-        showEnemySelectors();
+        showSelector(enemySelectorArea);
     }
 
-    private void showEnemySelectors() {
-        selectorArea.getChildren().clear();
+    public void createEnemySelectors() {
         ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i<enemyTeam.size();i++){
             Button enemy = new Button(enemyTeam.get(i).getName());
@@ -164,8 +159,61 @@ public class BattleController {
                     selectEnemy(enemy);
                 }
             });
-            selectorArea.getChildren().add(enemy);
+            enemySelectorArea.setVisible(false);
+            enemySelectorArea.getChildren().add(enemy);
+
         }
+    }
+
+    public void hideSelector(HBox selector){
+        selector.setVisible(false);
+    }
+
+    public void showSelector(HBox selector){
+        selector.setVisible(true);
+    }
+
+    public boolean detectHeroKO() {
+        //This is an ugly piece of work
+        ObservableList<Node> selectors = characterSelectorArea.getChildren();
+        ArrayList<Fighter> fighters = gameData.getTeam();
+        int KOamt = 0;
+
+        for (int i = 0; i < selectors.size(); i++) {
+            fighters.get(i).checkKO();
+            if (fighters.get(i).getKOLvl() > 0) {
+                KOamt++;
+                selectors.get(i).setVisible(false);
+                pushMessage(fighters.get(i).getName() + " is down!");
+            }
+        }
+        if (KOamt == fighters.size()) {
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean detectEnemyKO() {
+        //Pls don't crucify me I did it again
+        ObservableList<Node> selectors = enemySelectorArea.getChildren();
+        ArrayList<Fighter> fighters = gameData.getEnemyTeam();
+        int KOamt = 0;
+        for (int i = 0; i < selectors.size(); i++) {
+            fighters.get(i).checkKO();
+            System.out.println(fighters.get(i).getName());
+            if (fighters.get(i).getKOLvl() == 1) {
+                selectors.get(i).setVisible(false);
+                pushMessage(fighters.get(i).getName() + " is down!");
+            }
+            if(fighters.get(i).getKOLvl() == 1 || fighters.get(i).getKOLvl() == 2){
+                KOamt++;
+            }
+        }
+        if (KOamt == fighters.size()) {
+            return true;
+        }
+        return false;
     }
 
     private void selectEnemy(Button selected) {
@@ -198,8 +246,10 @@ public class BattleController {
         }
     }
 
-    private void updateTP(){
-        //Update progress bar with current TP amount
+    public void updateTP(double percentage){
+        tpBar.setProgress(percentage);
+        tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getMaxTP());
+        battleLogic.checkPlayerTP();
     }
 
     public void selectSkill(ActionEvent actionEvent) {
@@ -215,13 +265,18 @@ public class BattleController {
     }
 
     private void setCharacterButtonOpacity(){
-        for(int i = 0; i < buttons.size(); i++){
-            Button button = (Button)buttons.get(i);
+        ObservableList<Node> characterButtons = characterSelectorArea.getChildren();
+        for(int i = 0; i < characterButtons.size(); i++){
+            Button button = (Button) characterButtons.get(i);
             button.setOpacity(.5);
         }
-        buttons.get(gameData.getSelectedUser()).setOpacity(1);
+        if(!characterButtons.isEmpty()){
+            characterButtons.get(gameData.getSelectedUser()).setOpacity(1);
+        }
+
 
     }
+
     private void showActionMenu() {
         actionMenu.setVisible(true);
         setCharacterButtonOpacity();

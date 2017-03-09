@@ -1,8 +1,8 @@
 <GameInfo>
     <CharacterBattleInfo>
-        <chara name="Prota" maxHP="20" attack="1" defense="1" enAttack="1" enDefense="1" agility="1" tpCost="1"/>
-        <chara name="Roxy" maxHP="20" attack="1" defense="1" enAttack="1" enDefense="1" agility="1" tpCost="1" />
-        <chara name="Smitty" maxHP="20" attack="1" defense="1" enAttack="1" enDefense="1" agility="1" tpCost="1" />
+        <chara name="Prota" maxHP="30" attack="7" defense="5" enAttack="2" enDefense="5" agility="7" tpCost="3"/>
+        <chara name="Roxy" maxHP="20" attack="5" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" />
+        <chara name="Smitty" maxHP="45" attack="12" defense="10" enAttack="1" enDefense="4" agility="5" tpCost="5" />
     </CharacterBattleInfo>
 
     <CharacterBattleStrings>

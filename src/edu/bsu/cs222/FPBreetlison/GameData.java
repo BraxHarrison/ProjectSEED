@@ -1,7 +1,10 @@
 package edu.bsu.cs222.FPBreetlison;
 
 import javafx.stage.Stage;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameData {
@@ -9,6 +12,7 @@ public class GameData {
     public static GameData gameData;
 
     private ArrayList<Fighter> team;
+    private ArrayList<Fighter> allFighters;
     private ArrayList<Fighter> enemyTeam;
     private Fighter target;
     private Stage stage;
@@ -19,12 +23,13 @@ public class GameData {
 
     private GameManager game;
 
-    public GameData(){
+    public GameData() throws IOException, SAXException, ParserConfigurationException {
         init();
 
     }
 
-    private void init(){
+    private void init() throws ParserConfigurationException, SAXException, IOException {
+        loadDataBase();
         team = new ArrayList<Fighter>();
         enemyTeam = new ArrayList<Fighter>();
         addHeroes();
@@ -35,10 +40,15 @@ public class GameData {
 
     }
 
+    private void loadDataBase() throws IOException, SAXException, ParserConfigurationException {
+        XMLParser loader = new XMLParser();
+        allFighters = loader.parseFighterInfo();
+    }
+
     private void addHeroes(){
-        team.add(new Fighter("Prota,30,7,5,2,5,7,3"));
-        team.add(new Fighter("Roxy,20,5,7,6,9,12,2"));
-        team.add(new Fighter("Smitty,45,10,12,1,4,5,5"));
+        team.add(allFighters.get(0));
+        team.add(allFighters.get(1));
+        team.add(allFighters.get(2));
     }
 
     private void addEnemies(){

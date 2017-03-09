@@ -2,20 +2,21 @@ package edu.bsu.cs222.FPBreetlison;
 
 public class DamageCalculator {
 
-    private Fighter Attacker;
-    private Fighter Defender;
+    private Fighter attacker;
+    private Fighter defender;
 
 
     public DamageCalculator(Fighter attacker, Fighter defender){
 
-        Attacker = attacker;
-        Defender = defender;
+        this.attacker = attacker;
+        this.defender = defender;
 
     }
 
     public int calculateDamage(){
-        //return (int)calculateByStats();
-        return 2;
+        //int baseDamage = (int)calculateByStats();
+        //return baseDamage*5;
+        return 5;
     }
 
     private float calculateElementalAffinity(){
@@ -34,12 +35,14 @@ public class DamageCalculator {
         return 2.0f;
     }
 
-    private float calculateByStats(Fighter target, Fighter attacker){
+    private float calculateByStats(){
         //float defensePercent = 0.0;
         //Defense
         //if Attacker.selectedMove.type = "PhyAtk"
-        float defensePercent = target.getDefense()/300.0f;
-        return attacker.getAttack()*defensePercent;
+        float roughDamage =  attacker.getAttack()/defender.getDefense();
+
+        return roughDamage;
+
         //Figuring this out--------------------------------------
         // else if attacker.selectedMove.type = "EnAtk"
         //      defensePercent = defender.enDefense/100

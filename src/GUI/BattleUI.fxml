@@ -13,21 +13,20 @@
     <VBox fx:id="allEnemyVitals" maxWidth="200" GridPane.columnIndex="250" spacing="50" />
     <VBox spacing="20" maxWidth="300" GridPane.columnIndex="100">
 
-        <Label fx:id="mainDisplay" wrapText="true" maxHeight="10"/>
+        <Label fx:id="mainDisplay" wrapText="true" maxHeight="40" minHeight="40" />
 
-        <ScrollPane fx:id="historyScroller"  prefHeight="100" maxWidth="300" >
-        <Label fx:id="historyDisplay" wrapText="true"/>
+        <ScrollPane fx:id="historyScroller"  prefHeight="100" maxWidth="300" hbarPolicy="NEVER" >
+        <Label fx:id="historyDisplay" wrapText="true" maxWidth="295"/>
     </ScrollPane>
 
         <ScrollPane fx:id="selectorMenu" prefHeight="100" maxWidth="300"  vvalue="1">
-            <HBox fx:id="selectorArea" spacing="30"/>
+            <HBox fx:id="enemySelectorArea" spacing="30">
+            </HBox>
+
+
         </ScrollPane>
 
-        <HBox fx:id="characterMenu" maxWidth="300"  spacing="10">
-            <Button fx:id="character1" visible="false" onAction="#selectCharacter1"/>
-            <Button fx:id="character2" visible="false" onAction="#selectCharacter2"/>
-            <Button fx:id="character3" visible="false" onAction="#selectCharacter3"/>
-            <Button fx:id="character4" visible="false" onAction="#selectCharacter4"/>
+        <HBox fx:id="characterSelectorArea" maxWidth="300" spacing="10">
         </HBox>
 
         <HBox fx:id="actionMenu" prefWidth="350" visible="false"  spacing="10">

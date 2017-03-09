@@ -2,19 +2,19 @@ package edu.bsu.cs222.FPBreetlison;
 
 import GUI.BattleController;
 
+import java.util.ArrayList;
 import java.util.Random;
 
-import static java.lang.Thread.sleep;
 
 public class BattleManager {
 
-    GameManager game;
-    GameData gameData;
-    BattleController battleControl;
+    private GameManager game;
+    private GameData gameData;
+    private BattleController battleControl;
 
-    Fighter attacker;
-    Fighter target;
-    boolean battleRunning;
+    private Fighter attacker;
+    private Fighter target;
+
 
     public void getGameInfo(GameManager game){
         this.game = game;
@@ -23,61 +23,112 @@ public class BattleManager {
 
     }
 
-    public void testMethod(){
-
-    }
-
     public void start(){
+        requestTPUpdate();
         checkSpeeds();
     }
 
-    private void updateTurn(String phase) {
+    public void updateTurn(String phase) {
+        //Investigate this for possible memory leaks
         if(phase.equals("hero")){
+            battleControl.pushMessage("It's your team's turn!");
             enableCharacterMenu();
         }
-        if(phase.equals("enemy")) {
+        else if(phase.equals("enemy")) {
+            battleControl.pushMessage("It's the enemy's turn!");
             disableCharacterMenu();
-            triggerEnemyAttack();
+            tryEnemyAttack();
             resetTP();
-
+            endEnemyTurn();
+        }
+        else if(phase.equals("enemyWin")){
+            battleControl.pushMessage("You were defeated!");
+            battleControl.hideSelector(battleControl.enemySelectorArea);
+        }
+        else if(phase.equals("heroWin")){
+            battleControl.pushMessage(("You were victorious!"));
+            battleControl.hideSelector(battleControl.enemySelectorArea);
         }
     }
 
     private void resetTP() {
         gameData.resetHeroTP();
-        updateTP();
+        requestTPUpdate();
     }
 
-    private void triggerEnemyAttack() {
-        for(int i = 0; i<gameData.getEnemyTeam().size();i++){
-            Fighter user = gameData.getEnemyTeam().get(i);
+    private void tryEnemyAttack() {
+
+        //This is horrible someone please fix it
+        ArrayList<Fighter> remainingEnemies = getRemainingEnemies();
+        for(int i = 0; i<remainingEnemies.size();i++){
+            Fighter user = remainingEnemies.get(i);
             Fighter target = gameData.getTeam().get(makeRandom(gameData.getTeam().size()));
-            user.doBasicAttack(target);
-            battleControl.pushMessage(user.getName() + " strikes " + target.getName() + " !");
-            battleControl.updateHeroVitals();
+            if(target.getKOLvl() > 0){
+                target = findNextTarget();
+            }
+            if(target != null){
+                doEnemyAttack(user,target);
+            }
         }
-        updateTurn("hero");
     }
 
+    private ArrayList<Fighter> getRemainingEnemies() {
+        ArrayList<Fighter> fighters = gameData.getEnemyTeam();
+        ArrayList<Fighter> ableFighters = new ArrayList<>();
+        for(int i = 0; i < fighters.size();i++){
+            if(fighters.get(i).getKOLvl() == 0){
+                ableFighters.add(fighters.get(i));
+            }
+        }
+        return ableFighters;
+    }
+
+    private void doEnemyAttack(Fighter user, Fighter target){
+        user.doBasicAttack(target);
+        battleControl.pushMessage(user.getName() + " strikes " + target.getName() + " !");
+        battleControl.updateHeroVitals();
+    }
+
+    private Fighter findNextTarget() {
+        for(int i = 0; i<gameData.getTeam().size();i++){
+            Fighter target = gameData.getTeam().get(i);
+            if(target.getKOLvl()<1){
+                return target;
+            }
+        }
+        return null;
+    }
+
+    private void endEnemyTurn() {
+        battleControl.showSelector(battleControl.characterSelectorArea);
+        if(battleControl.detectHeroKO()){
+            updateTurn("enemyWin");
+        }
+        else{
+            updateTurn("hero");
+        }
+
+
+
+    }
 
     private int makeRandom(int bound) {
         Random random = new Random();
         return random.nextInt(bound);
     }
 
-
     private void checkSpeeds() {
         //Check compare the fastest members from each team to see which team goes first
-        String phase = "hero";
-        updateTurn(phase);
+        //String phase = "hero";
+        //updateTurn(phase);
     }
 
     private void enableCharacterMenu() {
-        battleControl.characterMenu.setVisible(true);
+        battleControl.showSelector(battleControl.characterSelectorArea);
     }
     private void disableCharacterMenu(){
-        battleControl.characterMenu.setVisible(false);
-        battleControl.actionMenu.setVisible(false);
+        battleControl.hideSelector(battleControl.characterSelectorArea);
+        battleControl.hideSelector(battleControl.actionMenu);
     }
 
     public void checkPlayerTP(){
@@ -92,6 +143,9 @@ public class BattleManager {
         int cost = attacker.getTpCost();
         if(gameData.getCurrentTp() >= cost ){
             startBasicAttack(cost);
+            if(battleControl.detectEnemyKO()){
+                updateTurn("heroWin");
+            }
         }
         else{
             battleControl.pushMessage("There's not enough time left for " + attacker.getName()
@@ -102,17 +156,26 @@ public class BattleManager {
     private void startBasicAttack(int cost) {
         gameData.subtractTp(cost);
         attacker.doBasicAttack(target);
-        battleControl.pushMessage(attacker.getName() + " hit " +  target.getName() + " with a basic attack!");
-        updateTP();
+        battleControl.pushMessage(attacker.getBattleStrings().get(0));
+        battleControl.hideSelector(battleControl.enemySelectorArea);
+        battleControl.hideSelector(battleControl.actionMenu);
+       requestTPUpdate();
     }
 
-    public void updateTP() {
-        battleControl.tpBar.setProgress((double)gameData.getCurrentTp()/(double)gameData.getMaxTP());
-        battleControl.tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getMaxTP());
-        checkPlayerTP();
+    private void requestTPUpdate(){
+        double percentage = (double)gameData.getCurrentTp()/(double)gameData.getMaxTP();
+        battleControl.updateTP(percentage);
     }
 
     public void endPlayerTurn() {
+        battleControl.hideSelector(battleControl.enemySelectorArea);
+        if(battleControl.detectEnemyKO()){
+            updateTurn("heroWin");
+        }
+        else{
         updateTurn("enemy");
+        }
+
+
     }
 }

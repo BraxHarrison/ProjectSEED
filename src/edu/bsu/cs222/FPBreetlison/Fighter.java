@@ -19,11 +19,13 @@ public class Fighter {
     private ArrayList<Skill> skills;
     private ArrayList<String> battleStrings;
     private String actionString;
+    private int koLvl;
 
     public Fighter(String info){
 
         skills = new ArrayList<Skill>();
         List<String> characterInfo = stringParser(info);
+        koLvl = 0;
 
         this.name = characterInfo.get(0);
         this.maxHP = Integer.parseInt(characterInfo.get(1));
@@ -84,6 +86,17 @@ public class Fighter {
 
     public void learnSkill(Skill skill){
         skills.add(skill);
+    }
+
+    public int checkKO(){
+        if(hp<=0 && koLvl == 1){
+            koLvl = 2;
+        }
+        else if(hp<=0 && koLvl==0){
+            koLvl = 1;
+        }
+        return koLvl;
+
     }
 
     //region Setters and Getters
@@ -150,6 +163,9 @@ public class Fighter {
     }
     public void setBattleStrings(ArrayList<String> battleStrings) {
         this.battleStrings = battleStrings;
+    }
+    public int getKOLvl() {
+        return koLvl;
     }
     //endregion
 
