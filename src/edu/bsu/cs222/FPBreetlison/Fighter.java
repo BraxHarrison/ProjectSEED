@@ -1,6 +1,8 @@
 package edu.bsu.cs222.FPBreetlison;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class Fighter {
 
@@ -12,29 +14,41 @@ public class Fighter {
     private int enAttack;
     private int enDefense;
     private int agility;
+    private int tpCost;
 
-    private ArrayList<Skill> Skills;
+    private ArrayList<Skill> skills;
+    private ArrayList<String> battleStrings;
+    private String actionString;
+    private int koLvl;
 
-    //Try to get rid of all of these parameter
-    public Fighter(String name, int maxHP, int attack, int defense, int enAttack, int enDefense, int agility){
+    public Fighter(String info){
 
-        Skills = new ArrayList<Skill>();
+        skills = new ArrayList<Skill>();
+        List<String> characterInfo = stringParser(info);
+        koLvl = 0;
 
-        this.name = name;
+        this.name = characterInfo.get(0);
+        this.maxHP = Integer.parseInt(characterInfo.get(1));
         this.hp = maxHP;
-        this.maxHP = maxHP;
-        this.attack = attack;
-        this.defense = defense;
-        this.enAttack = enAttack;
-        this.enDefense = enDefense;
-        this.agility = agility;
+        this.attack = Integer.parseInt(characterInfo.get(2));
+        this.defense = Integer.parseInt(characterInfo.get(3));
+        this.enAttack = Integer.parseInt(characterInfo.get(4));
+        this.enDefense = Integer.parseInt(characterInfo.get(5));
+        this.agility = Integer.parseInt(characterInfo.get(6));
+        this.tpCost = Integer.parseInt(characterInfo.get(7));
     }
 
+    //region In-Battle Functionality
 
     public void doBasicAttack(Fighter target){
        DamageCalculator damageCalculator = new DamageCalculator(this, target);
        target.takeDamage(damageCalculator.calculateDamage());
+       chooseActionString();
     }
+
+    //endregion
+
+    //region Reaction Functionality
 
     public void takeDamage(int damage){
         hp -=damage;
@@ -43,8 +57,6 @@ public class Fighter {
         }
     }
 
-
-
     public void recoverHealth(int heal){
         hp +=heal;
         if(hp > maxHP){
@@ -52,18 +64,39 @@ public class Fighter {
         }
     }
 
-
     public void sufferEffect(){
 
     }
 
-    public String generateAttackDescription(){
-        //Expand this to include randomized descriptions
-        return name + " struck the enemy!";
+    //endregion
+
+    //region Text-Related Functionality
+
+    private void chooseActionString(){
+
     }
 
+    private List<String> stringParser(String info){
+
+        List<String> attributes = Arrays.asList(info.split(","));
+        return attributes;
+    }
+
+    //endregion
+
     public void learnSkill(Skill skill){
-        Skills.add(skill);
+        skills.add(skill);
+    }
+
+    public int checkKO(){
+        if(hp<=0 && koLvl == 1){
+            koLvl = 2;
+        }
+        else if(hp<=0 && koLvl==0){
+            koLvl = 1;
+        }
+        return koLvl;
+
     }
 
     //region Setters and Getters
@@ -116,8 +149,23 @@ public class Fighter {
     public void setAgility(int agility) {
         this.agility = agility;
     }
-    public ArrayList<Skill> getSkills(){
-        return Skills;
+    public int getTpCost() {
+        return tpCost;
+    }
+    public void setTpCost(int tpCost) {
+        this.tpCost = tpCost;
+    }
+    public ArrayList<Skill> getSkills() {
+        return skills;
+    }
+    public ArrayList<String> getBattleStrings() {
+        return battleStrings;
+    }
+    public void setBattleStrings(ArrayList<String> battleStrings) {
+        this.battleStrings = battleStrings;
+    }
+    public int getKOLvl() {
+        return koLvl;
     }
     //endregion
 

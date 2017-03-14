@@ -1,21 +1,28 @@
 package GUI;
 
+import edu.bsu.cs222.FPBreetlison.GameManager;
+import edu.bsu.cs222.FPBreetlison.GameData;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 public class Main extends Application {
 
+GameData gameData = new GameData();
+GameManager game = new GameManager();
 
+    public Main() throws ParserConfigurationException, SAXException, IOException {
+    }
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("BattleUI.fxml"));
-        primaryStage.setTitle("TextGames");
-        primaryStage.setScene(new Scene(root, 800, 800));
-        primaryStage.show();
+        gameData.setStage(primaryStage);
+        //gameData.setGame(game);
+        game.init(gameData);
+        game.play();
     }
 
 

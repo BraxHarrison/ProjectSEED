@@ -14,8 +14,9 @@ public class DamageCalculator {
     }
 
     public int calculateDamage(){
-        return (int)calculateByStats();
-        //return 2;
+        //int baseDamage = (int)calculateByStats();
+        //return baseDamage*5;
+        return 5;
     }
 
     private float calculateElementalAffinity(){
@@ -37,13 +38,22 @@ public class DamageCalculator {
     private float calculateByStats(){
         //float defensePercent = 0.0;
         //Defense
-        //if (attacker.selectedMove.type = "PhyAtk"){}
-        int defenseVal= defender.getDefense();
-        float defensePercent = (defenseVal*1.0f)/40;
-        return attacker.getAttack()*(1-defensePercent);
+        //if Attacker.selectedMove.type = "PhyAtk"
+        float roughDamage =  attacker.getAttack()/defender.getDefense();
+
+        return roughDamage;
+
         //Figuring this out--------------------------------------
         // else if attacker.selectedMove.type = "EnAtk"
         //      defensePercent = defender.enDefense/100
         //      return attacker.enAttack*defensePercent ??
+
     }
+
+
+
+
+
+
+
 }
