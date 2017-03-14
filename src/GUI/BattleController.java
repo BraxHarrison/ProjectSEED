@@ -166,7 +166,6 @@ public class BattleController {
     }
 
     public boolean detectHeroKO() {
-        //This is an ugly piece of work
         ObservableList<Node> selectors = heroSelectorArea.getChildren();
         ArrayList<Fighter> fighters = gameData.getTeam();
         int KOamt = 0;
@@ -189,18 +188,17 @@ public class BattleController {
 
 
     public boolean detectEnemyKO() {
-        //Pls don't crucify me I did it again
         ObservableList<Node> selectors = enemySelectorArea.getChildren();
         ArrayList<Fighter> fighters = gameData.getEnemyTeam();
         int KOamt = 0;
         for (int i = 0; i < selectors.size(); i++) {
             fighters.get(i).checkKO();
-            if (fighters.get(i).getKOLvl() == 1) {
+            if (fighters.get(i).getKOLvl() > 0) {
+                KOamt++;
+            }
+            if(fighters.get(i).getKOLvl() == 1){
                 selectors.get(i).setVisible(false);
                 pushMessage(fighters.get(i).getName() + " is down!");
-            }
-            if(fighters.get(i).getKOLvl() == 1 || fighters.get(i).getKOLvl() == 2){
-                KOamt++;
             }
         }
         if (KOamt == fighters.size()) {
