@@ -126,6 +126,7 @@ public class BattleManager {
     private void enableCharacterMenu() {
         battleControl.showSelector(battleControl.characterSelectorArea);
     }
+
     private void disableCharacterMenu(){
         battleControl.hideSelector(battleControl.characterSelectorArea);
         battleControl.hideSelector(battleControl.actionMenu);

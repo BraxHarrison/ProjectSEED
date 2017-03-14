@@ -183,6 +183,8 @@ public class BattleController {
             fighters.get(i).checkKO();
             if (fighters.get(i).getKOLvl() > 0) {
                 KOamt++;
+            }
+            if(fighters.get(i).getKOLvl() == 1){
                 selectors.get(i).setVisible(false);
                 pushMessage(fighters.get(i).getName() + " is down!");
             }
