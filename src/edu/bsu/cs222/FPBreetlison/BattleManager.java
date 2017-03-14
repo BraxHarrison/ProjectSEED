@@ -157,7 +157,8 @@ public class BattleManager {
     private void startBasicAttack(int cost) {
         gameData.subtractTp(cost);
         attacker.doBasicAttack(target);
-        battleControl.pushMessage(attacker.getBattleStrings().get(0));
+        int random = makeRandom(attacker.getBattleStrings().size());
+        battleControl.pushMessage(attacker.getBattleStrings().get(random));
         battleControl.hideSelector(battleControl.enemySelectorArea);
         battleControl.hideSelector(battleControl.actionMenu);
        requestTPUpdate();
