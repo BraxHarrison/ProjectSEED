@@ -69,7 +69,6 @@ public class BattleController {
         this.game = game;
         this.gameData = game.getGameData();
         this.battleLogic = game.getBattleLogic();
-        //I don't really like this. I feel like this should be done from GameManager
         battleLogic.getGameInfo(game);
         setupBattle();
     }

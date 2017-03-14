@@ -16,16 +16,11 @@ import java.io.InputStream;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-
 public class XMLParser {
-
-    //I want this to read through all of the character info and return a list of fighters
 
     Document document;
     NodeList nodeList;
     ArrayList<Fighter> fighters;
-
-
 
     //region Initialization Functions
 
@@ -37,7 +32,6 @@ public class XMLParser {
     }
 
     //endregion
-
 
     public ArrayList<Fighter> parseFighterInfo() throws ParserConfigurationException, IOException, SAXException {
         createDoc();
@@ -70,7 +64,6 @@ public class XMLParser {
 
     }
 
-
     private ArrayList<Fighter> createFighterList(){
         ArrayList<Fighter> fighters = new ArrayList<Fighter>();
         nodeList = this.document.getElementsByTagName("chara");
@@ -97,7 +90,6 @@ public class XMLParser {
         strBuilder.append(battler.getAttribute("tpCost"));
 
         return strBuilder.toString();
-
 
     }
 

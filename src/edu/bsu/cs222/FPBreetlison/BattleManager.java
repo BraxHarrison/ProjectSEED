@@ -29,7 +29,6 @@ public class BattleManager {
     }
 
     public void updateTurn(String phase) {
-        //Investigate this for possible memory leaks
         if(phase.equals("hero")){
             battleControl.pushMessage("It's your team's turn!");
             enableCharacterMenu();
@@ -58,7 +57,6 @@ public class BattleManager {
 
     private void tryEnemyAttack() {
 
-        //This is horrible someone please fix it
         ArrayList<Fighter> remainingEnemies = getRemainingEnemies();
         for(int i = 0; i<remainingEnemies.size();i++){
             Fighter user = remainingEnemies.get(i);
@@ -118,9 +116,7 @@ public class BattleManager {
     }
 
     private void checkSpeeds() {
-        //Check compare the fastest members from each team to see which team goes first
-        //String phase = "hero";
-        //updateTurn(phase);
+
     }
 
     private void enableCharacterMenu() {

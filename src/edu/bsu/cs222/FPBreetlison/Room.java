@@ -19,9 +19,4 @@ public class Room {
         return 2;
     }
 
-    //These can return the room number which can be looked up.
-
-    //Dialogue and Event logic can be handled in the room class.
-
-    //Possible ideas for methods: hasNewEvent(), chatWithCharacters(), executeEvent().
 }
