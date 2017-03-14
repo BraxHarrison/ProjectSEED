@@ -52,12 +52,23 @@ public class BattleTests {
     @Test
     public void TestDamageCalcGeneral(){
 
-        Assert.assertEquals(2,damageCalc.calculateDamage());
+        Assert.assertEquals(attacker.getAttack(),damageCalc.calculateDamage());
     }
 
     @Test
     public void TestAffinityGeneral(){
-        Assert.assertEquals(2, damageCalc.calculateDamage());
+        Assert.assertEquals(attacker.getAttack(), damageCalc.calculateDamage());
+    }
+
+    @Test
+    public void CheckFighterKO(){
+        Assert.assertEquals(0,attacker.checkKO());
+    }
+
+    @Test
+    public void CheckDeadFighterKO(){
+        Fighter deadAttakcer = new Fighter("Attacker,0,2,2,2,2,2,2");
+        Assert.assertEquals(1,deadAttakcer.checkKO());
     }
 
     @Test

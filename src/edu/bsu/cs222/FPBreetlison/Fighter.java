@@ -101,6 +101,7 @@ public class Fighter {
 
     //region Setters and Getters
 
+    //Will be cleaned up, and hopefully most will be gone by iteration 2.
     public String getName() {
         return name;
     }

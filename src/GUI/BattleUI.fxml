@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.control.ProgressBar?>
 <GridPane fx:controller="GUI.BattleController" xmlns:fx="http://javafx.com/fxml" hgap="1" vgap="1" alignment="CENTER">
-    <VBox fx:id="allCharacterVitals" maxWidth="200" spacing="50"/>
+    <VBox fx:id="allHeroVitals" maxWidth="200" spacing="50"/>
     <VBox fx:id="allEnemyVitals" maxWidth="200" GridPane.columnIndex="250" spacing="50" />
     <VBox spacing="20" maxWidth="300" GridPane.columnIndex="100">
 
@@ -26,7 +26,7 @@
 
         </ScrollPane>
 
-        <HBox fx:id="characterSelectorArea" maxWidth="300" spacing="10">
+        <HBox fx:id="heroSelectorArea" maxWidth="300" spacing="10">
         </HBox>
 
         <HBox fx:id="actionMenu" prefWidth="350" visible="false"  spacing="10">
