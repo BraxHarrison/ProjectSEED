@@ -37,8 +37,8 @@ public class GameData {
     }
 
     private void addEnemies(){
-        enemyTeam.add(new Fighter("Jag", 30,4,3,3,3,3));
-        enemyTeam.add(new Fighter("Jag", 30,2,2,2,2,2));
+        enemyTeam.add(new Fighter("Jag1", 30,4,20,3,3,3));
+        enemyTeam.add(new Fighter("Jag2", 30,2,2,2,2,2));
     }
 
     public ArrayList<Fighter> getTeam() {

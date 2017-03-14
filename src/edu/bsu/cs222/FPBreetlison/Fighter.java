@@ -43,12 +43,15 @@ public class Fighter {
         }
     }
 
+
+
     public void recoverHealth(int heal){
         hp +=heal;
         if(hp > maxHP){
             hp = maxHP;
         }
     }
+
 
     public void sufferEffect(){
 
