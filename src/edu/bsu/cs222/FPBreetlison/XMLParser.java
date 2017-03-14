@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class XMLParser {
 
-    //I want this to read through all of the character info and return a list of fighter
+    //I want this to read through all of the character info and return a list of fighters
 
     Document document;
     NodeList nodeList;

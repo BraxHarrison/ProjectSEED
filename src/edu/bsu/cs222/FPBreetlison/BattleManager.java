@@ -100,7 +100,7 @@ public class BattleManager {
     }
 
     private void endEnemyTurn() {
-        battleControl.showSelector(battleControl.characterSelectorArea);
+        battleControl.showSelector(battleControl.heroSelectorArea);
         if(battleControl.detectHeroKO()){
             updateTurn("enemyWin");
         }
@@ -124,11 +124,11 @@ public class BattleManager {
     }
 
     private void enableCharacterMenu() {
-        battleControl.showSelector(battleControl.characterSelectorArea);
+        battleControl.showSelector(battleControl.heroSelectorArea);
     }
 
     private void disableCharacterMenu(){
-        battleControl.hideSelector(battleControl.characterSelectorArea);
+        battleControl.hideSelector(battleControl.heroSelectorArea);
         battleControl.hideSelector(battleControl.actionMenu);
     }
 

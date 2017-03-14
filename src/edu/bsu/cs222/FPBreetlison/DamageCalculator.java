@@ -16,7 +16,7 @@ public class DamageCalculator {
     public int calculateDamage(){
         //int baseDamage = (int)calculateByStats();
         //return baseDamage*5;
-        return 5;
+        return attacker.getAttack();
     }
 
     private float calculateElementalAffinity(){

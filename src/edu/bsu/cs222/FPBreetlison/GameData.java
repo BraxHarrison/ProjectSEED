@@ -34,7 +34,6 @@ public class GameData {
         enemyTeam = new ArrayList<Fighter>();
         addHeroes();
         addEnemies();
-        System.out.println("Initializing...");
         maxTP = 10;
         tp = maxTP;
 
