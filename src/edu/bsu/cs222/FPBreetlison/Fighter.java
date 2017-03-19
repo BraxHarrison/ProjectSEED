@@ -19,6 +19,7 @@ public class Fighter {
     private ArrayList<Skill> skills;
     private ArrayList<String> battleStrings;
     private String actionString;
+    private String battlerGraphicPath;
     private int koLvl;
 
     public Fighter(String info){
@@ -36,14 +37,15 @@ public class Fighter {
         this.enDefense = Integer.parseInt(characterInfo.get(5));
         this.agility = Integer.parseInt(characterInfo.get(6));
         this.tpCost = Integer.parseInt(characterInfo.get(7));
+        this.battlerGraphicPath = characterInfo.get(8);
     }
 
     //region In-Battle Functionality
 
     public void doBasicAttack(Fighter target){
-       DamageCalculator damageCalculator = new DamageCalculator(this, target);
-       target.takeDamage(damageCalculator.calculateDamage());
-       chooseActionString();
+        DamageCalculator damageCalculator = new DamageCalculator(this, target);
+        target.takeDamage(damageCalculator.calculateDamage());
+        chooseActionString();
     }
 
     //endregion
@@ -167,6 +169,9 @@ public class Fighter {
     }
     public int getKOLvl() {
         return koLvl;
+    }
+    public String getBattlerGraphicPath() {
+        return battlerGraphicPath;
     }
     //endregion
 

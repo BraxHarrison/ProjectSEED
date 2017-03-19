@@ -4,16 +4,22 @@ import edu.bsu.cs222.FPBreetlison.BattleManager;
 import edu.bsu.cs222.FPBreetlison.Fighter;
 import edu.bsu.cs222.FPBreetlison.GameManager;
 import edu.bsu.cs222.FPBreetlison.GameData;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.paint.Color;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.*;
+import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -23,13 +29,8 @@ public class BattleController {
 
     //region Variables
 
-    public HBox heroSelectorArea;
-
-    public HBox actionMenu;
-    public Button attack;
-    public Button skills;
-    public Button items;
-    public Button flee;
+    public VBox heroSelectorArea;
+    public VBox actionMenu;
     public VBox allHeroVitals;
     public VBox allEnemyVitals;
     public ScrollPane objectsMenu;
@@ -37,23 +38,48 @@ public class BattleController {
     public Label historyDisplay;
     public ProgressBar tpBar;
     public Label tpDisplay;
+    public HBox backgroundImage;
+    public ScrollPane selectorMenu;
+    public Pane loaderScreen;
+    public StackPane battleDisplay;
 
     GameData gameData;
     GameManager game;
     BattleManager battleLogic;
+
+    Font darwinFont;
 
 
     public Label mainDisplay;
     //endregion
     //region Utility Functions
 
-    public void pushMessage(String message){
+    public void pushMessage(String message) {
         historyDisplay.setText(mainDisplay.getText() + "\n\n" + historyDisplay.getText());
-
         mainDisplay.setText(message);
-
-       // historyDisplay.setVvalue(mainScroller.getVmax());
     }
+
+    public void startMessagePush(){
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(2500),
+                ae -> endLoader()));
+        timeline.getKeyFrames().addAll();
+    }
+    private void startLoader(){
+        loaderScreen.toFront();
+        loaderScreen.setStyle("-fx-background-color: black;");
+        Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(2500),
+                ae -> endLoader()));
+        timeline.play();
+
+    }
+
+    private void endLoader() {
+        loaderScreen.setVisible(false);
+        battleDisplay.setVisible(true);
+    }
+
     public void delayFunction(long time){
         try {
             TimeUnit.MILLISECONDS.sleep(time);
@@ -66,17 +92,49 @@ public class BattleController {
     //region Initialization Functions
 
     public void initialize(GameManager game){
+        startLoader();
+        loadFonts();
+        transferBattleData(game);
+        setBackground();
+        formatSelectorArea();
+        setupBattle();
+    }
+
+    private void transferBattleData(GameManager game) {
         this.game = game;
         this.gameData = game.getGameData();
         this.battleLogic = game.getBattleLogic();
         battleLogic.getGameInfo(game);
-        setupBattle();
+
+    }
+
+
+    private void loadFonts() {
+        darwinFont = Font.loadFont(getClass().getResource("/fonts/Darwin.ttf").toExternalForm(), 10);
+    }
+
+    private void formatSelectorArea() {
+
+        mainDisplay.setTextFill(Color.web("0x000000"));
+        mainDisplay.setFont(darwinFont);
+        for(int i = 0; i < actionMenu.getChildren().size();i++){
+            Label action = (Label)actionMenu.getChildren().get(i);
+            action.setFont(darwinFont);
+        }
+
+    }
+
+    private void setBackground() {
+        BackgroundImage battleBack = new BackgroundImage(new Image("images/Plains_Day.png",900,500,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+        backgroundImage.setBackground(new Background(battleBack));
+        backgroundImage.toBack();
+
     }
 
     private void setupBattle(){
         createHeroButtons();
-        createHeroVitals();
-        createEnemyVitals();
+        //createHeroVitals();
+        //createEnemyVitals();
         createEnemySelectors();
         pushMessage("An enemy group led by " + gameData.getEnemyTeam().get(0).getName()
                 + " appears!");
@@ -87,21 +145,40 @@ public class BattleController {
 
         ArrayList<Fighter> team = gameData.getTeam();
         for(int i = 0; i<team.size();i++){
-            Button Hero = new Button(team.get(i).getName());
-            Hero.setText(team.get(i).getName());
-            Hero.setId(Integer.toString(i));
-            Hero.setOnAction(new EventHandler<ActionEvent>() {
+            Label hero = new Label(team.get(i).getName());
+            hero.setText(team.get(i).getName());
+            hero.setId(Integer.toString(i));
+            formatHeroButton(hero);
+            hero.setOnMousePressed(new EventHandler<javafx.scene.input.MouseEvent>() {
                 @Override
-                public void handle(ActionEvent event) {
-                    selectHero(Hero);
+                public void handle(javafx.scene.input.MouseEvent event) {
+                    selectHero(hero);
                 }
             });
-            heroSelectorArea.getChildren().add(Hero);
+            heroSelectorArea.getChildren().add(hero);
         }
     }
 
-    private void selectHero(Button hero) {
+    private void formatHeroButton(Label hero) {
+        hero.setScaleX(3);
+        hero.setScaleY(3);
+        hero.maxWidth(40);
+        hero.maxHeight(40);
+        hero.setTextFill(Color.web("0xffffff"));
+        hero.setFont(darwinFont);
+    }
+
+    private ImageView setImage(int id) {
+        String heroPath = gameData.getTeam().get(id).getBattlerGraphicPath();
+        System.out.println(heroPath);
+        Image image = new Image(getClass().getResourceAsStream(heroPath));
+        ImageView imageView = new ImageView(image);
+        return imageView;
+    }
+
+    private void selectHero(Label hero) {
         gameData.setSelectedUser(Integer.parseInt(hero.getId()));
+        heroSelectorArea.setVisible(false);
         showActionMenu();
     }
 
@@ -134,16 +211,31 @@ public class BattleController {
     //endregion
     //region Button Logic
 
-    public void selectAttack(ActionEvent actionEvent) {
+    public void selectAttack(javafx.scene.input.MouseEvent event) {
         pushMessage("Who will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " attack?");
         showSelector(enemySelectorArea);
+    }
+    public void selectEndTurn(javafx.scene.input.MouseEvent event) {
+        battleLogic.endPlayerTurn();
+    }
+    public void selectSkill(javafx.scene.input.MouseEvent event) {
+
+    }
+
+    public void selectItems(javafx.scene.input.MouseEvent event) {
+
+    }
+
+    public void selectFlee(javafx.scene.input.MouseEvent event) {
+
     }
 
     public void createEnemySelectors() {
         ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i<enemyTeam.size();i++){
-            Button enemy = new Button(enemyTeam.get(i).getName());
+            Button enemy = new Button("Enemy");
             enemy.setId(Integer.toString(i));
+            formatEnemySelector(enemy);
             enemy.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
@@ -154,6 +246,12 @@ public class BattleController {
             enemySelectorArea.getChildren().add(enemy);
 
         }
+    }
+
+    private void formatEnemySelector(Button enemy) {
+        enemy.setScaleX(1.5);
+        enemy.setScaleY(2);
+        enemy.setOpacity(0);
     }
 
     public void hideSelector(HBox selector){
@@ -171,11 +269,13 @@ public class BattleController {
 
         for (int i = 0; i < selectors.size(); i++) {
             fighters.get(i).checkKO();
+            Label hero = (Label)selectors.get(i);
             if (fighters.get(i).getKOLvl() > 0) {
                 KOamt++;
             }
             if(fighters.get(i).getKOLvl() == 1){
-                selectors.get(i).setVisible(false);
+                hero.setTextFill(Color.web("0x333c47"));
+                hero.setOnMousePressed(null);
                 pushMessage(fighters.get(i).getName() + " is down!");
             }
         }
@@ -209,13 +309,12 @@ public class BattleController {
     private void selectEnemy(Button selected) {
         gameData.setSelectedTarget(Integer.parseInt(selected.getId()));
         triggerAttack();
-        setHeroButtonsFullOpacity();
     }
 
     private void triggerAttack() {
 
         battleLogic.tryBasicAttack();
-        updateEnemyVitals();
+        //updateEnemyVitals();
 
     }
 
@@ -243,49 +342,11 @@ public class BattleController {
         battleLogic.checkPlayerTP();
     }
 
-    public void selectSkill(ActionEvent actionEvent) {
-
-    }
-
-    public void selectItems(ActionEvent actionEvent) {
-
-    }
-
-    public void selectFlee(ActionEvent actionEvent) {
-
-    }
-    public void setHeroButtonsFullOpacity(){
-        ObservableList<Node> heroButtons = heroSelectorArea.getChildren();
-        for(int i = 0; i < heroButtons.size(); i++){
-            Button button = (Button) heroButtons.get(i);
-            button.setOpacity(1);
-        }
-    }
-
-    private void setHeroButtonOpacity(){
-        ObservableList<Node> heroButtons = heroSelectorArea.getChildren();
-        for(int i = 0; i < heroButtons.size(); i++){
-            Button button = (Button) heroButtons.get(i);
-            button.setOpacity(.5);
-        }
-        if(!heroButtons.isEmpty()){
-            heroButtons.get(gameData.getSelectedUser()).setOpacity(1);
-        }
-
-
-    }
-
     private void showActionMenu() {
         actionMenu.setVisible(true);
-        setHeroButtonOpacity();
         pushMessage("What will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " do?" );
     }
 
-    public void selectEndTurn(ActionEvent actionEvent) {
-
-        battleLogic.endPlayerTurn();
-        setHeroButtonsFullOpacity();
-    }
 
     //endregion
 

@@ -46,7 +46,8 @@ public class BattleManager {
         }
         else if(phase.equals("heroWin")){
             battleControl.pushMessage(("You were victorious!"));
-            battleControl.hideSelector(battleControl.enemySelectorArea);
+            battleControl.enemySelectorArea.setVisible(false);
+            battleControl.heroSelectorArea.setVisible(false);
         }
     }
 
@@ -84,7 +85,7 @@ public class BattleManager {
     private void doEnemyAttack(Fighter user, Fighter target){
         user.doBasicAttack(target);
         battleControl.pushMessage(user.getName() + " strikes " + target.getName() + " !");
-        battleControl.updateHeroVitals();
+        //battleControl.updateHeroVitals();
     }
 
     private Fighter findNextTarget() {
@@ -98,7 +99,7 @@ public class BattleManager {
     }
 
     private void endEnemyTurn() {
-        battleControl.showSelector(battleControl.heroSelectorArea);
+        battleControl.heroSelectorArea.setVisible(true);
         if(battleControl.detectHeroKO()){
             updateTurn("enemyWin");
         }
@@ -120,12 +121,12 @@ public class BattleManager {
     }
 
     private void enableCharacterMenu() {
-        battleControl.showSelector(battleControl.heroSelectorArea);
+        battleControl.heroSelectorArea.setVisible(true);
     }
 
     private void disableCharacterMenu(){
-        battleControl.hideSelector(battleControl.heroSelectorArea);
-        battleControl.hideSelector(battleControl.actionMenu);
+        battleControl.heroSelectorArea.setVisible(false);
+        battleControl.actionMenu.setVisible(false);
     }
 
     public void checkPlayerTP(){
@@ -146,7 +147,7 @@ public class BattleManager {
         }
         else{
             battleControl.pushMessage("There's not enough time left for " + attacker.getName()
-            + " to attack!");
+                    + " to attack!");
         }
     }
 
@@ -155,9 +156,9 @@ public class BattleManager {
         attacker.doBasicAttack(target);
         int random = makeRandom(attacker.getBattleStrings().size());
         battleControl.pushMessage(attacker.getBattleStrings().get(random));
-        battleControl.hideSelector(battleControl.enemySelectorArea);
-        battleControl.hideSelector(battleControl.actionMenu);
-       requestTPUpdate();
+        battleControl.enemySelectorArea.setVisible(false);
+        battleControl.actionMenu.setVisible(false);
+        requestTPUpdate();
     }
 
     private void requestTPUpdate(){
@@ -166,12 +167,12 @@ public class BattleManager {
     }
 
     public void endPlayerTurn() {
-        battleControl.hideSelector(battleControl.enemySelectorArea);
+        battleControl.enemySelectorArea.setVisible(false);
         if(battleControl.detectEnemyKO()){
             updateTurn("heroWin");
         }
         else{
-        updateTurn("enemy");
+            updateTurn("enemy");
         }
 
 

@@ -5,6 +5,8 @@ import GUI.OverworldController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -38,8 +40,9 @@ public class GameManager {
     }
     private void setOverworldAsStage(Parent root){
         currentStage.setTitle("Overworld---(Location to be set)");
-        currentStage.setScene(new Scene(root, 900, 500));
+        currentStage.setScene(new Scene(root, 900, 800));
         currentStage.show();
+
     }
     //endregion
 
@@ -73,7 +76,7 @@ public class GameManager {
 
     private void setBattleAsStage(Parent root){
         currentStage.setTitle("Battle!");
-        currentStage.setScene(new Scene(root, 900,500));
+        currentStage.setScene(new Scene(root, 900,800));
 
     }
 
