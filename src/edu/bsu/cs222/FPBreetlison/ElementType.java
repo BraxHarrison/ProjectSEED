@@ -7,7 +7,6 @@ public class ElementType {
     }
 
     public String[] weaknesses(){
-       \
         String[] weaknesses = {"Pyro", "Metal"};
         return weaknesses;
     }

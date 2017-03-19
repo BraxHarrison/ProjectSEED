@@ -51,9 +51,9 @@ public class GameData {
     }
 
     private void addEnemies(){
-        enemyTeam.add(new Fighter("Jag,25,10,3,3,3,7,2"));
-        enemyTeam.add(new Fighter("Blisterbulb,30,6,6,7,7,3,6"));
-        enemyTeam.add(new Fighter("Harshmallow,20,3,4,9,11,4,4"));
+        enemyTeam.add(new Fighter("Jag,25,10,3,3,3,7,2,images/Ragtime_Pepe.jpg"));
+        enemyTeam.add(new Fighter("Blisterbulb,30,6,6,7,7,3,6,images/Ragtime_Pepe.jpg"));
+        enemyTeam.add(new Fighter("Harshmallow,20,3,4,9,11,4,4,images/Ragtime_Pepe.jpg"));
     }
 
     public void resetHeroTP(){

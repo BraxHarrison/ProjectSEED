@@ -6,14 +6,11 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.lang.model.util.Elements;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class XMLParser {
@@ -25,7 +22,7 @@ public class XMLParser {
     //region Initialization Functions
 
     private void createDoc() throws ParserConfigurationException, IOException, SAXException {
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("GameInfo.xml");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("database/GameInfo.xml");
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         this.document = builder.parse(inputStream);
@@ -87,7 +84,8 @@ public class XMLParser {
         strBuilder.append(battler.getAttribute("enAttack") + ",");
         strBuilder.append(battler.getAttribute("enDefense") + ",");
         strBuilder.append(battler.getAttribute("agility") + ",");
-        strBuilder.append(battler.getAttribute("tpCost"));
+        strBuilder.append(battler.getAttribute("tpCost") + ",");
+        strBuilder.append(battler.getAttribute("battlerGraphicPath"));
 
         return strBuilder.toString();
 
