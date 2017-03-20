@@ -44,7 +44,6 @@ public class BattleManager {
             tryEnemyAttack();
             resetTP();
             endEnemyTurn();
-            System.out.println(messageQueue);
         }
         else if(phase.equals("enemyWin")){
             battleControl.hideSelector(battleControl.enemySelectorArea);
@@ -53,6 +52,7 @@ public class BattleManager {
             battleControl.enemySelectorArea.setVisible(false);
             battleControl.heroSelectorArea.setVisible(false);
         }
+        battleControl.queueMessages(messageQueue);
     }
 
     private void resetTP() {
@@ -177,7 +177,10 @@ public class BattleManager {
         else{
             messageQueue.add("There's not enough time left for " + attacker.getName()
                     + " to attack!");
+            //This doesn't call for some reason
+            battleControl.queueMessages(messageQueue);
         }
+
     }
 
     private void startBasicAttack(int cost) {

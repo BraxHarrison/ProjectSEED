@@ -34,7 +34,7 @@
         <StackPane fx:id="mainSelectorArea">
             <ScrollPane fx:id="selectorMenu" maxHeight="800" maxWidth="125" styleClass="edge-to-edge" stylesheets="/stylesheets/ui1.css" StackPane.alignment="CENTER_LEFT" GridPane.rowIndex="1">
             </ScrollPane>
-            <VBox fx:id="heroSelectorArea" translateX="30" translateY="15" spacing="40">
+            <VBox fx:id="heroSelectorArea" translateX="45" translateY="15" spacing="40">
             </VBox>
 
             <VBox fx:id="actionMenu" visible="false" translateX="30" translateY="10" spacing="40">

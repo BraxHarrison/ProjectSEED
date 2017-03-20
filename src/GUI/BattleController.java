@@ -56,8 +56,6 @@ public class BattleController {
     //region Utility Functions
 
     public void queueMessages(ArrayList<String> messages){
-        //There's a strange issue here where the messages are somehow deleted before
-        //the animation finishes
         Timeline timeline = new Timeline();
         timeline.setOnFinished(new EventHandler<ActionEvent>() {
             @Override
@@ -99,15 +97,6 @@ public class BattleController {
         loaderScreen.setVisible(false);
         battleDisplay.setVisible(true);
     }
-
-    public void delayFunction(long time){
-        try {
-            TimeUnit.MILLISECONDS.sleep(time);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     //endregion
     //region Initialization Functions
 
@@ -182,9 +171,9 @@ public class BattleController {
     private void formatHeroButton(Label hero) {
         hero.setScaleX(3);
         hero.setScaleY(3);
-        hero.maxWidth(40);
-        hero.maxHeight(40);
-        hero.setTextFill(Color.web("0xffffff"));
+        hero.setMaxWidth(40);
+        hero.setMinWidth(40);
+        hero.setTextFill(Color.web("0xfffff1"));
         hero.setFont(darwinFont);
     }
 
@@ -261,7 +250,7 @@ public class BattleController {
                     selectEnemy(enemy);
                 }
             });
-            enemySelectorArea.setVisible(true);
+            enemySelectorArea.setVisible(false);
             enemySelectorArea.getChildren().add(enemy);
 
         }
@@ -270,7 +259,7 @@ public class BattleController {
     private void formatEnemySelector(Button enemy) {
         enemy.setScaleX(1.5);
         enemy.setScaleY(2);
-        enemy.setOpacity(0);
+        //enemy.setOpacity(0);
     }
 
     public void hideSelector(HBox selector){
