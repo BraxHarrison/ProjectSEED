@@ -67,8 +67,8 @@ public class BattleTests {
 
     @Test
     public void CheckDeadFighterKO(){
-        Fighter deadAttakcer = new Fighter("Attacker,0,2,2,2,2,2,2");
-        Assert.assertEquals(1,deadAttakcer.checkKO());
+        Fighter downFighter = new Fighter("Attacker,0,2,2,2,2,2,2");
+        Assert.assertEquals(1,downFighter.checkKO());
     }
 
     @Test

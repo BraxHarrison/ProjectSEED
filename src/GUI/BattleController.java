@@ -21,6 +21,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -54,17 +55,36 @@ public class BattleController {
     //endregion
     //region Utility Functions
 
+    public void queueMessages(ArrayList<String> messages){
+        //There's a strange issue here where the messages are somehow deleted before
+        //the animation finishes
+        Timeline timeline = new Timeline();
+        timeline.setOnFinished(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                clearMessages(messages);
+            }
+        });
+        int dur = 0;
+        for(int i = 0; i<messages.size();i++){
+            String message = messages.get(i);
+            timeline.getKeyFrames().add(new KeyFrame(
+                    Duration.millis(dur),
+                    ae -> pushMessage(message)));
+            dur += 1500;
+        }
+        timeline.play();
+    }
+
+    private void clearMessages(ArrayList<String> messages){
+        messages.clear();
+    }
+
     public void pushMessage(String message) {
         historyDisplay.setText(mainDisplay.getText() + "\n\n" + historyDisplay.getText());
         mainDisplay.setText(message);
     }
 
-    public void startMessagePush(){
-        Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(2500),
-                ae -> endLoader()));
-        timeline.getKeyFrames().addAll();
-    }
     private void startLoader(){
         loaderScreen.toFront();
         loaderScreen.setStyle("-fx-background-color: black;");
@@ -170,7 +190,6 @@ public class BattleController {
 
     private ImageView setImage(int id) {
         String heroPath = gameData.getTeam().get(id).getBattlerGraphicPath();
-        System.out.println(heroPath);
         Image image = new Image(getClass().getResourceAsStream(heroPath));
         ImageView imageView = new ImageView(image);
         return imageView;
@@ -242,7 +261,7 @@ public class BattleController {
                     selectEnemy(enemy);
                 }
             });
-            enemySelectorArea.setVisible(false);
+            enemySelectorArea.setVisible(true);
             enemySelectorArea.getChildren().add(enemy);
 
         }
@@ -260,29 +279,6 @@ public class BattleController {
 
     public void showSelector(HBox selector){
         selector.setVisible(true);
-    }
-
-    public boolean detectHeroKO() {
-        ObservableList<Node> selectors = heroSelectorArea.getChildren();
-        ArrayList<Fighter> fighters = gameData.getTeam();
-        int KOamt = 0;
-
-        for (int i = 0; i < selectors.size(); i++) {
-            fighters.get(i).checkKO();
-            Label hero = (Label)selectors.get(i);
-            if (fighters.get(i).getKOLvl() > 0) {
-                KOamt++;
-            }
-            if(fighters.get(i).getKOLvl() == 1){
-                hero.setTextFill(Color.web("0x333c47"));
-                hero.setOnMousePressed(null);
-                pushMessage(fighters.get(i).getName() + " is down!");
-            }
-        }
-        if (KOamt == fighters.size()) {
-            return true;
-        }
-        return false;
     }
 
 
@@ -344,7 +340,7 @@ public class BattleController {
 
     private void showActionMenu() {
         actionMenu.setVisible(true);
-        pushMessage("What will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " do?" );
+        //pushMessage("What will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " do?" );
     }
 
 
