@@ -1,22 +1,59 @@
 package edu.bsu.cs222.FPBreetlison;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class Room {
 
-    public Room(String name){
+    private String description;
+    private String name;
+    private String north;
+    private String south;
+    private String east;
+    private String west;
+    //private ArrayList<Item> itemsInRoom;
+
+
+
+
+    public Room(String info){
+
+
+        List<String> roomInfo = stringParser(info);
+        this.name = roomInfo.get(0);
+        this.description = roomInfo.get(1);
+        this.north = roomInfo.get(2);
+        this.south = roomInfo.get(3);
+        this.east = roomInfo.get(4);
+        this.west = roomInfo.get(5);
 
     }
 
-    public int GetNorth(){
-        return 2;
+    private List<String> stringParser(String info) {
+
+        List<String> details = Arrays.asList(info.split(","));
+        return details;
     }
-    public int GetSouth(){
-        return 2;
+
+
+    public String getNorth(){
+        return north;
     }
-    public int GetEast(){
-        return 2;
+    public String getSouth(){
+        return south;
     }
-    public int GetWest(){
-        return 2;
+    public String getEast(){
+        return east;
+    }
+    public String getWest(){
+        return west;
+    }
+
+    public String getDescription(){
+       return description;
+    }
+    public String getName(){
+        return name;
     }
 
 }

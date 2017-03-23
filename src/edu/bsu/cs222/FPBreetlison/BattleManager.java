@@ -1,6 +1,6 @@
 package edu.bsu.cs222.FPBreetlison;
 
-import GUI.BattleController;
+import GUI.BattleView;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -14,7 +14,7 @@ public class BattleManager {
 
     private GameManager game;
     private GameData gameData;
-    private BattleController battleControl;
+    private BattleView battleControl;
 
     private Fighter attacker;
     private Fighter target;
@@ -124,7 +124,7 @@ public class BattleManager {
         ArrayList<Fighter> fighters = gameData.getTeam();
         int KOamt = 0;
 
-        for (int i = 0; i < selectors.size(); i++) {
+        for (int i = 0; i < fighters.size(); i++) {
             fighters.get(i).checkKO();
             Label hero = (Label)selectors.get(i);
             if (fighters.get(i).getKOLvl() > 0) {
@@ -175,10 +175,8 @@ public class BattleManager {
             startBasicAttack(cost);
         }
         else{
-            messageQueue.add("There's not enough time left for " + attacker.getName()
+            battleControl.pushMessage("There's not enough time left for " + attacker.getName()
                     + " to attack!");
-            //This doesn't call for some reason
-            battleControl.queueMessages(messageQueue);
         }
 
     }

@@ -25,7 +25,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
-public class BattleController {
+public class BattleView {
 
 
     //region Variables
@@ -142,8 +142,6 @@ public class BattleController {
 
     private void setupBattle(){
         createHeroButtons();
-        //createHeroVitals();
-        //createEnemyVitals();
         createEnemySelectors();
         pushMessage("An enemy group led by " + gameData.getEnemyTeam().get(0).getName()
                 + " appears!");

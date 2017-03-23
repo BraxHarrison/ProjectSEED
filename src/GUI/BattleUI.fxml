@@ -11,11 +11,11 @@
 
 <?import javafx.scene.Group?>
 <?import javafx.geometry.Insets?>
-<StackPane fx:controller="GUI.BattleController" xmlns:fx="http://javafx.com/fxml">
+<StackPane fx:controller="GUI.BattleView" xmlns:fx="http://javafx.com/fxml">
 
 
-    <Pane fx:id="loaderScreen" maxWidth="900" maxHeight="800">
-        <ProgressIndicator fx:id="loader" layoutX="420" layoutY="300"/>
+    <Pane fx:id="loaderScreen" maxWidth="900" maxHeight="600">
+        <ProgressIndicator fx:id="loader" layoutX="420" layoutY="275"/>
     </Pane>
 
     <StackPane fx:id="battleDisplay" visible="false">
@@ -32,7 +32,7 @@
 
         <!--Lots of stuff needs to be moved here-->
         <StackPane fx:id="mainSelectorArea">
-            <ScrollPane fx:id="selectorMenu" maxHeight="800" maxWidth="125" styleClass="edge-to-edge" stylesheets="/stylesheets/ui1.css" StackPane.alignment="CENTER_LEFT" GridPane.rowIndex="1">
+            <ScrollPane fx:id="selectorMenu" maxHeight="600" maxWidth="125" styleClass="edge-to-edge" stylesheets="/stylesheets/ui1.css" StackPane.alignment="CENTER_LEFT" GridPane.rowIndex="1">
             </ScrollPane>
             <VBox fx:id="heroSelectorArea" translateX="45" translateY="15" spacing="40">
             </VBox>

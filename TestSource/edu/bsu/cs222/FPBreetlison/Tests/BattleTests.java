@@ -3,29 +3,22 @@ package edu.bsu.cs222.FPBreetlison.Tests;
 import edu.bsu.cs222.FPBreetlison.Fighter;
 import edu.bsu.cs222.FPBreetlison.DamageCalculator;
 
-import edu.bsu.cs222.FPBreetlison.XMLParser;
+import edu.bsu.cs222.FPBreetlison.BattleXMLParser;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 
 public class BattleTests {
 
     private DamageCalculator damageCalc;
-    private XMLParser parser;
+    private BattleXMLParser parser;
     private Document characterInfo;
     private Fighter attacker;
     private Fighter defender;
@@ -42,7 +35,7 @@ public class BattleTests {
         attacker = new Fighter("Attacker,2,2,2,2,2,2,2");
         defender = new Fighter("Attacker,2,2,2,2,2,2,2");
         damageCalc = new DamageCalculator(attacker, defender);
-        parser = new XMLParser();
+        parser = new BattleXMLParser();
     }
 
     private void setUpCharacterInfo() throws ParserConfigurationException, IOException, SAXException {

@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 
-public class XMLParser {
+public class BattleXMLParser {
 
     Document document;
     NodeList nodeList;
@@ -35,6 +35,20 @@ public class XMLParser {
         fighters = createFighterList();
         setBattleDescriptions();
         return fighters;
+    }
+
+    private ArrayList<Fighter> createFighterList(){
+        ArrayList<Fighter> fighters = new ArrayList<Fighter>();
+        nodeList = this.document.getElementsByTagName("chara");
+        for(int i = 0; i< nodeList.getLength();i++){
+
+            Node battleInfo = nodeList.item(i);
+            Element battler = (Element)battleInfo;
+            Fighter fighter = new Fighter(createFighterString(battler));
+            fighters.add(fighter);
+        }
+        return fighters;
+
     }
 
     private void setBattleDescriptions (){
@@ -61,19 +75,7 @@ public class XMLParser {
 
     }
 
-    private ArrayList<Fighter> createFighterList(){
-        ArrayList<Fighter> fighters = new ArrayList<Fighter>();
-        nodeList = this.document.getElementsByTagName("chara");
-        for(int i = 0; i< nodeList.getLength();i++){
 
-            Node battleInfo = nodeList.item(i);
-            Element battler = (Element)battleInfo;
-            Fighter fighter = new Fighter(createFighterString(battler));
-            fighters.add(fighter);
-        }
-        return fighters;
-
-    }
 
     private String createFighterString(Element battler) {
         StringBuilder strBuilder = new StringBuilder();

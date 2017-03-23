@@ -1,12 +1,10 @@
 package edu.bsu.cs222.FPBreetlison;
 
-import GUI.BattleController;
+import GUI.BattleView;
 import GUI.OverworldController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,7 +14,7 @@ public class GameManager {
     private GameData gameData;
     private BattleManager battleLogic;
     private OverworldController overworld;
-    private BattleController battleControl;
+    private BattleView battleControl;
     Stage currentStage;
 
     //region Initialization
@@ -25,8 +23,8 @@ public class GameManager {
         currentStage = gameData.getStage();
         currentStage.setResizable(false);
         setUpOverworld();
-
     }
+
     private void setUpOverworld() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         try {
@@ -39,15 +37,14 @@ public class GameManager {
         overworld.initialize(this);
     }
     private void setOverworldAsStage(Parent root){
-        currentStage.setTitle("Overworld---(Location to be set)");
-        currentStage.setScene(new Scene(root, 900, 800));
+        currentStage.setTitle("Overworld: "+gameData.getCurrentRoom().getName());
+        currentStage.setScene(new Scene(root, 900, 600));
         currentStage.show();
 
     }
     //endregion
 
     public void play(){
-        System.out.println("Game is running");
         this.gameData = gameData;
     }
 
@@ -76,7 +73,7 @@ public class GameManager {
 
     private void setBattleAsStage(Parent root){
         currentStage.setTitle("Battle!");
-        currentStage.setScene(new Scene(root, 900,800));
+        currentStage.setScene(new Scene(root, 900,600));
 
     }
 
@@ -86,7 +83,7 @@ public class GameManager {
     public OverworldController getOverworld() {
         return overworld;
     }
-    public BattleController getBattleControl() {
+    public BattleView getBattleControl() {
         return battleControl;
     }
     public BattleManager getBattleLogic() {

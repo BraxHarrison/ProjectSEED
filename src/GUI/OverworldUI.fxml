@@ -6,6 +6,8 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<GridPane fx:controller="GUI.OverworldController" xmlns:fx="http://javafx.com/fxml" alignment="center" hgap="1" vgap="1">
-    <Button fx:id="clickToBattle" text="Click to start battle" onAction="#startBattle"/>
-</GridPane>
+<?import javafx.scene.layout.StackPane?>
+<StackPane fx:controller="GUI.OverworldController" xmlns:fx="http://javafx.com/fxml" alignment="center">
+    <Label fx:id="roomDescription" StackPane.alignment="CENTER" text="TESTPOOP"/>
+    <Button fx:id="clickToBattle" StackPane.alignment="TOP_LEFT" text="Click to start battle" onAction="#startBattle"/>
+</StackPane>

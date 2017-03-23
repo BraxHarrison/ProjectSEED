@@ -6,16 +6,18 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class GameData {
 
     public static GameData gameData;
-
     private ArrayList<Fighter> team;
     private ArrayList<Fighter> allFighters;
     private ArrayList<Fighter> enemyTeam;
+    private Map<String, Room> allRooms;
     private Fighter target;
     private Stage stage;
+    private Room currentRoom;
     private int tp;
     private int maxTP;
     private int selectedUser;
@@ -29,19 +31,30 @@ public class GameData {
     }
 
     private void init() throws ParserConfigurationException, SAXException, IOException {
-        loadDataBase();
+        loadFighters();
+        loadRooms();
         team = new ArrayList<Fighter>();
         enemyTeam = new ArrayList<Fighter>();
         addHeroes();
+        currentRoom = allRooms.get("FirstSteps");
+        //addHeroes();
         addEnemies();
         maxTP = 10;
         tp = maxTP;
 
     }
 
-    private void loadDataBase() throws IOException, SAXException, ParserConfigurationException {
-        XMLParser loader = new XMLParser();
+    private void loadRooms() throws IOException, SAXException, ParserConfigurationException {
+
+        OverWorldParser loader = new OverWorldParser();
+        allRooms = loader.parseRoomInfo();
+
+    }
+
+    private void loadFighters() throws IOException, SAXException, ParserConfigurationException {
+        BattleXMLParser loader = new BattleXMLParser();
         allFighters = loader.parseFighterInfo();
+
     }
 
     private void addHeroes(){
@@ -60,6 +73,7 @@ public class GameData {
         tp = maxTP;
     }
 
+    public Room getCurrentRoom(){return currentRoom;}
     public ArrayList<Fighter> getTeam() {
         return team;
     }

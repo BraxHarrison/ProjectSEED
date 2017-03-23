@@ -1,17 +1,34 @@
 <GameInfo>
-    <CharacterBattleInfo>
-        <chara name="Prota" maxHP="30" attack="7" defense="5" enAttack="2" enDefense="5" agility="7" tpCost="3" battlerGraphicPath="/images/Bulba_Pepe.png"/>
-        <chara name="Roxy" maxHP="20" attack="5" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/Trump_Pepe.png"/>
-        <chara name="Smitty" maxHP="45" attack="12" defense="10" enAttack="1" enDefense="4" agility="5" tpCost="5" battlerGraphicPath="/images/Ragtime_Pepe.jpg"/>
-    </CharacterBattleInfo>
-    <CharacterBattleStrings>
-                <ProtaBattleString string="You fire a quick shot at the enemy. It grazes them."/>
-                <ProtaBattleString string="You take a second to aim at the enemy. You fire. The shot connects."/>
-                <RoxyBattleString string="Roxy springs forward, kicks the enemy in the gut, and bounces back."/>
-                <RoxyBattleString string="Roxy bounces high into the air. Her metal heels come crashing down on the enemy's head."/>
-                <RoxyBattleString string="Roxy pushes her palm to the enemy's chest and looses an electric shock."/>
-                <SmittyBattleString string="Smitty quickly sweeps under the enemy with his hammer. They trip and fall."/>
-                <SmittyBattleString string="Smitty clips the ground with his hammer, flinging a light field of rubble at the enemy."/>
-                <SmittyBattleString string ="Smitty slams the ground, causing a fissure to open up under the enemy."/>
-    </CharacterBattleStrings>
+    <BattleInfo>
+        <CharacterBattleInfo>
+            <chara name="Prota" maxHP="30" attack="7" defense="5" enAttack="2" enDefense="5" agility="7" tpCost="3" battlerGraphicPath="/images/Bulba_Pepe.png"/>
+            <chara name="Roxy" maxHP="20" attack="5" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/Trump_Pepe.png"/>
+            <chara name="Smitty" maxHP="45" attack="12" defense="10" enAttack="1" enDefense="4" agility="5" tpCost="5" battlerGraphicPath="/images/Ragtime_Pepe.jpg"/>
+        </CharacterBattleInfo>
+        <CharacterBattleStrings>
+            <ProtaBattleString string="You fire a quick shot at the enemy. It grazes them."/>
+            <ProtaBattleString string="You take a second to aim at the enemy. You fire. The shot connects."/>
+            <RoxyBattleString string="Roxy springs forward, kicks the enemy in the gut, and bounces back."/>
+            <RoxyBattleString string="Roxy bounces high into the air. Her metal heels come crashing down on the enemy's head."/>
+            <RoxyBattleString string="Roxy pushes her palm to the enemy's chest and looses an electric shock."/>
+            <SmittyBattleString string="Smitty quickly sweeps under the enemy with his hammer. They trip and fall."/>
+            <SmittyBattleString string="Smitty clips the ground with his hammer, flinging a light field of rubble at the enemy."/>
+            <SmittyBattleString string ="Smitty slams the ground, causing a fissure to open up under the enemy."/>
+        </CharacterBattleStrings>
+    </BattleInfo>
+
+    <OverWorldInfo>
+        <Islands>
+            <Sectors>
+                <Rooms>
+                    <room name="FirstSteps" des="This is our first test room plz work GET SOME. To the North you see Take Two! To the South is A Rooster. The East and West Do not exist in this realm." north="TakeTwo" south="A-Doodle-Doo" east="Null" west="Null"/>
+                    <room name="TakeTwo" des="This is our Second room. I hope we can find it." north="TakeTwo" south="FirstSteps" east="Null" west="Null" />
+                    <room name="FakeOutTakeOut" des="This is a test room, I hope you never find it" north="TakeTwo" south="A-Doodle-Doo" east="Null" west="Null"/>
+                    <room name="A-Doodle-Doo" des="This one's for Brax." north="TakeTwo" south="A-Doodle-Doo" east="Null" west="Null"/>
+                </Rooms>
+            </Sectors>
+        </Islands>
+
+    </OverWorldInfo>
 </GameInfo>
+
