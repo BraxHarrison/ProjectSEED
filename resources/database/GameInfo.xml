@@ -21,10 +21,10 @@
         <Islands>
             <Sectors>
                 <Rooms>
-                    <room name="FirstSteps" des="This is our first test room plz work GET SOME. To the North you see Take Two! To the South is A Rooster. The East and West Do not exist in this realm." north="TakeTwo" south="A-Doodle-Doo" east="Null" west="Null"/>
-                    <room name="TakeTwo" des="This is our Second room. I hope we can find it." north="TakeTwo" south="FirstSteps" east="Null" west="Null" />
-                    <room name="FakeOutTakeOut" des="This is a test room, I hope you never find it" north="TakeTwo" south="A-Doodle-Doo" east="Null" west="Null"/>
-                    <room name="A-Doodle-Doo" des="This one's for Brax." north="TakeTwo" south="A-Doodle-Doo" east="Null" west="Null"/>
+                    <room name="FirstSteps" des="This is our first test room plz work GET SOME. To the North you see Take Two! To the South is A Rooster. The East and West Do not exist in this realm." north="TakeTwo" south="A-Doodle-Doo" east="null" west="pop"/>
+                    <room name="TakeTwo" des="This is our Second room. I hope we can find it." north="FirstSteps" south="FirstSteps" east="null" west="null" />
+                    <room name="FakeOutTakeOut" des="This is a test room, I hope you never find it" north="TakeTwo" south="A-Doodle-Doo" east="null" west="null"/>
+                    <room name="A-Doodle-Doo" des="This one's for Brax." north="TakeTwo" south="A-Doodle-Doo" east="null" west="null"/>
                 </Rooms>
             </Sectors>
         </Islands>

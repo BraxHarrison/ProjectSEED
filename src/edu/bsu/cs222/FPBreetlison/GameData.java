@@ -73,7 +73,12 @@ public class GameData {
         tp = maxTP;
     }
 
+    public void changeRoom(String direction){
+
+    }
+
     public Room getCurrentRoom(){return currentRoom;}
+    public Map<String, Room> getAllRooms(){return allRooms;}
     public ArrayList<Fighter> getTeam() {
         return team;
     }

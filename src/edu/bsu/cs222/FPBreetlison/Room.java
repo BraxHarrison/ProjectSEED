@@ -36,9 +36,11 @@ public class Room {
     }
 
 
+
     public String getNorth(){
         return north;
     }
+
     public String getSouth(){
         return south;
     }

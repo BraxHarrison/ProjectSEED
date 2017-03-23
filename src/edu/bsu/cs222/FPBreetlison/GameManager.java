@@ -1,24 +1,28 @@
 package edu.bsu.cs222.FPBreetlison;
 
 import GUI.BattleView;
-import GUI.OverworldController;
+import GUI.OverworldView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class GameManager {
 
     private GameData gameData;
     private BattleManager battleLogic;
-    private OverworldController overworld;
+    private OverworldView overworld;
     private BattleView battleControl;
     Stage currentStage;
+    private Room currentRoom;
+
 
     //region Initialization
     public void init(GameData gameData){
+        currentRoom = gameData.getAllRooms().get("FirstSteps");
         this.gameData = gameData;
         currentStage = gameData.getStage();
         currentStage.setResizable(false);
@@ -76,11 +80,11 @@ public class GameManager {
         currentStage.setScene(new Scene(root, 900,600));
 
     }
-
+    public Room getCurrentRoom() {return currentRoom;}
     public GameData getGameData(){
         return gameData;
     }
-    public OverworldController getOverworld() {
+    public OverworldView getOverworld() {
         return overworld;
     }
     public BattleView getBattleControl() {
@@ -88,5 +92,38 @@ public class GameManager {
     }
     public BattleManager getBattleLogic() {
         return battleLogic;
+    }
+
+    public void travelNorth() {
+        if(Objects.equals(currentRoom.getNorth(), "null")) {
+            return;
+        }
+        currentRoom = gameData.getAllRooms().get(currentRoom.getNorth());
+
+    }
+
+    public void travelSouth() {
+        if(Objects.equals(currentRoom.getSouth(), "null")){
+            return;
+        }
+        currentRoom = gameData.getAllRooms().get(currentRoom.getSouth());
+
+    }
+
+    public void travelEast() {
+        if(Objects.equals(currentRoom.getEast(), "null")) {
+            return;
+        }
+        currentRoom = gameData.getAllRooms().get(currentRoom.getEast());
+
+    }
+
+    public void travelWest() {
+
+        if(Objects.equals(currentRoom.getWest(), "pop")) {
+            return;
+        }
+        currentRoom = gameData.getAllRooms().get(currentRoom.getWest());
+
     }
 }

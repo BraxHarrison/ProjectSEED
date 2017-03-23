@@ -7,7 +7,19 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
-<StackPane fx:controller="GUI.OverworldController" xmlns:fx="http://javafx.com/fxml" alignment="center">
+<StackPane fx:controller="GUI.OverworldView" xmlns:fx="http://javafx.com/fxml" alignment="center">
     <Label fx:id="roomDescription" StackPane.alignment="CENTER" text="TESTPOOP"/>
+
+    <Button fx:id="travelButton" StackPane.alignment="BOTTOM_RIGHT" onAction="#openTravel"/>
+    <ScrollPane fx:id="travelPane" StackPane.alignment="BOTTOM_RIGHT"  maxHeight="175" maxWidth="175" visible="false">
+        <Button fx:id="closeTravelButton" translateX="150" text="X" onAction="#closeTravel"/>
+        <Button fx:id="south" translateX="75" text="S" translateY="120" onAction="#travelSouth"/>
+        <Button fx:id="east" translateX="40" text="E" translateY="80" onAction="#travelEast"/>
+        <Button fx:id="west" translateX="105" text="W" translateY="80" onAction="#travelWest"/>
+        <Button fx:id="north" translateX="75" translateY="40" text="N" onAction="#travelNorth"/>
+
+    </ScrollPane>
+
+
     <Button fx:id="clickToBattle" StackPane.alignment="TOP_LEFT" text="Click to start battle" onAction="#startBattle"/>
 </StackPane>
