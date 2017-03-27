@@ -1,13 +1,11 @@
 package GUI;
 
-import edu.bsu.cs222.FPBreetlison.BattleManager;
-import edu.bsu.cs222.FPBreetlison.Fighter;
-import edu.bsu.cs222.FPBreetlison.GameManager;
-import edu.bsu.cs222.FPBreetlison.GameData;
+import edu.bsu.cs222.FPBreetlison.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -21,21 +19,22 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class BattleView {
 
 
     //region Variables
 
+    private ArrayList<Fighter> team;
+    private ArrayList<Fighter> enemyTeam;
+
     public VBox heroSelectorArea;
     public VBox actionMenu;
     public VBox allHeroVitals;
     public VBox allEnemyVitals;
-    public ScrollPane objectsMenu;
     public HBox enemySelectorArea;
+    public VBox itemSelectorArea;
     public Label historyDisplay;
     public ProgressBar tpBar;
     public Label tpDisplay;
@@ -43,6 +42,9 @@ public class BattleView {
     public ScrollPane selectorMenu;
     public Pane loaderScreen;
     public StackPane battleDisplay;
+
+    private int selectedItem;
+    private boolean uiLocked;
 
     GameData gameData;
     GameManager game;
@@ -57,25 +59,23 @@ public class BattleView {
 
     public void queueMessages(ArrayList<String> messages){
         Timeline timeline = new Timeline();
-        timeline.setOnFinished(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                clearMessages(messages);
-            }
-        });
+        timeline.setOnFinished(e -> clearMessages(messages));
+        ArrayList<String> queuedMessages = messages;
         int dur = 0;
-        for(int i = 0; i<messages.size();i++){
-            String message = messages.get(i);
+        for(int i = 0; i<queuedMessages.size();i++){
+            String message = queuedMessages.get(i);
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
                     ae -> pushMessage(message)));
             dur += 1500;
         }
+        uiLocked = true;
         timeline.play();
     }
 
     private void clearMessages(ArrayList<String> messages){
         messages.clear();
+        uiLocked = false;
     }
 
     public void pushMessage(String message) {
@@ -101,12 +101,19 @@ public class BattleView {
     //region Initialization Functions
 
     public void initialize(GameManager game){
+        transferBattleData(game);
+        readData();
         startLoader();
         loadFonts();
-        transferBattleData(game);
         setBackground();
-        formatSelectorArea();
+        formatDisplayArea();
         setupBattle();
+    }
+
+    private void readData() {
+        team = gameData.getTeam();
+        enemyTeam = gameData.getEnemyTeam();
+
     }
 
     private void transferBattleData(GameManager game) {
@@ -117,12 +124,11 @@ public class BattleView {
 
     }
 
-
     private void loadFonts() {
         darwinFont = Font.loadFont(getClass().getResource("/fonts/Darwin.ttf").toExternalForm(), 10);
     }
 
-    private void formatSelectorArea() {
+    private void formatDisplayArea() {
 
         mainDisplay.setTextFill(Color.web("0x000000"));
         mainDisplay.setFont(darwinFont);
@@ -143,17 +149,16 @@ public class BattleView {
     private void setupBattle(){
         createHeroButtons();
         createEnemySelectors();
-        pushMessage("An enemy group led by " + gameData.getEnemyTeam().get(0).getName()
+        createItemsButtons();
+        pushMessage("An enemy group led by " + enemyTeam.get(0).getName()
                 + " appears!");
         battleLogic.start();
     }
 
     private void createHeroButtons() {
 
-        ArrayList<Fighter> team = gameData.getTeam();
         for(int i = 0; i<team.size();i++){
             Label hero = new Label(team.get(i).getName());
-            hero.setText(team.get(i).getName());
             hero.setId(Integer.toString(i));
             formatHeroButton(hero);
             hero.setOnMousePressed(new EventHandler<javafx.scene.input.MouseEvent>() {
@@ -176,20 +181,39 @@ public class BattleView {
     }
 
     private ImageView setImage(int id) {
-        String heroPath = gameData.getTeam().get(id).getBattlerGraphicPath();
+        String heroPath = team.get(id).getBattlerGraphicPath();
         Image image = new Image(getClass().getResourceAsStream(heroPath));
         ImageView imageView = new ImageView(image);
         return imageView;
     }
 
-    private void selectHero(Label hero) {
-        gameData.setSelectedUser(Integer.parseInt(hero.getId()));
-        heroSelectorArea.setVisible(false);
-        showActionMenu();
+    private void createItemsButtons(){
+        ArrayList<Item> inventory = gameData.getInventory();
+        for(int i = 0; i<inventory.size();i++){
+            System.out.println(inventory.get(i).getName());
+            Label item = new Label(inventory.get(i).getName());
+            item.setId(Integer.toString(i));
+            formatItemSelector(item);
+            item.setOnMousePressed(new EventHandler<javafx.scene.input.MouseEvent>(){
+                @Override
+                public void handle(javafx.scene.input.MouseEvent event){selectItem(item);}
+
+            });
+            itemSelectorArea.getChildren().add(item);
+        }
+    }
+
+    private void formatItemSelector(Label item) {
+        item.setScaleX(2);
+        item.setScaleY(2);
+        item.setMaxWidth(60);
+        item.setMinWidth(40);
+        System.out.println("This is happening too");
+        item.setTextFill(Color.web("0xffffff"));
+        item.setFont(darwinFont);
     }
 
     private void createHeroVitals(){
-        ArrayList<Fighter> team = gameData.getTeam();
         for(int i = 0; i < team.size();i++){
             Label name = new Label(team.get(i).getName());
             Label hp = new Label("HP: "+team.get(i).getHp()+"/"+team.get(i).getMaxHP());
@@ -202,7 +226,6 @@ public class BattleView {
     }
 
     private void createEnemyVitals(){
-        ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i < enemyTeam.size();i++){
             Label name = new Label(enemyTeam.get(i).getName());
             Label hp = new Label("HP: "+ enemyTeam.get(i).getHp()+"/"+enemyTeam.get(i).getMaxHP());
@@ -218,17 +241,37 @@ public class BattleView {
     //region Button Logic
 
     public void selectAttack(javafx.scene.input.MouseEvent event) {
-        pushMessage("Who will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " attack?");
-        showSelector(enemySelectorArea);
+        if(!uiLocked){
+            pushMessage("Who will " + team.get(gameData.getSelectedUser()).getName() + " attack?");
+            enemySelectorArea.setVisible(true);
+        }
+
     }
     public void selectEndTurn(javafx.scene.input.MouseEvent event) {
-        battleLogic.endPlayerTurn();
+        if(!uiLocked){
+            battleLogic.endPlayerTurn();
+        }
+
     }
     public void selectSkill(javafx.scene.input.MouseEvent event) {
 
     }
 
-    public void selectItems(javafx.scene.input.MouseEvent event) {
+    public void selectBag(javafx.scene.input.MouseEvent event) {
+        if(!uiLocked){
+            pushMessage("Which item will " + team.get(gameData.getSelectedUser()).getName() +
+                    " use?");
+            itemSelectorArea.setVisible(true);
+            actionMenu.setVisible(false);
+        }
+
+    }
+
+    private void selectItem(Label item){
+        System.out.println("Item Selected!");
+        selectedItem = Integer.parseInt(item.getId());
+    }
+    private void useItem(){
 
     }
 
@@ -237,7 +280,6 @@ public class BattleView {
     }
 
     public void createEnemySelectors() {
-        ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i<enemyTeam.size();i++){
             Button enemy = new Button("Enemy");
             enemy.setId(Integer.toString(i));
@@ -260,16 +302,8 @@ public class BattleView {
         //enemy.setOpacity(0);
     }
 
-    public void hideSelector(HBox selector){
-        selector.setVisible(false);
-    }
-
-    public void showSelector(HBox selector){
-        selector.setVisible(true);
-    }
-
-
     public boolean detectEnemyKO() {
+        //This really needs to be moved to BattleManager
         ObservableList<Node> selectors = enemySelectorArea.getChildren();
         ArrayList<Fighter> fighters = gameData.getEnemyTeam();
         int KOamt = 0;
@@ -289,6 +323,13 @@ public class BattleView {
         return false;
     }
 
+
+    private void selectHero(Label hero) {
+        gameData.setSelectedUser(Integer.parseInt(hero.getId()));
+        heroSelectorArea.setVisible(false);
+        showActionMenu();
+    }
+
     private void selectEnemy(Button selected) {
         gameData.setSelectedTarget(Integer.parseInt(selected.getId()));
         triggerAttack();
@@ -302,7 +343,7 @@ public class BattleView {
     }
 
     private void updateEnemyVitals() {
-        ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
+
         for(int i = 0; i<allEnemyVitals.getChildren().size();i++){
             VBox enemyVital = (VBox) allEnemyVitals.getChildren().get(i);
             Label enemyHP = (Label)enemyVital.getChildren().get(1);
@@ -311,11 +352,10 @@ public class BattleView {
     }
 
     public void updateHeroVitals(){
-        ArrayList<Fighter> heroTeam = gameData.getTeam();
         for(int i = 0; i< allHeroVitals.getChildren().size(); i++){
             VBox heroVital = (VBox) allHeroVitals.getChildren().get(i);
             Label heroHP = (Label)heroVital.getChildren().get(1);
-            heroHP.setText("HP: " + heroTeam.get(i).getHp()+"/"+heroTeam.get(i).getMaxHP());
+            heroHP.setText("HP: " + team.get(i).getHp()+"/"+ team.get(i).getMaxHP());
         }
     }
 
@@ -327,7 +367,12 @@ public class BattleView {
 
     private void showActionMenu() {
         actionMenu.setVisible(true);
-        //pushMessage("What will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " do?" );
+        pushMessage("What will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " do?" );
+    }
+
+    public void goBack(MouseEvent mouseEvent) {
+        actionMenu.setVisible(false);
+        heroSelectorArea.setVisible(true);
     }
 
 

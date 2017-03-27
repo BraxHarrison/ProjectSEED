@@ -14,6 +14,8 @@ public class GameData {
     private ArrayList<Fighter> team;
     private ArrayList<Fighter> allFighters;
     private ArrayList<Fighter> enemyTeam;
+    private ArrayList<Item> allItems;
+    private ArrayList<Item> inventory;
     private Map<String, Room> allRooms;
     private Fighter target;
     private Stage stage;
@@ -33,15 +35,20 @@ public class GameData {
     private void init() throws ParserConfigurationException, SAXException, IOException {
         loadFighters();
         loadRooms();
-        team = new ArrayList<Fighter>();
-        enemyTeam = new ArrayList<Fighter>();
+        loadLists();
         addHeroes();
-        currentRoom = allRooms.get("FirstSteps");
-        //addHeroes();
         addEnemies();
+        initItems();
+        currentRoom = allRooms.get("FirstSteps");
         maxTP = 10;
         tp = maxTP;
 
+    }
+
+    private void loadLists() {
+        team = new ArrayList<Fighter>();
+        inventory = new ArrayList<Item>();
+        enemyTeam = new ArrayList<Fighter>();
     }
 
     private void loadRooms() throws IOException, SAXException, ParserConfigurationException {
@@ -67,6 +74,17 @@ public class GameData {
         enemyTeam.add(new Fighter("Jag,25,10,3,3,3,7,2,images/Ragtime_Pepe.jpg"));
         enemyTeam.add(new Fighter("Blisterbulb,30,6,6,7,7,3,6,images/Ragtime_Pepe.jpg"));
         enemyTeam.add(new Fighter("Harshmallow,20,3,4,9,11,4,4,images/Ragtime_Pepe.jpg"));
+    }
+
+    private void initItems() {
+        inventory.add(new Item("Patch, A cluster of raw pixels. " +
+                "Integrates with the user's body to recover health.,15,heal"));
+        inventory.add(new Item("Overclock,A bizarre pocketwatch that creates a bubble of " +
+                "sped-up time around the user. Allows user to attack more quickly.,1,buff,speed"));
+    }
+
+    public void collectItem(Item item){
+        inventory.add(item);
     }
 
     public void resetHeroTP(){
@@ -127,11 +145,13 @@ public class GameData {
     public void setSelectedTarget(int selectedTarget) {
         this.selectedTarget = selectedTarget;
     }
-
     public void subtractTp(int cost) {
         tp -= cost;
         if(tp < 0){
             tp = 0;
         }
+    }
+    public ArrayList<Item> getInventory() {
+        return inventory;
     }
 }

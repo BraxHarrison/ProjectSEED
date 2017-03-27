@@ -66,6 +66,15 @@ public class Fighter {
         }
     }
 
+    public void buffer(String type, int amt){
+        if(type.equals("speed")){
+            tpCost-=amt;
+        }
+        else if(type.equals("attack")){
+            attack+=amt;
+        }
+    }
+
     public void sufferEffect(){
 
     }

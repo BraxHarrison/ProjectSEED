@@ -46,13 +46,13 @@ public class BattleManager {
             endEnemyTurn();
         }
         else if(phase.equals("enemyWin")){
-            battleControl.hideSelector(battleControl.enemySelectorArea);
+            battleControl.enemySelectorArea.setVisible(false);
         }
         else if(phase.equals("heroWin")){
             battleControl.enemySelectorArea.setVisible(false);
             battleControl.heroSelectorArea.setVisible(false);
         }
-        battleControl.queueMessages(messageQueue);
+        //battleControl.queueMessages(messageQueue);
     }
 
     private void resetTP() {
@@ -193,7 +193,6 @@ public class BattleManager {
     private void requestTPUpdate(){
         double percentage = (double)gameData.getCurrentTp()/(double)gameData.getMaxTP();
         battleControl.updateTP(percentage);
-        battleControl.queueMessages(messageQueue);
     }
 
     public void endPlayerTurn() {

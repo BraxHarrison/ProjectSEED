@@ -32,22 +32,42 @@
 
         <!--Lots of stuff needs to be moved here-->
         <StackPane fx:id="mainSelectorArea">
-            <ScrollPane fx:id="selectorMenu" maxHeight="600" maxWidth="125" styleClass="edge-to-edge" stylesheets="/stylesheets/ui1.css" StackPane.alignment="CENTER_LEFT" GridPane.rowIndex="1">
+            <ScrollPane fx:id="selectorMenu" maxHeight="600" vbarPolicy="NEVER" maxWidth="125" styleClass="edge-to-edge" stylesheets="/stylesheets/ui1.css" StackPane.alignment="CENTER_LEFT" GridPane.rowIndex="1">
+                <content>
+                    <StackPane fx:id="selectorHolder">
+                        <VBox fx:id="itemSelectorArea" visible="false" prefHeight="600" spacing="40" translateX="30" translateY="15">
+                            <children>
+
+                            </children>
+                        </VBox>
+                        <VBox fx:id="heroSelectorArea" translateX="45" prefHeight="600" translateY="15" spacing="40">
+                            <children>
+
+                            </children>
+                        </VBox>
+                    </StackPane>
+
+                </content>
+
             </ScrollPane>
-            <VBox fx:id="heroSelectorArea" translateX="45" translateY="15" spacing="40">
-            </VBox>
+
 
             <VBox fx:id="actionMenu" visible="false" translateX="30" translateY="10" spacing="40">
 
                 <Label fx:id="attack" maxWidth="40" minWidth="40" text="Attack" scaleX="2.2" scaleY="2.2" onMousePressed="#selectAttack" textFill="white"/>
                 <Label fx:id="skills" maxWidth="40" minWidth="40" text="Skills" scaleX="2.2" scaleY="2.2" onMousePressed="#selectSkill" textFill="white"/>
-                <Label fx:id="items" maxWidth="40" minWidth="40" text="Items" scaleX="2.2" scaleY="2.2" onMousePressed="#selectItems" textFill="white"/>
+                <Label fx:id="bag" maxWidth="40" minWidth="40" text="Items" scaleX="2.2" scaleY="2.2" onMousePressed="#selectBag" textFill="white"/>
                 <Label fx:id="flee" maxWidth="40" minWidth="40" text="Flee" scaleX="2.2" scaleY="2.2" onMousePressed="#selectFlee" textFill="white"/>
                 <Label fx:id="endTurn" maxWidth="40" minWidth="40" text="End Turn" scaleX="2.2" scaleY="2.2" onMousePressed="#selectEndTurn" textFill="white"/>
+                <Label fx:id="back" maxWidth="40" minWidth="40" text="(Back)" scaleX="2.2" scaleY="2.2" onMousePressed="#goBack" textFill="white"/>
+
             </VBox>
 
             <HBox fx:id="enemySelectorArea" spacing="60" translateX="500" translateY="200">
             </HBox>
+
+
+
         </StackPane>
 
 
