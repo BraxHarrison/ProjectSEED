@@ -5,7 +5,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -23,11 +22,11 @@ import java.util.ArrayList;
 
 public class BattleView {
 
-
     //region Variables
 
     private ArrayList<Fighter> team;
     private ArrayList<Fighter> enemyTeam;
+    private ArrayList<Item> inventory;
 
     public VBox heroSelectorArea;
     public VBox actionMenu;
@@ -42,7 +41,10 @@ public class BattleView {
     public ScrollPane selectorMenu;
     public Pane loaderScreen;
     public StackPane battleDisplay;
+    public Button backButton;
 
+    public int selectedUser;
+    private int selectedTarget;
     private int selectedItem;
     private boolean uiLocked;
 
@@ -51,7 +53,6 @@ public class BattleView {
     BattleManager battleLogic;
 
     Font darwinFont;
-
 
     public Label mainDisplay;
     //endregion
@@ -113,6 +114,7 @@ public class BattleView {
     private void readData() {
         team = gameData.getTeam();
         enemyTeam = gameData.getEnemyTeam();
+        inventory = gameData.getInventory();
 
     }
 
@@ -187,12 +189,36 @@ public class BattleView {
         return imageView;
     }
 
+    public void createEnemySelectors() {
+        for(int i = 0; i<enemyTeam.size();i++){
+            Button enemy = new Button("Enemy");
+            enemy.setId(Integer.toString(i));
+            formatEnemySelector(enemy);
+            enemy.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    selectEnemy(enemy);
+                }
+            });
+            enemySelectorArea.setVisible(false);
+            enemySelectorArea.getChildren().add(enemy);
+
+        }
+    }
+
+    private void formatEnemySelector(Button enemy) {
+        enemy.setScaleX(1.5);
+        enemy.setScaleY(2);
+        //enemy.setOpacity(0);
+    }
+
     private void createItemsButtons(){
         ArrayList<Item> inventory = gameData.getInventory();
         for(int i = 0; i<inventory.size();i++){
             System.out.println(inventory.get(i).getName());
             Label item = new Label(inventory.get(i).getName());
             item.setId(Integer.toString(i));
+            System.out.println("Creating item id : " + item.getId());
             formatItemSelector(item);
             item.setOnMousePressed(new EventHandler<javafx.scene.input.MouseEvent>(){
                 @Override
@@ -242,24 +268,26 @@ public class BattleView {
 
     public void selectAttack(javafx.scene.input.MouseEvent event) {
         if(!uiLocked){
-            pushMessage("Who will " + team.get(gameData.getSelectedUser()).getName() + " attack?");
+            pushMessage("Who will " + team.get(selectedUser).getName() + " attack?");
             enemySelectorArea.setVisible(true);
         }
 
     }
+
     public void selectEndTurn(javafx.scene.input.MouseEvent event) {
         if(!uiLocked){
             battleLogic.endPlayerTurn();
         }
 
     }
+
     public void selectSkill(javafx.scene.input.MouseEvent event) {
 
     }
 
     public void selectBag(javafx.scene.input.MouseEvent event) {
         if(!uiLocked){
-            pushMessage("Which item will " + team.get(gameData.getSelectedUser()).getName() +
+            pushMessage("Which item will " + team.get(selectedUser).getName() +
                     " use?");
             itemSelectorArea.setVisible(true);
             actionMenu.setVisible(false);
@@ -268,38 +296,22 @@ public class BattleView {
     }
 
     private void selectItem(Label item){
-        System.out.println("Item Selected!");
-        selectedItem = Integer.parseInt(item.getId());
+        selectedItem = itemSelectorArea.getChildren().lastIndexOf(item);
+        battleLogic.useItem(selectedItem);
+        updateInventoryUI();
+
     }
-    private void useItem(){
+
+    private void updateInventoryUI(){
+        pushMessage(team.get(selectedUser).getName() +  " used the " + inventory.get(selectedItem).getName() + " !");
+        itemSelectorArea.getChildren().remove(selectedItem);
+        itemSelectorArea.setVisible(false);
+        actionMenu.setVisible(true);
 
     }
 
     public void selectFlee(javafx.scene.input.MouseEvent event) {
 
-    }
-
-    public void createEnemySelectors() {
-        for(int i = 0; i<enemyTeam.size();i++){
-            Button enemy = new Button("Enemy");
-            enemy.setId(Integer.toString(i));
-            formatEnemySelector(enemy);
-            enemy.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    selectEnemy(enemy);
-                }
-            });
-            enemySelectorArea.setVisible(false);
-            enemySelectorArea.getChildren().add(enemy);
-
-        }
-    }
-
-    private void formatEnemySelector(Button enemy) {
-        enemy.setScaleX(1.5);
-        enemy.setScaleY(2);
-        //enemy.setOpacity(0);
     }
 
     public boolean detectEnemyKO() {
@@ -323,9 +335,8 @@ public class BattleView {
         return false;
     }
 
-
     private void selectHero(Label hero) {
-        gameData.setSelectedUser(Integer.parseInt(hero.getId()));
+        selectedUser = Integer.parseInt(hero.getId());
         heroSelectorArea.setVisible(false);
         showActionMenu();
     }
@@ -367,14 +378,26 @@ public class BattleView {
 
     private void showActionMenu() {
         actionMenu.setVisible(true);
-        pushMessage("What will " + gameData.getTeam().get(gameData.getSelectedUser()).getName() + " do?" );
+        backButton.setVisible(true);
+        pushMessage("What will " + team.get(selectedUser).getName() + " do?" );
     }
 
-    public void goBack(MouseEvent mouseEvent) {
-        actionMenu.setVisible(false);
-        heroSelectorArea.setVisible(true);
-    }
+    public void goBack(ActionEvent event) {
+        selectorMenu.setVvalue(0);
+        if(actionMenu.isVisible()){
+            System.out.println("Does this happen?");
+            heroSelectorArea.setVisible(true);
+            actionMenu.setVisible(false);
+            enemySelectorArea.setVisible(false);
 
+        }
+        else if(itemSelectorArea.isVisible()){
+            actionMenu.setVisible(true);
+            itemSelectorArea.setVisible(false);
+
+        }
+
+    }
 
     //endregion
 

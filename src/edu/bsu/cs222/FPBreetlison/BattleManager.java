@@ -21,7 +21,6 @@ public class BattleManager {
 
     private ArrayList<String> messageQueue;
 
-
     public void getGameInfo(GameManager game){
         this.game = game;
         this.gameData = game.getGameData();
@@ -114,9 +113,6 @@ public class BattleManager {
 
         }
         battleControl.queueMessages(messageQueue);
-
-
-
     }
 
     public boolean detectHeroKO() {
@@ -142,7 +138,6 @@ public class BattleManager {
         return false;
     }
 
-
     private int makeRandom(int bound) {
         Random random = new Random();
         return random.nextInt(bound);
@@ -154,6 +149,7 @@ public class BattleManager {
 
     private void enableCharacterMenu() {
         battleControl.heroSelectorArea.setVisible(true);
+        battleControl.backButton.setVisible(false);
     }
 
     private void disableCharacterMenu(){
@@ -206,5 +202,10 @@ public class BattleManager {
         }
         battleControl.queueMessages(messageQueue);
 
+    }
+
+    public void useItem(int itemNo) {
+        gameData.getInventory().get(itemNo).activate(gameData.getTeam().get(battleControl.selectedUser));
+        gameData.getInventory().remove(itemNo);
     }
 }

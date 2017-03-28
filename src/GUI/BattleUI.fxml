@@ -31,8 +31,10 @@
         </ScrollPane>
 
         <!--Lots of stuff needs to be moved here-->
-        <StackPane fx:id="mainSelectorArea">
-            <ScrollPane fx:id="selectorMenu" maxHeight="600" vbarPolicy="NEVER" maxWidth="125" styleClass="edge-to-edge" stylesheets="/stylesheets/ui1.css" StackPane.alignment="CENTER_LEFT" GridPane.rowIndex="1">
+        <StackPane fx:id="mainSelectorArea" stylesheets="/stylesheets/pane.css"><!--What is this nonsense?!-->
+            <HBox fx:id="selectorBackground"  maxWidth="125" maxHeight="600" StackPane.alignment="CENTER_LEFT" styleClass="pane"/>
+            <Button fx:id="backButton" visible="false" text="(Back)" onAction="#goBack" StackPane.alignment="CENTER_LEFT" translateY="120"/>
+            <ScrollPane fx:id="selectorMenu" maxHeight="375" prefViewportHeight="200" vbarPolicy="NEVER" maxWidth="125" stylesheets="/stylesheets/scrollpane.css" styleClass="edge-to-edge" StackPane.alignment="TOP_LEFT">
                 <content>
                     <StackPane fx:id="selectorHolder">
                         <VBox fx:id="itemSelectorArea" visible="false" prefHeight="600" spacing="40" translateX="30" translateY="15">
@@ -45,23 +47,20 @@
 
                             </children>
                         </VBox>
+                        <VBox fx:id="actionMenu" visible="false" prefHeight="400" translateX="30" translateY="10" spacing="40">
+
+                            <Label fx:id="attack" maxWidth="40" minWidth="40" text="Attack" scaleX="2.2" scaleY="2.2" onMousePressed="#selectAttack" textFill="white"/>
+                            <Label fx:id="skills" maxWidth="40" minWidth="40" text="Skills" scaleX="2.2" scaleY="2.2" onMousePressed="#selectSkill" textFill="white"/>
+                            <Label fx:id="bag" maxWidth="40" minWidth="40" text="Items" scaleX="2.2" scaleY="2.2" onMousePressed="#selectBag" textFill="white"/>
+                            <Label fx:id="flee" maxWidth="40" minWidth="40" text="Flee" scaleX="2.2" scaleY="2.2" onMousePressed="#selectFlee" textFill="white"/>
+                            <Label fx:id="endTurn" maxWidth="40" minWidth="40" text="End Turn" scaleX="2.2" scaleY="2.2" onMousePressed="#selectEndTurn" textFill="white"/>
+
+                        </VBox>
                     </StackPane>
 
                 </content>
-
             </ScrollPane>
 
-
-            <VBox fx:id="actionMenu" visible="false" translateX="30" translateY="10" spacing="40">
-
-                <Label fx:id="attack" maxWidth="40" minWidth="40" text="Attack" scaleX="2.2" scaleY="2.2" onMousePressed="#selectAttack" textFill="white"/>
-                <Label fx:id="skills" maxWidth="40" minWidth="40" text="Skills" scaleX="2.2" scaleY="2.2" onMousePressed="#selectSkill" textFill="white"/>
-                <Label fx:id="bag" maxWidth="40" minWidth="40" text="Items" scaleX="2.2" scaleY="2.2" onMousePressed="#selectBag" textFill="white"/>
-                <Label fx:id="flee" maxWidth="40" minWidth="40" text="Flee" scaleX="2.2" scaleY="2.2" onMousePressed="#selectFlee" textFill="white"/>
-                <Label fx:id="endTurn" maxWidth="40" minWidth="40" text="End Turn" scaleX="2.2" scaleY="2.2" onMousePressed="#selectEndTurn" textFill="white"/>
-                <Label fx:id="back" maxWidth="40" minWidth="40" text="(Back)" scaleX="2.2" scaleY="2.2" onMousePressed="#goBack" textFill="white"/>
-
-            </VBox>
 
             <HBox fx:id="enemySelectorArea" spacing="60" translateX="500" translateY="200">
             </HBox>
@@ -74,6 +73,7 @@
         <ScrollPane fx:id="textBox" stylesheets="/stylesheets/textBox.css" styleClass="edge-to-edge" maxHeight="150" maxWidth="900" StackPane.alignment="BOTTOM_CENTER">
             <Label fx:id="mainDisplay" wrapText="true" scaleX="2" scaleY="2"  translateX="310" translateY="10" maxWidth="600" minWidth="600" maxHeight="40" minHeight="40" />
         </ScrollPane>
+        <StackPane fx:id="infoBox" styleClass="pane" maxHeight="200" maxWidth="200" StackPane.alignment="BOTTOM_RIGHT"/>
 
         <Label fx:id="tpDisplay" visible="false" text="TP:" GridPane.rowIndex="20" GridPane.columnIndex="80" maxWidth="50" minWidth="50" />
         <ProgressBar fx:id="tpBar" StackPane.alignment="TOP_CENTER" translateX="30" translateY="20" maxWidth="300" maxHeight="50" stylesheets="/stylesheets/tpBar.css" />

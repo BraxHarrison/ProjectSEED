@@ -47,6 +47,7 @@ public class GameData {
 
     private void loadLists() {
         team = new ArrayList<Fighter>();
+        allItems = new ArrayList<Item>();
         inventory = new ArrayList<Item>();
         enemyTeam = new ArrayList<Fighter>();
     }
@@ -77,10 +78,24 @@ public class GameData {
     }
 
     private void initItems() {
-        inventory.add(new Item("Patch, A cluster of raw pixels. " +
+        allItems.add(new Item("Patch, A cluster of raw pixels. " +
                 "Integrates with the user's body to recover health.,15,heal"));
-        inventory.add(new Item("Overclock,A bizarre pocketwatch that creates a bubble of " +
+        allItems.add(new Item("Overclock,A bizarre pocketwatch that creates a bubble of " +
                 "sped-up time around the user. Allows user to attack more quickly.,1,buff,speed"));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+        inventory.add(allItems.get(0));
+
+
     }
 
     public void collectItem(Item item){
