@@ -158,13 +158,13 @@ public class BattleManager {
     }
 
     public void checkPlayerTP(){
-        if(gameData.getCurrentTp() <= 0){
-            updateTurn("enemy");
-        }
+//        if(gameData.getCurrentTp() <= 0){
+//            updateTurn("enemy");
+//        }
     }
 
     public void tryBasicAttack(){
-        attacker = gameData.getTeam().get(gameData.getSelectedUser());
+        attacker = gameData.getTeam().get(battleControl.selectedUser);
         target = gameData.getEnemyTeam().get(gameData.getSelectedTarget());
         int cost = attacker.getTpCost();
         if(gameData.getCurrentTp() >= cost ){
@@ -181,6 +181,7 @@ public class BattleManager {
         gameData.subtractTp(cost);
         attacker.doBasicAttack(target);
         int random = makeRandom(attacker.getBattleStrings().size());
+        //messageQueue.add(attacker.getBattleStrings().get(random));
         battleControl.pushMessage(attacker.getBattleStrings().get(random));
         battleControl.enemySelectorArea.setVisible(false);
         requestTPUpdate();

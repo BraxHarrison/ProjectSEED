@@ -14,10 +14,7 @@ To-Do's:
 
 -Ravioli Ravioli give me the (attack) formuoli
 
--We're in need of a clean way of delaying the Battle Logic while the enemy attacks.
 
--We need to come up with a way of knowing which enemy will attack and which target
-they will select (Maybe randoms for now?)
 
 
 

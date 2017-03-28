@@ -5,6 +5,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.scene.Group;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -42,6 +44,7 @@ public class BattleView {
     public Pane loaderScreen;
     public StackPane battleDisplay;
     public Button backButton;
+    public Group infoDisplay;
 
     public int selectedUser;
     private int selectedTarget;
@@ -68,7 +71,7 @@ public class BattleView {
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
                     ae -> pushMessage(message)));
-            dur += 1500;
+            dur += 1000;
         }
         uiLocked = true;
         timeline.play();
@@ -88,7 +91,7 @@ public class BattleView {
         loaderScreen.toFront();
         loaderScreen.setStyle("-fx-background-color: black;");
         Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(2500),
+                Duration.millis(1000),
                 ae -> endLoader()));
         timeline.play();
 
@@ -215,18 +218,46 @@ public class BattleView {
     private void createItemsButtons(){
         ArrayList<Item> inventory = gameData.getInventory();
         for(int i = 0; i<inventory.size();i++){
-            System.out.println(inventory.get(i).getName());
             Label item = new Label(inventory.get(i).getName());
             item.setId(Integer.toString(i));
-            System.out.println("Creating item id : " + item.getId());
             formatItemSelector(item);
-            item.setOnMousePressed(new EventHandler<javafx.scene.input.MouseEvent>(){
-                @Override
-                public void handle(javafx.scene.input.MouseEvent event){selectItem(item);}
-
-            });
+            setupMouseEventsForItem(item);
             itemSelectorArea.getChildren().add(item);
         }
+    }
+
+    private void setupMouseEventsForItem(Label item) {
+        item.setOnMousePressed(new EventHandler<javafx.scene.input.MouseEvent>(){
+            @Override
+            public void handle(javafx.scene.input.MouseEvent event){selectItem(item);}
+
+        });
+        item.setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {hoverItem(item);}
+        });
+        item.setOnMouseExited(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event){exitItem();}
+        });
+    }
+
+    private void exitItem() {
+        infoDisplay.setVisible(false);
+    }
+
+    private void hoverItem(Label item) {
+        selectedItem = Integer.parseInt(item.getId());
+        infoDisplay.setVisible(true);
+        loadItemImage();
+        loadItemDescription();
+    }
+
+    private void loadItemImage() {
+        ImageView infoGraphic = (ImageView)infoDisplay.getChildren().get(0);
+        infoGraphic.setImage(new Image(inventory.get(selectedItem).getImagePath()));
+        infoGraphic.setFitWidth(50);
+        infoGraphic.setFitHeight(50);
     }
 
     private void formatItemSelector(Label item) {
@@ -234,9 +265,16 @@ public class BattleView {
         item.setScaleY(2);
         item.setMaxWidth(60);
         item.setMinWidth(40);
-        System.out.println("This is happening too");
         item.setTextFill(Color.web("0xffffff"));
         item.setFont(darwinFont);
+    }
+
+    private void loadItemDescription() {
+        Label quickSummary = (Label)infoDisplay.getChildren().get(1);
+        Label infoText = (Label)infoDisplay.getChildren().get(2);
+        quickSummary.setText(inventory.get(selectedItem).getQuickSummary());
+        infoText.setText(inventory.get(selectedItem).getDescription());
+
     }
 
     private void createHeroVitals(){
@@ -297,8 +335,8 @@ public class BattleView {
 
     private void selectItem(Label item){
         selectedItem = itemSelectorArea.getChildren().lastIndexOf(item);
-        battleLogic.useItem(selectedItem);
         updateInventoryUI();
+        battleLogic.useItem(selectedItem);
 
     }
 
@@ -385,7 +423,6 @@ public class BattleView {
     public void goBack(ActionEvent event) {
         selectorMenu.setVvalue(0);
         if(actionMenu.isVisible()){
-            System.out.println("Does this happen?");
             heroSelectorArea.setVisible(true);
             actionMenu.setVisible(false);
             enemySelectorArea.setVisible(false);
