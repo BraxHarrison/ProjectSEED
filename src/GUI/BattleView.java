@@ -20,6 +20,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class BattleView {
@@ -77,14 +78,32 @@ public class BattleView {
         timeline.play();
     }
 
+    public void queueBarUpdates(ArrayList<DamageState> targets){
+        Timeline timeline = new Timeline();
+        timeline.setOnFinished(e -> clearBarInfo(targets));
+        int dur = 0;
+        for(int i = 0; i<targets.size();i++) {
+            DamageState barInfo = targets.get(i);
+            timeline.getKeyFrames().add(new KeyFrame(
+                    Duration.millis(dur),
+                    ae -> updateHeroBars(barInfo)));
+            dur += 1000;
+        }
+        timeline.play();
+    }
+
     private void clearMessages(ArrayList<String> messages){
         messages.clear();
         uiLocked = false;
+    }
+    private void clearBarInfo(ArrayList<DamageState> barInfos){
+        barInfos.clear();
     }
 
     public void pushMessage(String message) {
         historyDisplay.setText(mainDisplay.getText() + "\n\n" + historyDisplay.getText());
         mainDisplay.setText(message);
+
     }
 
     private void startLoader(){
@@ -163,9 +182,11 @@ public class BattleView {
     private void createHeroButtons() {
 
         for(int i = 0; i<team.size();i++){
-            Label hero = new Label(team.get(i).getName());
+            StackPane hero =  new StackPane();
             hero.setId(Integer.toString(i));
-            formatHeroButton(hero);
+            populateHero(hero);
+            formatHeroButton((Label)hero.getChildren().get(0));
+            formatHeroBar((ProgressBar)hero.getChildren().get(1));
             hero.setOnMousePressed(new EventHandler<javafx.scene.input.MouseEvent>() {
                 @Override
                 public void handle(javafx.scene.input.MouseEvent event) {
@@ -176,13 +197,42 @@ public class BattleView {
         }
     }
 
+    private void populateHero(StackPane hero) {
+        int index = Integer.parseInt(hero.getId());
+        Label hLabel = new Label(team.get(index).getName());
+        ProgressBar hbar = new ProgressBar();
+        hero.getChildren().add(hLabel);
+        hero.getChildren().add(hbar);
+
+    }
+
     private void formatHeroButton(Label hero) {
         hero.setScaleX(3);
         hero.setScaleY(3);
+        hero.setTranslateX(-30);
         hero.setMaxWidth(40);
         hero.setMinWidth(40);
         hero.setTextFill(Color.web("0xfffff1"));
         hero.setFont(darwinFont);
+    }
+
+    private void formatHeroBar(ProgressBar hBar) {
+        hBar.setRotate(270);
+        hBar.setScaleX(.30);
+        hBar.setScaleY(.80);
+        hBar.setTranslateX(20);
+        hBar.setTranslateY(3);
+        hBar.getStyleClass().add("healthBar");
+        hBar.getStyleClass().add("green-bar");
+        hBar.setProgress(1);
+
+    }
+
+    public void updateHeroBars(DamageState barInfo){
+        ObservableList<Node> hSelectors = heroSelectorArea.getChildren();
+        StackPane selector = (StackPane)hSelectors.get(barInfo.getIndex());
+        ProgressBar hbar = (ProgressBar)selector.getChildren().get(1);
+        hbar.setProgress(barInfo.getHpPercent());
     }
 
     private ImageView setImage(int id) {
@@ -373,7 +423,7 @@ public class BattleView {
         return false;
     }
 
-    private void selectHero(Label hero) {
+    private void selectHero(StackPane hero) {
         selectedUser = Integer.parseInt(hero.getId());
         heroSelectorArea.setVisible(false);
         showActionMenu();

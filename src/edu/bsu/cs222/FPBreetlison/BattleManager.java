@@ -4,6 +4,7 @@ import GUI.BattleView;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -19,6 +20,10 @@ public class BattleManager {
     private Fighter attacker;
     private Fighter target;
 
+    private int targetNo;
+    private DamageState barInfo;
+    private ArrayList<DamageState> targetQueue;
+
     private ArrayList<String> messageQueue;
 
     public void getGameInfo(GameManager game){
@@ -30,6 +35,8 @@ public class BattleManager {
 
     public void start(){
         messageQueue = new ArrayList<>();
+        targetQueue = new ArrayList<>();
+
         requestTPUpdate();
         checkSpeeds();
     }
@@ -63,12 +70,15 @@ public class BattleManager {
 
         ArrayList<Fighter> remainingEnemies = getRemainingEnemies();
         for(int i = 0; i<remainingEnemies.size();i++){
+            barInfo = new DamageState();
             Fighter user = remainingEnemies.get(i);
-            Fighter target = gameData.getTeam().get(makeRandom(gameData.getTeam().size()));
+            int targetNo = makeRandom(gameData.getTeam().size());Fighter target = gameData.getTeam().get(targetNo);
             if(target.getKOLvl() > 0){
                 target = findNextTarget();
             }
             if(target != null){
+                System.out.println(targetNo);
+                barInfo.setIndex(targetNo);
                 doEnemyAttack(user,target);
             }
         }
@@ -87,7 +97,10 @@ public class BattleManager {
 
     private void doEnemyAttack(Fighter user, Fighter target){
         user.doBasicAttack(target);
+        barInfo.setHpPercent((double)target.getHp()/(double)target.getMaxHP());
+        DamageState newBarInfo = barInfo;
         messageQueue.add(user.getName() + " strikes " + target.getName() + " !");
+        targetQueue.add(newBarInfo);
         //battleControl.updateHeroVitals();
     }
 
@@ -95,6 +108,7 @@ public class BattleManager {
         for(int i = 0; i<gameData.getTeam().size();i++){
             Fighter target = gameData.getTeam().get(i);
             if(target.getKOLvl()<1){
+                targetNo = i;
                 return target;
             }
         }
@@ -113,6 +127,7 @@ public class BattleManager {
 
         }
         battleControl.queueMessages(messageQueue);
+        battleControl.queueBarUpdates(targetQueue);
     }
 
     public boolean detectHeroKO() {
@@ -122,12 +137,13 @@ public class BattleManager {
 
         for (int i = 0; i < fighters.size(); i++) {
             fighters.get(i).checkKO();
-            Label hero = (Label)selectors.get(i);
+            StackPane hero = (StackPane)selectors.get(i);
             if (fighters.get(i).getKOLvl() > 0) {
                 KOamt++;
             }
             if(fighters.get(i).getKOLvl() == 1){
-                hero.setTextFill(Color.web("0x333c47"));
+                Label hLabel = (Label)hero.getChildren().get(0);
+                hLabel.setTextFill(Color.web("0x333c47"));
                 hero.setOnMousePressed(null);
                 messageQueue.add(fighters.get(i).getName() + " is down!");
             }
@@ -208,5 +224,9 @@ public class BattleManager {
     public void useItem(int itemNo) {
         gameData.getInventory().get(itemNo).activate(gameData.getTeam().get(battleControl.selectedUser));
         gameData.getInventory().remove(itemNo);
+    }
+
+    public ArrayList<DamageState> getTargetQueue() {
+        return targetQueue;
     }
 }

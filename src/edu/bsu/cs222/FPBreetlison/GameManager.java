@@ -5,6 +5,7 @@ import GUI.OverworldView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class GameManager {
     }
     private void setOverworldAsStage(Parent root){
         currentStage.setTitle("Overworld: "+gameData.getCurrentRoom().getName());
+        currentStage.getIcons().add(new Image("/images/item_undefined.png"));
         currentStage.setScene(new Scene(root, 900, 600));
         currentStage.show();
 

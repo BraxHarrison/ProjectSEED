@@ -1,4 +1,16 @@
 .infoBox{
     -fx-background-color: #4286f4;
 }
+.healthBar > .track{
+    -fx-background-color: #77f442;
+     -fx-background-color: transparent;
+      -fx-text-box-border: transparent;
+      -fx-control-inner-background: transparent;
+      -fx-background-radius: 0, 0, 0; /* 10, 9, 8 */
+      -fx-background-insets: 0, 0 0 0 0, 0 0 0 0;
+}
+
+.green-bar{
+    -fx-accent:#77f442;
+}
 
