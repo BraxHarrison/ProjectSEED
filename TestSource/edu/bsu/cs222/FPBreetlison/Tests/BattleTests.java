@@ -24,6 +24,7 @@ public class BattleTests {
     private Fighter defender;
 
 
+    //region Test Initialization
     @Before
     public void setUp() throws ParserConfigurationException, IOException, SAXException {
         initFighters();
@@ -42,6 +43,87 @@ public class BattleTests {
 
     }
 
+    //endregion
+    //region XML Parser Tests
+
+    //These need to be redone when we're finished adding information to characters
+
+    @Test
+    public void TestCharacterStringParser(){
+        Fighter fighter = new Fighter("Elmira,10,2,2,2,2,2,2");
+        Assert.assertEquals("Elmira",fighter.getName());
+        Assert.assertEquals(2,fighter.getAttack());
+    }
+
+    @Test
+    public void TestFighterXMLParse() throws IOException, SAXException, ParserConfigurationException {
+        ArrayList<Fighter> fighters = parser.parseFighterInfo();
+        Fighter fighter = fighters.get(0);
+        Assert.assertEquals("Prota",fighter.getName());
+
+    }
+
+    @Test
+    public void TestMoveDescriptionXMLParse() throws IOException, SAXException, ParserConfigurationException {
+        ArrayList<Fighter> fighters = parser.parseFighterInfo();
+        ArrayList<String> battleDesc = fighters.get(0).getBattleStrings();
+        Assert.assertEquals("You fire a quick shot at the enemy. It grazes them.",battleDesc.get(0));
+    }
+
+    @Test
+    public void TestItemXMLParse(){
+
+    }
+
+    @Test
+    public void TestRoomXMLParse(){
+
+    }
+
+    @Test
+    public void TestEntityXMLParse(){
+
+    }
+
+    @Test
+    public void TestEventXMLParse(){
+
+    }
+
+    //endregion
+    //region Overworld Tests
+    @Test
+    public void TestBasicRoomTraversal(){
+
+    }
+
+    //endregion
+    //region Battle System Tests
+
+    @Test
+    public void TestKODetection(){
+
+    }
+
+    @Test
+    public void TestEnemyTargetFinder(){
+
+    }
+
+    @Test
+    public void TestStateMachineEndEnemyTurn(){
+
+    }
+
+    @Test
+    public void TestStateMachineEnemyWin(){
+
+    }
+    @Test
+    public void TestStateMachineHeroWin(){
+
+    }
+
     @Test
     public void TestDamageCalcGeneral(){
 
@@ -53,37 +135,36 @@ public class BattleTests {
         Assert.assertEquals(attacker.getAttack(), damageCalc.calculateDamage());
     }
 
-    @Test
-    public void CheckFighterKO(){
-        Assert.assertEquals(0,attacker.checkKO());
-    }
 
     @Test
-    public void CheckDeadFighterKO(){
-        Fighter downFighter = new Fighter("Attacker,0,2,2,2,2,2,2");
-        Assert.assertEquals(1,downFighter.checkKO());
-    }
-
-    @Test
-    public void TestCharacterStringParser(){
-        Fighter fighter = new Fighter("Elmira,10,2,2,2,2,2,2");
-        Assert.assertEquals("Elmira",fighter.getName());
-        Assert.assertEquals(2,fighter.getAttack());
-    }
-
-    @Test
-    public void TestXMLCharacterInfo() throws IOException, SAXException, ParserConfigurationException {
-        ArrayList<Fighter> fighters = parser.parseFighterInfo();
-        Fighter fighter = fighters.get(0);
-        Assert.assertEquals("Prota",fighter.getName());
+    public void TestHealingItem(){
 
     }
 
     @Test
-    public void TestCharacterBattleDescriptions() throws IOException, SAXException, ParserConfigurationException {
-        ArrayList<Fighter> fighters = parser.parseFighterInfo();
-        ArrayList<String> battleDesc = fighters.get(0).getBattleStrings();
-        Assert.assertEquals("You fire a quick shot at the enemy. It grazes them.",battleDesc.get(0));
+    public void TestBuffItem(){
+
     }
 
+    @Test
+    public void TestAttackSkill(){
+
+    }
+
+    @Test
+    public void TestBuffSkill(){
+
+    }
+
+    @Test
+    public void TestHealSkill(){
+
+    }
+
+    @Test
+    public void TestFleeChecker(){
+
+    }
+
+    //endregion
 }
