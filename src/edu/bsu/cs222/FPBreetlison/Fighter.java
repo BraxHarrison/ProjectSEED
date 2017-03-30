@@ -20,13 +20,14 @@ public class Fighter {
     private ArrayList<String> battleStrings;
     private String actionString;
     private String battlerGraphicPath;
-    private int koLvl;
+    private boolean KOState;
+    private int KOLevel;
 
     public Fighter(String info){
 
         skills = new ArrayList<Skill>();
         List<String> characterInfo = stringParser(info);
-        koLvl = 0;
+        KOLevel = 0;
 
         this.name = characterInfo.get(0);
         this.maxHP = Integer.parseInt(characterInfo.get(1));
@@ -99,15 +100,20 @@ public class Fighter {
         skills.add(skill);
     }
 
-    public int checkKO(){
-        if(hp<=0 && koLvl == 1){
-            koLvl = 2;
+    public int checkKOLevel(){
+        if(hp<=0 && KOLevel == 1){
+            KOState = true;
+            KOLevel = 2;
         }
-        else if(hp<=0 && koLvl==0){
-            koLvl = 1;
+        else if(hp<=0 && KOLevel ==0){
+            KOState = true;
+            KOLevel = 1;
         }
-        return koLvl;
+        return KOLevel;
 
+    }
+    public boolean isKO(){
+        return KOState;
     }
 
     //region Setters and Getters
@@ -177,7 +183,7 @@ public class Fighter {
         this.battleStrings = battleStrings;
     }
     public int getKOLvl() {
-        return koLvl;
+        return KOLevel;
     }
     public String getBattlerGraphicPath() {
         return battlerGraphicPath;

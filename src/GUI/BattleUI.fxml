@@ -35,7 +35,7 @@
         <!--Lots of stuff needs to be moved here-->
         <StackPane fx:id="mainSelectorArea" stylesheets="/stylesheets/pane.css"><!--What is this nonsense?!-->
             <Button fx:id="backButton" visible="false" text="(Back)" onAction="#goBack" StackPane.alignment="CENTER_LEFT" translateY="120"/>
-            <ScrollPane fx:id="selectorMenu" maxHeight="375" prefViewportHeight="200" vbarPolicy="NEVER" maxWidth="125" stylesheets="/stylesheets/scrollpane.css" styleClass="edge-to-edge" StackPane.alignment="TOP_LEFT">
+            <ScrollPane fx:id="selectorMenu" maxHeight="375" fitToHeight="true" prefViewportHeight="200" vbarPolicy="NEVER" maxWidth="125" stylesheets="/stylesheets/scrollpane.css" styleClass="edge-to-edge" StackPane.alignment="TOP_LEFT">
                 <content>
                     <StackPane fx:id="selectorHolder">
                         <VBox fx:id="itemSelectorArea" visible="false" prefHeight="600" spacing="40" translateX="30" translateY="15">
@@ -74,12 +74,11 @@
             <Label fx:id="mainDisplay" wrapText="true" scaleX="2" scaleY="2"  translateX="165" translateY="10" maxWidth="300" minWidth="300" maxHeight="40" minHeight="40" />
         </ScrollPane>
         <Pane fx:id="infoBox" styleClass="infoBox" maxHeight="150" maxWidth="250" StackPane.alignment="BOTTOM_RIGHT">
-            <Group fx:id="infoDisplay" translateX="5" translateY="5">
+            <Group fx:id="itemInfoDisplay" translateX="5" translateY="5">
                 <ImageView fx:id="infoGraphic"/>
                 <Label fx:id="quickSummary" wrapText="true" translateX="80" translateY="20" maxWidth="85" minWidth="85"/>
                 <Label fx:id="infoText" wrapText="true" translateY="55" maxWidth="200" maxHeight="90"/>
             </Group>
-
 
         </Pane>
 

@@ -20,8 +20,8 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class BattleView {
 
@@ -45,7 +45,7 @@ public class BattleView {
     public Pane loaderScreen;
     public StackPane battleDisplay;
     public Button backButton;
-    public Group infoDisplay;
+    public Group itemInfoDisplay;
 
     public int selectedUser;
     private int selectedTarget;
@@ -65,10 +65,9 @@ public class BattleView {
     public void queueMessages(ArrayList<String> messages){
         Timeline timeline = new Timeline();
         timeline.setOnFinished(e -> clearMessages(messages));
-        ArrayList<String> queuedMessages = messages;
         int dur = 0;
-        for(int i = 0; i<queuedMessages.size();i++){
-            String message = queuedMessages.get(i);
+        for(int i = 0; i<messages.size();i++){
+            String message = messages.get(i);
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
                     ae -> pushMessage(message)));
@@ -83,10 +82,10 @@ public class BattleView {
         timeline.setOnFinished(e -> clearBarInfo(targets));
         int dur = 0;
         for(int i = 0; i<targets.size();i++) {
-            DamageState barInfo = targets.get(i);
+            DamageState heroSnapshot = targets.get(i);
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
-                    ae -> updateHeroBars(barInfo)));
+                    ae -> updateHeroBars(heroSnapshot)));
             dur += 1000;
         }
         timeline.play();
@@ -103,6 +102,20 @@ public class BattleView {
     public void pushMessage(String message) {
         historyDisplay.setText(mainDisplay.getText() + "\n\n" + historyDisplay.getText());
         mainDisplay.setText(message);
+
+    }
+
+
+    public void updateHeroBars(DamageState heroSnapshot){
+        ObservableList<Node> hSelectors = heroSelectorArea.getChildren();
+        System.out.println(team.get(heroSnapshot.getIndex()).getName() + "/" + heroSnapshot.getHpPercent() + "/" + heroSnapshot.getKOState());
+        StackPane selector = (StackPane)hSelectors.get(heroSnapshot.getIndex());
+        ProgressBar hbar = (ProgressBar)selector.getChildren().get(1);
+        hbar.setProgress(heroSnapshot.getHpPercent());
+        accountForRounding(hbar,heroSnapshot);
+        if(heroSnapshot.getKOState()){
+            removeHero(heroSnapshot.getIndex());
+        }
 
     }
 
@@ -220,19 +233,18 @@ public class BattleView {
         hBar.setRotate(270);
         hBar.setScaleX(.30);
         hBar.setScaleY(.80);
-        hBar.setTranslateX(20);
-        hBar.setTranslateY(3);
+        hBar.setTranslateX(26);
+//        hBar.setTranslateY(2);
         hBar.getStyleClass().add("healthBar");
         hBar.getStyleClass().add("green-bar");
         hBar.setProgress(1);
 
     }
 
-    public void updateHeroBars(DamageState barInfo){
-        ObservableList<Node> hSelectors = heroSelectorArea.getChildren();
-        StackPane selector = (StackPane)hSelectors.get(barInfo.getIndex());
-        ProgressBar hbar = (ProgressBar)selector.getChildren().get(1);
-        hbar.setProgress(barInfo.getHpPercent());
+    private void accountForRounding(ProgressBar hbar, DamageState heroSnapshot) {
+        if(heroSnapshot.getHpPercent() < .07 && heroSnapshot.getHpPercent() > 0){
+            hbar.setProgress(0.1);
+        }
     }
 
     private ImageView setImage(int id) {
@@ -293,18 +305,18 @@ public class BattleView {
     }
 
     private void exitItem() {
-        infoDisplay.setVisible(false);
+        itemInfoDisplay.setVisible(false);
     }
 
     private void hoverItem(Label item) {
         selectedItem = Integer.parseInt(item.getId());
-        infoDisplay.setVisible(true);
+        itemInfoDisplay.setVisible(true);
         loadItemImage();
         loadItemDescription();
     }
 
     private void loadItemImage() {
-        ImageView infoGraphic = (ImageView)infoDisplay.getChildren().get(0);
+        ImageView infoGraphic = (ImageView) itemInfoDisplay.getChildren().get(0);
         infoGraphic.setImage(new Image(inventory.get(selectedItem).getImagePath()));
         infoGraphic.setFitWidth(50);
         infoGraphic.setFitHeight(50);
@@ -320,8 +332,8 @@ public class BattleView {
     }
 
     private void loadItemDescription() {
-        Label quickSummary = (Label)infoDisplay.getChildren().get(1);
-        Label infoText = (Label)infoDisplay.getChildren().get(2);
+        Label quickSummary = (Label) itemInfoDisplay.getChildren().get(1);
+        Label infoText = (Label) itemInfoDisplay.getChildren().get(2);
         quickSummary.setText(inventory.get(selectedItem).getQuickSummary());
         infoText.setText(inventory.get(selectedItem).getDescription());
 
@@ -408,7 +420,7 @@ public class BattleView {
         ArrayList<Fighter> fighters = gameData.getEnemyTeam();
         int KOamt = 0;
         for (int i = 0; i < selectors.size(); i++) {
-            fighters.get(i).checkKO();
+            fighters.get(i).checkKOLevel();
             if (fighters.get(i).getKOLvl() > 0) {
                 KOamt++;
             }
@@ -470,12 +482,21 @@ public class BattleView {
         pushMessage("What will " + team.get(selectedUser).getName() + " do?" );
     }
 
+    public void removeHero(int index){
+        StackPane hero = (StackPane) heroSelectorArea.getChildren().get(index);
+        Label heroLabel = (Label)hero.getChildren().get(0);
+        heroLabel.setTextFill(Color.web("0x333c47"));
+        hero.setOnMousePressed(null);
+        battleLogic.getMessageQueue().add(team.get(index).getName() + " is down!");
+    }
+
     public void goBack(ActionEvent event) {
         selectorMenu.setVvalue(0);
         if(actionMenu.isVisible()){
             heroSelectorArea.setVisible(true);
             actionMenu.setVisible(false);
             enemySelectorArea.setVisible(false);
+            backButton.setVisible(false);
 
         }
         else if(itemSelectorArea.isVisible()){

@@ -3,9 +3,6 @@ package edu.bsu.cs222.FPBreetlison;
 import GUI.BattleView;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -15,13 +12,13 @@ public class BattleManager {
 
     private GameManager game;
     private GameData gameData;
-    private BattleView battleControl;
+    private BattleView battleView;
 
     private Fighter attacker;
     private Fighter target;
 
     private int targetNo;
-    private DamageState barInfo;
+    private DamageState fighterSnapshot;
     private ArrayList<DamageState> targetQueue;
 
     private ArrayList<String> messageQueue;
@@ -29,7 +26,7 @@ public class BattleManager {
     public void getGameInfo(GameManager game){
         this.game = game;
         this.gameData = game.getGameData();
-        this.battleControl = game.getBattleControl();
+        this.battleView = game.getBattleControl();
 
     }
 
@@ -52,13 +49,13 @@ public class BattleManager {
             endEnemyTurn();
         }
         else if(phase.equals("enemyWin")){
-            battleControl.enemySelectorArea.setVisible(false);
+            battleView.enemySelectorArea.setVisible(false);
         }
         else if(phase.equals("heroWin")){
-            battleControl.enemySelectorArea.setVisible(false);
-            battleControl.heroSelectorArea.setVisible(false);
+            battleView.enemySelectorArea.setVisible(false);
+            battleView.heroSelectorArea.setVisible(false);
         }
-        //battleControl.queueMessages(messageQueue);
+        //battleView.queueMessages(messageQueue);
     }
 
     private void resetTP() {
@@ -70,16 +67,24 @@ public class BattleManager {
 
         ArrayList<Fighter> remainingEnemies = getRemainingEnemies();
         for(int i = 0; i<remainingEnemies.size();i++){
-            barInfo = new DamageState();
+            fighterSnapshot = new DamageState();
             Fighter user = remainingEnemies.get(i);
-            int targetNo = makeRandom(gameData.getTeam().size());Fighter target = gameData.getTeam().get(targetNo);
-            if(target.getKOLvl() > 0){
+            targetNo = makeRandom(gameData.getTeam().size());
+            Fighter target = gameData.getTeam().get(targetNo);
+            if(target.isKO()){
                 target = findNextTarget();
             }
             if(target != null){
-                System.out.println(targetNo);
-                barInfo.setIndex(targetNo);
+                fighterSnapshot.setIndex(targetNo);
+                System.out.println("ACTUAL: " + user.getName() + " hits " + target.getName());
                 doEnemyAttack(user,target);
+            }
+            else{
+                fighterSnapshot.setIndex(i);
+                fighterSnapshot.setHpPercent(0);
+                fighterSnapshot.setKOState(true);
+                targetQueue.add(fighterSnapshot);
+                updateTurn("enemyWin");
             }
         }
     }
@@ -97,26 +102,32 @@ public class BattleManager {
 
     private void doEnemyAttack(Fighter user, Fighter target){
         user.doBasicAttack(target);
-        barInfo.setHpPercent((double)target.getHp()/(double)target.getMaxHP());
-        DamageState newBarInfo = barInfo;
+        fighterSnapshot.setHpPercent((double)target.getHp()/(double)target.getMaxHP());
+        detectHeroKO();
+        fighterSnapshot.setKOState(target.isKO());
         messageQueue.add(user.getName() + " strikes " + target.getName() + " !");
-        targetQueue.add(newBarInfo);
-        //battleControl.updateHeroVitals();
+        targetQueue.add(fighterSnapshot);
+
     }
 
     private Fighter findNextTarget() {
+
+        //Seems like this isn't functioning properly
         for(int i = 0; i<gameData.getTeam().size();i++){
             Fighter target = gameData.getTeam().get(i);
-            if(target.getKOLvl()<1){
+            if(!target.isKO()){
                 targetNo = i;
+                System.out.println(target.getName() + " has " + target.getHp() + " so clearly they are able to fight.");
                 return target;
             }
+            System.out.println(target.getName() + " is down. Searching for next target...");
+            //The problem is that when nothing is chosen, they still send the last instance of snapshot. We need to find a way to remove the snapshot if the hero is already KOd
         }
         return null;
     }
 
     private void endEnemyTurn() {
-        battleControl.heroSelectorArea.setVisible(true);
+        battleView.heroSelectorArea.setVisible(true);
         if(detectHeroKO()){
             updateTurn("enemyWin");
             messageQueue.add("Everyone's trashed! You lose!");
@@ -126,27 +137,23 @@ public class BattleManager {
             updateTurn("hero");
 
         }
-        battleControl.queueMessages(messageQueue);
-        battleControl.queueBarUpdates(targetQueue);
+        battleView.queueMessages(messageQueue);
+        battleView.queueBarUpdates(targetQueue);
     }
 
     public boolean detectHeroKO() {
-        ObservableList<Node> selectors = battleControl.heroSelectorArea.getChildren();
+        ObservableList<Node> selectors = battleView.heroSelectorArea.getChildren();
         ArrayList<Fighter> fighters = gameData.getTeam();
         int KOamt = 0;
 
         for (int i = 0; i < fighters.size(); i++) {
-            fighters.get(i).checkKO();
-            StackPane hero = (StackPane)selectors.get(i);
+            fighters.get(i).checkKOLevel();
             if (fighters.get(i).getKOLvl() > 0) {
                 KOamt++;
             }
-            if(fighters.get(i).getKOLvl() == 1){
-                Label hLabel = (Label)hero.getChildren().get(0);
-                hLabel.setTextFill(Color.web("0x333c47"));
-                hero.setOnMousePressed(null);
-                messageQueue.add(fighters.get(i).getName() + " is down!");
-            }
+//            if(fighters.get(i).getKOLvl() == 1){
+//                battleView.removeHero(i);
+//            }
         }
         if (KOamt == fighters.size()) {
             return true;
@@ -164,13 +171,13 @@ public class BattleManager {
     }
 
     private void enableCharacterMenu() {
-        battleControl.heroSelectorArea.setVisible(true);
-        battleControl.backButton.setVisible(false);
+        battleView.heroSelectorArea.setVisible(true);
+        battleView.backButton.setVisible(false);
     }
 
     private void disableCharacterMenu(){
-        battleControl.heroSelectorArea.setVisible(false);
-        battleControl.actionMenu.setVisible(false);
+        battleView.heroSelectorArea.setVisible(false);
+        battleView.actionMenu.setVisible(false);
     }
 
     public void checkPlayerTP(){
@@ -180,14 +187,14 @@ public class BattleManager {
     }
 
     public void tryBasicAttack(){
-        attacker = gameData.getTeam().get(battleControl.selectedUser);
+        attacker = gameData.getTeam().get(battleView.selectedUser);
         target = gameData.getEnemyTeam().get(gameData.getSelectedTarget());
         int cost = attacker.getTpCost();
         if(gameData.getCurrentTp() >= cost ){
             startBasicAttack(cost);
         }
         else{
-            battleControl.pushMessage("There's not enough time left for " + attacker.getName()
+            battleView.pushMessage("There's not enough time left for " + attacker.getName()
                     + " to attack!");
         }
 
@@ -198,35 +205,38 @@ public class BattleManager {
         attacker.doBasicAttack(target);
         int random = makeRandom(attacker.getBattleStrings().size());
         //messageQueue.add(attacker.getBattleStrings().get(random));
-        battleControl.pushMessage(attacker.getBattleStrings().get(random));
-        battleControl.enemySelectorArea.setVisible(false);
+        battleView.pushMessage(attacker.getBattleStrings().get(random));
+        battleView.enemySelectorArea.setVisible(false);
         requestTPUpdate();
     }
 
     private void requestTPUpdate(){
         double percentage = (double)gameData.getCurrentTp()/(double)gameData.getMaxTP();
-        battleControl.updateTP(percentage);
+        battleView.updateTP(percentage);
     }
 
     public void endPlayerTurn() {
-        battleControl.enemySelectorArea.setVisible(false);
-        if(battleControl.detectEnemyKO()){
+        battleView.enemySelectorArea.setVisible(false);
+        if(battleView.detectEnemyKO()){
             updateTurn("heroWin");
             messageQueue.add("The enemy team is down! You won!");
         }
         else{
             updateTurn("enemy");
         }
-        battleControl.queueMessages(messageQueue);
+        battleView.queueMessages(messageQueue);
 
     }
 
     public void useItem(int itemNo) {
-        gameData.getInventory().get(itemNo).activate(gameData.getTeam().get(battleControl.selectedUser));
+        gameData.getInventory().get(itemNo).activate(gameData.getTeam().get(battleView.selectedUser));
         gameData.getInventory().remove(itemNo);
     }
 
     public ArrayList<DamageState> getTargetQueue() {
         return targetQueue;
+    }
+    public ArrayList<String> getMessageQueue() {
+        return messageQueue;
     }
 }
