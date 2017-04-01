@@ -70,7 +70,6 @@ public class GameData {
 
     private void addHeroes(){
         team.add(allFighters.get(0));
-        team.add(allFighters.get(1));
     }
 
     private void addEnemies(){

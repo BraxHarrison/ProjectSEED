@@ -284,8 +284,8 @@ public class BattleView {
         for(int i = 0; i< team.size();i++){
             ImageView image = new ImageView(new Image(team.get(i).getBattlerGraphicPath()));
             image.setId(Integer.toString(i));
-            image.setFitHeight(150);
-            image.setFitWidth(150);
+            image.setFitHeight(300);
+            image.setFitWidth(200);
             image.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {showCharacterInfo(image);}

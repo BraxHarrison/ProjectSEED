@@ -67,7 +67,7 @@
             <HBox fx:id="enemySelectorArea" spacing="60" translateX="400" translateY="150">
 
             </HBox>
-            <HBox fx:id="heroGraphicsArea" StackPane.alignment="CENTER" spacing="40" translateY="170" translateX="-50" maxWidth="500" maxHeight="300"/>
+            <HBox fx:id="heroGraphicsArea" StackPane.alignment="CENTER" spacing="5" translateY="50" translateX="-55" maxWidth="500" maxHeight="300"/>
 
 
 
