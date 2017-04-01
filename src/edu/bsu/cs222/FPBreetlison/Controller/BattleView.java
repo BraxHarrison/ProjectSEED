@@ -25,6 +25,7 @@ import javafx.scene.transform.Shear;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class BattleView {
 
@@ -57,7 +58,7 @@ public class BattleView {
     public int selectedUser;
     private int selectedTarget;
     private int selectedItem;
-    private boolean uiLocked;
+    public boolean uiLocked;
 
     GameData gameData;
     GameManager game;
@@ -113,15 +114,14 @@ public class BattleView {
     }
 
     public void updateHeroBars(Snapshot heroSnapshot){
-        ObservableList<Node> hSelectors = heroSelectorArea.getChildren();
-        StackPane selector = (StackPane)hSelectors.get(heroSnapshot.getIndex());
+        StackPane selector = (StackPane)heroSelectorArea.getChildren().get(heroSnapshot.getIndex());
         ProgressBar hbar = (ProgressBar)selector.getChildren().get(1);
         hbar.setProgress(heroSnapshot.getHpPercent());
         roundHPPercent(hbar,heroSnapshot);
         updateHeroQuickInfo(heroSnapshot);
-        updateColor(hbar,heroSnapshot);
+        updateColor(hbar,heroSnapshot.getHpPercent());
         if(heroSnapshot.getKOState()){
-            removeHero(heroSnapshot.getIndex());
+             removeHero(heroSnapshot.getIndex());
         }
 
     }
@@ -134,12 +134,18 @@ public class BattleView {
         }
     }
 
-    private void updateColor(ProgressBar hbar, Snapshot heroSnapshot) {
-        if(heroSnapshot.getHpPercent() < .60){
+    private void updateColor(ProgressBar hbar, Double hpPercent) {
+        if(hpPercent < .60 && hpPercent >= .30){
+            hbar.getStyleClass().remove(2);
             hbar.getStyleClass().add("yellow-bar");
         }
-        if(heroSnapshot.getHpPercent() < .30){
+        else if(hpPercent < .30){
+            hbar.getStyleClass().remove(2);
             hbar.getStyleClass().add("red-bar");
+        }
+        else{
+            hbar.getStyleClass().remove(2);
+            hbar.getStyleClass().add("green-bar");
         }
     }
 
@@ -327,16 +333,9 @@ public class BattleView {
         battlerInfoDisplay.setVisible(false);
     }
 
-    private ImageView setImage(int id) {
-        String heroPath = team.get(id).getBattlerGraphicPath();
-        Image image = new Image(getClass().getResourceAsStream(heroPath));
-        ImageView imageView = new ImageView(image);
-        return imageView;
-    }
-
     public void createEnemySelectors() {
         for(int i = 0; i<enemyTeam.size();i++){
-            ImageView enemy = new ImageView();
+            ImageView enemy = new ImageView(new Image(enemyTeam.get(i).getBattlerGraphicPath()));
             enemy.setId(Integer.toString(i));
             populateEnemyUIElements(enemy);
             enemy.setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -357,9 +356,9 @@ public class BattleView {
     }
 
     private void populateEnemyUIElements(ImageView enemy) {
-        enemy.setImage(new Image("/images/battleGraphics/enBattler_undefined.png"));
         enemy.setFitHeight(100);
         enemy.setFitWidth(100);
+
     }
 
     private void selectEnemy(ImageView selected) {
@@ -491,14 +490,25 @@ public class BattleView {
         selectedItem = itemSelectorArea.getChildren().lastIndexOf(item);
         updateInventoryUI();
         battleLogic.useItem(selectedItem);
+        updateSingleHeroBar();
 
+
+    }
+
+    private void updateSingleHeroBar() {
+        StackPane hero = (StackPane)heroSelectorArea.getChildren().get(selectedUser);
+        ProgressBar heroBar = (ProgressBar)hero.getChildren().get(1);
+        Fighter user = team.get(selectedUser);
+        Double hpPercentage = (double)user.getHp()/(double)user.getMaxHP();
+        heroBar.setProgress(hpPercentage);
+        updateColor(heroBar,hpPercentage);
     }
 
     private void updateInventoryUI(){
         pushMessage(team.get(selectedUser).getName() +  " used the " + inventory.get(selectedItem).getName() + " !");
         itemSelectorArea.getChildren().remove(selectedItem);
         itemSelectorArea.setVisible(false);
-        actionMenu.setVisible(true);
+        heroSelectorArea.setVisible(true);
 
     }
 
@@ -508,9 +518,12 @@ public class BattleView {
 
 
     private void selectHero(StackPane hero) {
-        selectedUser = Integer.parseInt(hero.getId());
-        heroSelectorArea.setVisible(false);
-        showActionMenu();
+        if(!uiLocked){
+            selectedUser = Integer.parseInt(hero.getId());
+            heroSelectorArea.setVisible(false);
+            showActionMenu();
+        }
+
     }
 
 
@@ -558,6 +571,7 @@ public class BattleView {
         Label heroLabel = (Label)hero.getChildren().get(0);
         heroLabel.setTextFill(Color.web("0x333c47"));
         hero.setOnMousePressed(null);
+        heroGraphicsArea.getChildren().get(index).setOpacity(.35);
         battleLogic.getMessageQueue().add(team.get(index).getName() + " is down!");
     }
 

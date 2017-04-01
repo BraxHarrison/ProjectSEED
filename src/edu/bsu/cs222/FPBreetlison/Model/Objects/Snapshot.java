@@ -13,11 +13,12 @@ public class Snapshot {
     public void calcHPPercent(Fighter fighter){
         if(fighter == null){
             hpPercent=0;
+            hpString = "HP: " + 0 + "/" + 0;
         }
         else{
             hpPercent = (double)fighter.getHp()/(double)fighter.getMaxHP();
+            hpString = "HP: " + fighter.getHp() + "/" + fighter.getMaxHP();
         }
-        hpString = "HP: " + fighter.getHp() + "/" + fighter.getMaxHP();
 
     }
 

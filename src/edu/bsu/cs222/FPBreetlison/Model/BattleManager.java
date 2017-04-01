@@ -52,12 +52,13 @@ public class BattleManager {
         }
         else if(phase.equals("enemyWin")){
             battleView.blockEnemySelectors();
+            battleView.uiLocked = true;
         }
         else if(phase.equals("heroWin")){
             battleView.blockEnemySelectors();
             battleView.heroSelectorArea.setVisible(false);
+            battleView.uiLocked = true;
         }
-        //battleView.queueMessages(messageQueue);
     }
 
     private void resetTP() {
@@ -81,7 +82,7 @@ public class BattleManager {
                 doEnemyAttack(user,target);
             }
             else{
-                fighterSnapshot.setIndex(i);
+                fighterSnapshot.setIndex(targetNo);
                 fighterSnapshot.calcHPPercent(target);
                 fighterSnapshot.setKOState(true);
                 targetQueue.add(fighterSnapshot);
@@ -130,6 +131,7 @@ public class BattleManager {
         if(detectHeroKO()){
             updateTurn("enemyWin");
             messageQueue.add("Everyone's trashed! You lose!");
+
         }
         else{
             messageQueue.add("It's your turn!");
@@ -149,6 +151,7 @@ public class BattleManager {
             fighters.get(i).checkKOLevel();
             if (fighters.get(i).getKOLvl() > 0) {
                 KOamt++;
+
             }
 //            if(fighters.get(i).getKOLvl() == 1){
 //                battleView.removeHero(i);
@@ -233,10 +236,12 @@ public class BattleManager {
             }
         }
         if (KOamt == fighters.size()) {
-            updateTurn("heroWin");
             messageQueue.add("The enemy team is down! You won!");
+            battleView.queueMessages(messageQueue);
+            updateTurn("heroWin");
         }
-        battleView.queueMessages(messageQueue);
+
+
 
     }
 
