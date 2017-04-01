@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.scene.transform.Shear;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class BattleView {
     public VBox allEnemyVitals;
     public HBox enemySelectorArea;
     public VBox itemSelectorArea;
+    public Label mainDisplay;
     public Label historyDisplay;
     public ProgressBar tpBar;
     public Label tpDisplay;
@@ -63,7 +65,7 @@ public class BattleView {
 
     Font darwinFont;
 
-    public Label mainDisplay;
+
     //endregion
     //region UI Animation
 
@@ -116,11 +118,20 @@ public class BattleView {
         ProgressBar hbar = (ProgressBar)selector.getChildren().get(1);
         hbar.setProgress(heroSnapshot.getHpPercent());
         roundHPPercent(hbar,heroSnapshot);
+        updateHeroQuickInfo(heroSnapshot);
         updateColor(hbar,heroSnapshot);
         if(heroSnapshot.getKOState()){
             removeHero(heroSnapshot.getIndex());
         }
 
+    }
+
+    public void updateHeroQuickInfo(Snapshot heroSnapshot){
+        ImageView heroImage = (ImageView)heroGraphicsArea.getChildren().get(heroSnapshot.getIndex());
+        if(heroImage.isHover()){
+            Label hpInfo = (Label)battlerInfoDisplay.getChildren().get(1);
+            hpInfo.setText(heroSnapshot.getHpString());
+        }
     }
 
     private void updateColor(ProgressBar hbar, Snapshot heroSnapshot) {
@@ -183,10 +194,18 @@ public class BattleView {
 
         mainDisplay.setTextFill(Color.web("0x000000"));
         mainDisplay.setFont(darwinFont);
+        formatTPArea();
         for(int i = 0; i < actionMenu.getChildren().size();i++){
             Label action = (Label)actionMenu.getChildren().get(i);
             action.setFont(darwinFont);
         }
+
+    }
+
+    private void formatTPArea() {
+        tpBar.getTransforms().add(new Shear(0.95, 0));
+        tpDisplay.setFont(darwinFont);
+        tpDisplay.getStyleClass().add("black-text");
 
     }
 
@@ -341,11 +360,6 @@ public class BattleView {
         enemy.setImage(new Image("/images/battleGraphics/enBattler_undefined.png"));
         enemy.setFitHeight(100);
         enemy.setFitWidth(100);
-        enemy.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {selectEnemy(enemy);
-            }
-        });
     }
 
     private void selectEnemy(ImageView selected) {
@@ -492,26 +506,6 @@ public class BattleView {
 
     }
 
-    public boolean detectEnemyKO() {
-        //This really needs to be moved to BattleManager
-        ObservableList<Node> selectors = enemySelectorArea.getChildren();
-        ArrayList<Fighter> fighters = gameData.getEnemyTeam();
-        int KOamt = 0;
-        for (int i = 0; i < selectors.size(); i++) {
-            fighters.get(i).checkKOLevel();
-            if (fighters.get(i).getKOLvl() > 0) {
-                KOamt++;
-            }
-            if(fighters.get(i).getKOLvl() == 1){
-                selectors.get(i).setVisible(false);
-                pushMessage(fighters.get(i).getName() + " is down!");
-            }
-        }
-        if (KOamt == fighters.size()) {
-            return true;
-        }
-        return false;
-    }
 
     private void selectHero(StackPane hero) {
         selectedUser = Integer.parseInt(hero.getId());
@@ -523,25 +517,9 @@ public class BattleView {
     private void triggerAttack() {
 
         battleLogic.tryBasicAttack();
-        //updateEnemyVitals();
+        actionMenu.setVisible(false);
+        heroSelectorArea.setVisible(true);
 
-    }
-
-    private void updateEnemyVitals() {
-
-        for(int i = 0; i<allEnemyVitals.getChildren().size();i++){
-            VBox enemyVital = (VBox) allEnemyVitals.getChildren().get(i);
-            Label enemyHP = (Label)enemyVital.getChildren().get(1);
-            enemyHP.setText("HP: " + enemyTeam.get(i).getHp()+"/"+enemyTeam.get(i).getMaxHP());
-        }
-    }
-
-    public void updateHeroVitals(){
-        for(int i = 0; i< allHeroVitals.getChildren().size(); i++){
-            VBox heroVital = (VBox) allHeroVitals.getChildren().get(i);
-            Label heroHP = (Label)heroVital.getChildren().get(1);
-            heroHP.setText("HP: " + team.get(i).getHp()+"/"+ team.get(i).getMaxHP());
-        }
     }
 
     public void updateTP(double percentage){
@@ -598,6 +576,14 @@ public class BattleView {
 
         }
 
+    }
+
+    public void updateEnemyQuickInfo(Snapshot enemyState) {
+        if(enemySelectorArea.getChildren().get(enemyState.getIndex()).isHover()){
+            Fighter enemy = enemyTeam.get(enemyState.getIndex());
+            Label enemyHP = (Label)battlerInfoDisplay.getChildren().get(2);
+            enemyHP.setText("HP: " + enemy.getHp() + "/" + enemy.getMaxHP());
+        }
     }
 
     //endregion

@@ -20,7 +20,6 @@ GameManager game = new GameManager();
     @Override
     public void start(Stage primaryStage) throws Exception{
         gameData.setStage(primaryStage);
-        //gameData.setGame(game);
         game.init(gameData);
         game.play();
     }

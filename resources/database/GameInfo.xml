@@ -1,7 +1,9 @@
 <GameInfo>
     <BattleInfo>
         <CharacterBattleInfo>
+            <!--To be added later
             <chara name="Prota" maxHP="30" attack="7" defense="5" enAttack="2" enDefense="5" agility="7" tpCost="3" battlerGraphicPath="/images/Bulba_Pepe.png"/>
+            -->
             <chara name="Roxy" maxHP="20" attack="5" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/Trump_Pepe.png"/>
             <chara name="Smitty" maxHP="45" attack="12" defense="10" enAttack="1" enDefense="4" agility="5" tpCost="5" battlerGraphicPath="/images/Ragtime_Pepe.jpg"/>
         </CharacterBattleInfo>

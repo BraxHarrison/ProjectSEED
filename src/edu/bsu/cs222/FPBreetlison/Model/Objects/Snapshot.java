@@ -8,6 +8,7 @@ public class Snapshot {
     private int index;
     private double hpPercent;
     private boolean KOState;
+    private String hpString;
 
     public void calcHPPercent(Fighter fighter){
         if(fighter == null){
@@ -16,6 +17,7 @@ public class Snapshot {
         else{
             hpPercent = (double)fighter.getHp()/(double)fighter.getMaxHP();
         }
+        hpString = "HP: " + fighter.getHp() + "/" + fighter.getMaxHP();
 
     }
 
@@ -29,6 +31,10 @@ public class Snapshot {
 
     public double getHpPercent() {
         return hpPercent;
+    }
+
+    public String getHpString(){
+        return hpString;
     }
 
     public boolean getKOState() {

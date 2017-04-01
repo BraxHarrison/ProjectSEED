@@ -202,11 +202,42 @@ public class BattleManager {
     private void startBasicAttack(int cost) {
         gameData.subtractTp(cost);
         attacker.doBasicAttack(target);
+        updateUIForHeroAttack();
+        detectEnemyKO();
+
+    }
+
+    private void updateUIForHeroAttack(){
+        Snapshot enemyState = new Snapshot();
+        enemyState.setIndex(gameData.getSelectedTarget());
+        enemyState.calcHPPercent(target);
+        battleView.updateEnemyQuickInfo(enemyState);
         int random = makeRandom(attacker.getBattleStrings().size());
-        //messageQueue.add(attacker.getBattleStrings().get(random));
         battleView.pushMessage(attacker.getBattleStrings().get(random));
         battleView.blockEnemySelectors();
         requestTPUpdate();
+    }
+
+    public void detectEnemyKO() {
+        ObservableList<Node> selectors = battleView.enemySelectorArea.getChildren();
+        ArrayList<Fighter> fighters = gameData.getEnemyTeam();
+        int KOamt = 0;
+        for (int i = 0; i < selectors.size(); i++) {
+            fighters.get(i).checkKOLevel();
+            if (fighters.get(i).getKOLvl() > 0) {
+                KOamt++;
+            }
+            if(fighters.get(i).getKOLvl() == 1){
+                selectors.get(i).setVisible(false);
+                messageQueue.add(fighters.get(i).getName() + " is down!");
+            }
+        }
+        if (KOamt == fighters.size()) {
+            updateTurn("heroWin");
+            messageQueue.add("The enemy team is down! You won!");
+        }
+        battleView.queueMessages(messageQueue);
+
     }
 
     private void requestTPUpdate(){
@@ -216,13 +247,7 @@ public class BattleManager {
 
     public void endPlayerTurn() {
         battleView.blockEnemySelectors();
-        if(battleView.detectEnemyKO()){
-            updateTurn("heroWin");
-            messageQueue.add("The enemy team is down! You won!");
-        }
-        else{
-            updateTurn("enemy");
-        }
+        updateTurn("enemy");
         battleView.queueMessages(messageQueue);
 
     }
