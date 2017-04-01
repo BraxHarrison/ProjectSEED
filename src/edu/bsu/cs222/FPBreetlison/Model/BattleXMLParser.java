@@ -1,5 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

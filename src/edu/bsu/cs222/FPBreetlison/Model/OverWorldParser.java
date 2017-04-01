@@ -1,5 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -27,7 +28,6 @@ public class OverWorldParser {
         DocumentBuilder builder = factory.newDocumentBuilder();
         this.document = builder.parse(inputStream);
     }
-
 
     Map<String, Room> parseRoomInfo() throws ParserConfigurationException, IOException, SAXException {
 

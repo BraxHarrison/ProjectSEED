@@ -3,7 +3,7 @@
     <output-path>$PROJECT_DIR$/out/artifacts/FP_Breetlison</output-path>
     <properties id="javafx-properties">
       <options>
-        <option name="appClass" value="GUI.Main" />
+        <option name="appClass" value="edu.bsu.cs222.FPBreetlison.Main" />
         <option name="description" value="" />
         <option name="htmlPlaceholderId" value="" />
         <option name="icons">
@@ -11,6 +11,7 @@
             <option name="windowsIcon" value="$PROJECT_DIR$/resources/images/system/system_icon.ico" />
           </JavaFxApplicationIcons>
         </option>
+        <option name="nativeBundle" value="all" />
         <option name="title" value="Project SEED" />
         <option name="vendor" value="Pear Programming" />
         <option name="version" value="0.2" />

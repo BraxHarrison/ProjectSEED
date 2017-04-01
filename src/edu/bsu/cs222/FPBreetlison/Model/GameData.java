@@ -1,5 +1,8 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 

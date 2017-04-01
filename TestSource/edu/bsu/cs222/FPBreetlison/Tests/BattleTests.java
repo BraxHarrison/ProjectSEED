@@ -1,6 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Tests;
 
-import edu.bsu.cs222.FPBreetlison.Model.Fighter;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.DamageCalculator;
 
 import edu.bsu.cs222.FPBreetlison.Model.BattleXMLParser;

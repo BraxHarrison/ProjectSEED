@@ -1,6 +1,8 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
 import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 
@@ -18,8 +20,8 @@ public class BattleManager {
     private Fighter target;
 
     private int targetNo;
-    private DamageState fighterSnapshot;
-    private ArrayList<DamageState> targetQueue;
+    private Snapshot fighterSnapshot;
+    private ArrayList<Snapshot> targetQueue;
 
     private ArrayList<String> messageQueue;
 
@@ -49,10 +51,10 @@ public class BattleManager {
             endEnemyTurn();
         }
         else if(phase.equals("enemyWin")){
-            battleView.enemySelectorArea.setVisible(false);
+            battleView.blockEnemySelectors();
         }
         else if(phase.equals("heroWin")){
-            battleView.enemySelectorArea.setVisible(false);
+            battleView.blockEnemySelectors();
             battleView.heroSelectorArea.setVisible(false);
         }
         //battleView.queueMessages(messageQueue);
@@ -67,7 +69,7 @@ public class BattleManager {
 
         ArrayList<Fighter> remainingEnemies = getRemainingEnemies();
         for(int i = 0; i<remainingEnemies.size();i++){
-            fighterSnapshot = new DamageState();
+            fighterSnapshot = new Snapshot();
             Fighter user = remainingEnemies.get(i);
             targetNo = makeRandom(gameData.getTeam().size());
             Fighter target = gameData.getTeam().get(targetNo);
@@ -76,12 +78,11 @@ public class BattleManager {
             }
             if(target != null){
                 fighterSnapshot.setIndex(targetNo);
-                System.out.println("ACTUAL: " + user.getName() + " hits " + target.getName());
                 doEnemyAttack(user,target);
             }
             else{
                 fighterSnapshot.setIndex(i);
-                fighterSnapshot.setHpPercent(0);
+                fighterSnapshot.calcHPPercent(target);
                 fighterSnapshot.setKOState(true);
                 targetQueue.add(fighterSnapshot);
                 updateTurn("enemyWin");
@@ -102,7 +103,7 @@ public class BattleManager {
 
     private void doEnemyAttack(Fighter user, Fighter target){
         user.doBasicAttack(target);
-        fighterSnapshot.setHpPercent((double)target.getHp()/(double)target.getMaxHP());
+        fighterSnapshot.calcHPPercent(target);
         detectHeroKO();
         fighterSnapshot.setKOState(target.isKO());
         messageQueue.add(user.getName() + " strikes " + target.getName() + " !");
@@ -117,10 +118,8 @@ public class BattleManager {
             Fighter target = gameData.getTeam().get(i);
             if(!target.isKO()){
                 targetNo = i;
-                System.out.println(target.getName() + " has " + target.getHp() + " so clearly they are able to fight.");
                 return target;
             }
-            System.out.println(target.getName() + " is down. Searching for next target...");
             //The problem is that when nothing is chosen, they still send the last instance of snapshot. We need to find a way to remove the snapshot if the hero is already KOd
         }
         return null;
@@ -206,7 +205,7 @@ public class BattleManager {
         int random = makeRandom(attacker.getBattleStrings().size());
         //messageQueue.add(attacker.getBattleStrings().get(random));
         battleView.pushMessage(attacker.getBattleStrings().get(random));
-        battleView.enemySelectorArea.setVisible(false);
+        battleView.blockEnemySelectors();
         requestTPUpdate();
     }
 
@@ -216,7 +215,7 @@ public class BattleManager {
     }
 
     public void endPlayerTurn() {
-        battleView.enemySelectorArea.setVisible(false);
+        battleView.blockEnemySelectors();
         if(battleView.detectEnemyKO()){
             updateTurn("heroWin");
             messageQueue.add("The enemy team is down! You won!");
@@ -233,7 +232,7 @@ public class BattleManager {
         gameData.getInventory().remove(itemNo);
     }
 
-    public ArrayList<DamageState> getTargetQueue() {
+    public ArrayList<Snapshot> getTargetQueue() {
         return targetQueue;
     }
     public ArrayList<String> getMessageQueue() {

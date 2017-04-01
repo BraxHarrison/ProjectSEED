@@ -2,6 +2,7 @@ package edu.bsu.cs222.FPBreetlison.Model;
 
 import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
 import edu.bsu.cs222.FPBreetlison.Controller.OverworldView;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;

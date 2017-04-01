@@ -1,4 +1,6 @@
-package edu.bsu.cs222.FPBreetlison.Model;
+package edu.bsu.cs222.FPBreetlison.Model.Objects;
+
+import edu.bsu.cs222.FPBreetlison.Model.DamageCalculator;
 
 import java.util.ArrayList;
 import java.util.Arrays;

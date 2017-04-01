@@ -1,4 +1,4 @@
-package edu.bsu.cs222.FPBreetlison.Model;
+package edu.bsu.cs222.FPBreetlison.Model.Objects;
 
 import java.util.Arrays;
 import java.util.List;

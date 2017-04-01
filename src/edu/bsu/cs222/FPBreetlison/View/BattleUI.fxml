@@ -33,7 +33,7 @@
         </ScrollPane>
 
         <!--Lots of stuff needs to be moved here-->
-        <StackPane fx:id="mainSelectorArea" stylesheets="/stylesheets/pane.css"><!--What is this nonsense?!-->
+        <StackPane fx:id="mainSelectorArea" stylesheets="/stylesheets/pane.css">
             <Button fx:id="backButton" visible="false" text="(Back)" onAction="#goBack" StackPane.alignment="CENTER_LEFT" translateY="120"/>
             <ScrollPane fx:id="selectorMenu" maxHeight="375" fitToHeight="true" prefViewportHeight="200" vbarPolicy="NEVER" maxWidth="125" stylesheets="/stylesheets/scrollpane.css" styleClass="edge-to-edge" StackPane.alignment="TOP_LEFT">
                 <content>
@@ -63,8 +63,10 @@
             </ScrollPane>
 
 
-            <HBox fx:id="enemySelectorArea" spacing="60" translateX="500" translateY="200">
+            <HBox fx:id="enemySelectorArea" spacing="60" translateX="400" translateY="150">
+
             </HBox>
+            <HBox fx:id="heroGraphicsArea" StackPane.alignment="CENTER" spacing="40" translateY="170" translateX="-50" maxWidth="500" maxHeight="300"/>
 
 
 
@@ -75,9 +77,14 @@
         </ScrollPane>
         <Pane fx:id="infoBox" styleClass="infoBox" maxHeight="150" maxWidth="250" StackPane.alignment="BOTTOM_RIGHT">
             <Group fx:id="itemInfoDisplay" translateX="5" translateY="5">
-                <ImageView fx:id="infoGraphic"/>
-                <Label fx:id="quickSummary" wrapText="true" translateX="80" translateY="20" maxWidth="85" minWidth="85"/>
-                <Label fx:id="infoText" wrapText="true" translateY="55" maxWidth="200" maxHeight="90"/>
+                <ImageView fx:id="itemIGraphic"/>
+                <Label fx:id="itemQuickSummary" wrapText="true" translateX="80" translateY="20" maxWidth="85" minWidth="85"/>
+                <Label fx:id="itemInfoText" wrapText="true" translateY="55" maxWidth="200" maxHeight="90"/>
+            </Group>
+            <Group fx:id="battlerInfoDisplay" translateX="5" translateY="5">
+                <ImageView fx:id="battlerGraphic"/>
+                <Label fx:id="nameDisplay" translateX="90" translateY="20"/>
+                <Label fx:id="hpDisplay" translateX="90" translateY="40"/>
             </Group>
 
         </Pane>

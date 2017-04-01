@@ -1,4 +1,4 @@
-package edu.bsu.cs222.FPBreetlison.Model;
+package edu.bsu.cs222.FPBreetlison.Model.Objects;
 
 import java.util.Arrays;
 import java.util.List;
@@ -13,11 +13,7 @@ public class Room {
     private String west;
     //private ArrayList<Item> itemsInRoom;
 
-
-
-
     public Room(String info){
-
 
         List<String> roomInfo = stringParser(info);
         this.name = roomInfo.get(0);
@@ -34,8 +30,6 @@ public class Room {
         List<String> details = Arrays.asList(info.split(","));
         return details;
     }
-
-
 
     public String getNorth(){
         return north;
