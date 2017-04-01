@@ -1,6 +1,6 @@
-package edu.bsu.cs222.FPBreetlison;
+package edu.bsu.cs222.FPBreetlison.Model;
 
-import GUI.BattleView;
+import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
 

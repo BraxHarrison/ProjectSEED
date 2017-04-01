@@ -1,7 +1,7 @@
-package GUI;
+package edu.bsu.cs222.FPBreetlison;
 
-import edu.bsu.cs222.FPBreetlison.GameManager;
-import edu.bsu.cs222.FPBreetlison.GameData;
+import edu.bsu.cs222.FPBreetlison.Model.GameManager;
+import edu.bsu.cs222.FPBreetlison.Model.GameData;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;

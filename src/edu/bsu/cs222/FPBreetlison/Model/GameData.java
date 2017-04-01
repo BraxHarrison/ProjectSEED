@@ -1,4 +1,4 @@
-package edu.bsu.cs222.FPBreetlison;
+package edu.bsu.cs222.FPBreetlison.Model;
 
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;

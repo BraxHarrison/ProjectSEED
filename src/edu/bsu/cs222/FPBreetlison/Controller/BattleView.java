@@ -1,6 +1,6 @@
-package GUI;
+package edu.bsu.cs222.FPBreetlison.Controller;
 
-import edu.bsu.cs222.FPBreetlison.*;
+import edu.bsu.cs222.FPBreetlison.Model.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
@@ -21,7 +21,6 @@ import javafx.scene.text.Font;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class BattleView {
 

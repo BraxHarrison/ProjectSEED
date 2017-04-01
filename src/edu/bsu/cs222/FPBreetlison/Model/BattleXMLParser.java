@@ -1,4 +1,4 @@
-package edu.bsu.cs222.FPBreetlison;
+package edu.bsu.cs222.FPBreetlison.Model;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;

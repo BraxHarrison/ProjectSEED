@@ -1,7 +1,7 @@
-package edu.bsu.cs222.FPBreetlison;
+package edu.bsu.cs222.FPBreetlison.Model;
 
-import GUI.BattleView;
-import GUI.OverworldView;
+import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
+import edu.bsu.cs222.FPBreetlison.Controller.OverworldView;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -33,7 +33,7 @@ public class GameManager {
     private void setUpOverworld() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         try {
-            Parent root = fxmlLoader.load(getClass().getResource("/GUI/OverworldUI.fxml").openStream());
+            Parent root = fxmlLoader.load(getClass().getResource("/edu/bsu/cs222/FPBreetlison/View/OverworldUI.fxml").openStream());
             setOverworldAsStage(root);
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,7 +68,7 @@ public class GameManager {
     private void createBattleController(){
         FXMLLoader fxmlLoader = new FXMLLoader();
         try {
-            Parent root = fxmlLoader.load(getClass().getResource("/GUI/BattleUI.fxml").openStream());
+            Parent root = fxmlLoader.load(getClass().getResource("/edu/bsu/cs222/FPBreetlison/View/BattleUI.fxml").openStream());
             setBattleAsStage(root);
         } catch (IOException e) {
             e.printStackTrace();
