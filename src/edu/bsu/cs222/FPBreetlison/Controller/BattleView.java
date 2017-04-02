@@ -6,13 +6,11 @@ import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.scene.Group;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.event.EventHandler;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -25,7 +23,6 @@ import javafx.scene.transform.Shear;
 import javafx.util.Duration;
 
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class BattleView {
 
@@ -315,7 +312,7 @@ public class BattleView {
 
     private void showCharacterMiniImage(){
         ImageView display = (ImageView)battlerInfoDisplay.getChildren().get(0);
-        display.setImage(new Image("/images/item_undefined.png"));
+        display.setImage(new Image("/images/battleGraphics/itemGraphics/item_undefined.png"));
         display.setFitHeight(80);
         display.setFitWidth(80);
     }
@@ -376,7 +373,7 @@ public class BattleView {
 
     private void showEnemyMiniImage(){
         ImageView display = (ImageView)battlerInfoDisplay.getChildren().get(0);
-        display.setImage(new Image("/images/item_undefined.png"));
+        display.setImage(new Image("/images/battleGraphics/itemGraphics/item_undefined.png"));
         display.setFitHeight(80);
         display.setFitWidth(80);
     }

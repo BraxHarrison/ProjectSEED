@@ -80,9 +80,9 @@ public class GameData {
 
     private void initItems() {
         allItems.add(new Item("Patch, A cluster of raw pixels. " +
-                "Integrates with the user's body to recover health.,Recover 15 HP,15,/images/item_undefined.png,heal"));
+                "Integrates with the user's body to recover health.,Recover 15 HP,15,/images/battleGraphics/itemGraphics/item_patch.png,heal"));
         allItems.add(new Item("Overclock,A bizarre pocketwatch that creates a bubble of " +
-                "sped-up time around the user. Allows user to attack more quickly.,-1 TP Cost,1,/images/item_undefined.png,buff,speed"));
+                "sped-up time around the user. Allows user to attack more quickly.,-1 TP Cost,1,/images/battleGraphics/itemGraphics/item_overclock.png,buff,speed"));
         inventory.add(allItems.get(0));
         inventory.add(allItems.get(1));
 

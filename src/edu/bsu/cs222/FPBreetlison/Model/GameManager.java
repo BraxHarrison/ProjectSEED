@@ -27,7 +27,7 @@ public class GameManager {
         currentRoom = gameData.getAllRooms().get("FirstSteps");
         this.gameData = gameData;
         currentStage = gameData.getStage();
-        currentStage.setResizable(false);
+        currentStage.setResizable(true);
         setUpOverworld();
     }
 
@@ -44,7 +44,7 @@ public class GameManager {
     }
     private void setOverworldAsStage(Parent root){
         currentStage.setTitle("Overworld: "+gameData.getCurrentRoom().getName());
-        currentStage.getIcons().add(new Image("/images/item_undefined.png"));
+        currentStage.getIcons().add(new Image("/images/battleGraphics/itemGraphics/item_undefined.png"));
         currentStage.setScene(new Scene(root, 900, 600));
         currentStage.show();
 
