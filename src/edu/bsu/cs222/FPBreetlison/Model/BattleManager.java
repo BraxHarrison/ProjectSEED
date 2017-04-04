@@ -70,7 +70,7 @@ public class BattleManager {
         }
     }
 
-    private void endBattle(){
+    public void endBattle(){
         Timeline counter = new Timeline();
         counter.getKeyFrames().add(new KeyFrame(
                 Duration.millis(2000),

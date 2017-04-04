@@ -486,7 +486,8 @@ public class BattleView {
     }
 
     public void selectFlee(javafx.scene.input.MouseEvent event) {
-
+        pushMessage("You ran away. Everyone's disappointed.");
+        battleLogic.endBattle();
     }
 
 
