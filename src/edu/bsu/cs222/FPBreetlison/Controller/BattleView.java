@@ -6,6 +6,7 @@ import edu.bsu.cs222.FPBreetlison.Model.GameManager;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
