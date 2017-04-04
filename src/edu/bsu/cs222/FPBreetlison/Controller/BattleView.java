@@ -273,11 +273,24 @@ public class BattleView {
         }
     }
 
-    private void createHeroGraphics(){
-        for(int i = 0; i< team.size();i++){
+    private void createHeroGraphics() {
+        for (int i = 0; i < team.size(); i++) {
             ImageView image = new ImageView(new Image(team.get(i).getBattlerGraphicPath()));
             image.setId(Integer.toString(i));
-
+            image.setFitHeight(team.get(i).getSizeY());
+            image.setFitWidth(team.get(i).getSizeX());
+            image.setOnMouseEntered(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    showCharacterInfo(image);
+                }
+            });
+            image.setOnMouseExited(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    hideCharacterInfo();
+                }
+            });
             heroGraphicsArea.getChildren().add(image);
         }
     }
