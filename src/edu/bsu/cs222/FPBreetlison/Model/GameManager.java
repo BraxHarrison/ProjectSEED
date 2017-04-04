@@ -10,6 +10,8 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class GameManager {
@@ -97,8 +99,31 @@ public class GameManager {
         return battleLogic;
     }
 
+
+    public HashMap<Integer, Boolean> checkAvalibleDirections() {
+
+        HashMap<Integer, Boolean> availableDirections = new HashMap<>();
+        ArrayList<String> allDirections = new ArrayList<>();
+
+        allDirections.add(currentRoom.getNorth());
+        allDirections.add(currentRoom.getSouth());
+        allDirections.add(currentRoom.getEast());
+        allDirections.add(currentRoom.getWest());
+
+        for (int i = 0; i<allDirections.size();i++){
+            String roomDirection = allDirections.get(i);
+            if (roomDirection.equals("null")) {
+                availableDirections.put(i,false);
+            }
+            else{
+                availableDirections.put(i,true);
+            }
+        }
+        return  availableDirections;
+    }
+
     public void travelNorth() {
-        if(Objects.equals(currentRoom.getNorth(), "null")) {
+        if(currentRoom.getNorth().equals("null")) {
             return;
         }
         currentRoom = gameData.getAllRooms().get(currentRoom.getNorth());
@@ -106,7 +131,7 @@ public class GameManager {
     }
 
     public void travelSouth() {
-        if(Objects.equals(currentRoom.getSouth(), "null")){
+        if(currentRoom.getSouth().equals("null")){
             return;
         }
         currentRoom = gameData.getAllRooms().get(currentRoom.getSouth());
@@ -114,7 +139,7 @@ public class GameManager {
     }
 
     public void travelEast() {
-        if(Objects.equals(currentRoom.getEast(), "null")) {
+        if(currentRoom.getEast().equals("null")) {
             return;
         }
         currentRoom = gameData.getAllRooms().get(currentRoom.getEast());
@@ -123,7 +148,7 @@ public class GameManager {
 
     public void travelWest() {
 
-        if(Objects.equals(currentRoom.getWest(), "pop")) {
+        if(currentRoom.getWest().equals("null")) {
             return;
         }
         currentRoom = gameData.getAllRooms().get(currentRoom.getWest());
