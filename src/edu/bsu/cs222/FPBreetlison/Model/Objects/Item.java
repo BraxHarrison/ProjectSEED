@@ -45,16 +45,11 @@ public class Item {
 
     private List<String> stringParser(String info){
 
-        List<String> attributes = Arrays.asList(info.split(","));
-        return attributes;
+        return Arrays.asList(info.split(","));
     }
-
 
     public String getName() {
         return name;
-    }
-    public String getType() {
-        return type;
     }
     public String getImagePath() {
         return imagePath;

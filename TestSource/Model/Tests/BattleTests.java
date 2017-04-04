@@ -35,7 +35,7 @@ public class BattleTests {
     private void initFighters(){
         attacker = new Fighter("Attacker,2,2,2,2,2,2,2");
         defender = new Fighter("Attacker,2,2,2,2,2,2,2");
-        damageCalc = new DamageCalculator(attacker, defender);
+        damageCalc = new DamageCalculator(attacker);
         parser = new BattleXMLParser();
     }
 

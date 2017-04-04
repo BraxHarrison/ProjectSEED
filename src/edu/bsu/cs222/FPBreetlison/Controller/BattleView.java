@@ -1,20 +1,24 @@
 package edu.bsu.cs222.FPBreetlison.Controller;
 
-import edu.bsu.cs222.FPBreetlison.Model.*;
-import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
+import edu.bsu.cs222.FPBreetlison.Model.BattleManager;
+import edu.bsu.cs222.FPBreetlison.Model.GameData;
+import edu.bsu.cs222.FPBreetlison.Model.GameManager;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.paint.Color;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.transform.Shear;
 import javafx.util.Duration;
@@ -468,7 +472,7 @@ public class BattleView {
 
     }
 
-    public void selectFlee() {
+    public void selectFlee(javafx.scene.input.MouseEvent event) {
 
     }
 

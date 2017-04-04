@@ -22,13 +22,11 @@ public class Room {
         this.south = roomInfo.get(3);
         this.east = roomInfo.get(4);
         this.west = roomInfo.get(5);
-
     }
 
     private List<String> stringParser(String info) {
 
-        List<String> details = Arrays.asList(info.split(","));
-        return details;
+        return Arrays.asList(info.split(","));
     }
 
     public String getNorth(){
