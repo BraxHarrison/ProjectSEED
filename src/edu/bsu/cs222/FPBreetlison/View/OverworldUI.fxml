@@ -1,25 +1,16 @@
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.layout.GridPane?>
-
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.StackPane?>
 <StackPane fx:controller="edu.bsu.cs222.FPBreetlison.Controller.OverworldView" xmlns:fx="http://javafx.com/fxml" alignment="center">
-    <Label fx:id="roomDescription" StackPane.alignment="CENTER" text="TESTPOOP"/>
-
-    <Button fx:id="travelButton" StackPane.alignment="BOTTOM_RIGHT" onAction="#openTravel"/>
-    <ScrollPane fx:id="travelPane" StackPane.alignment="BOTTOM_RIGHT"  maxHeight="175" maxWidth="175" visible="false">
-        <Button fx:id="closeTravelButton" translateX="150" text="X" onAction="#closeTravel"/>
-        <Button fx:id="south" translateX="75" text="S" translateY="120" onAction="#travelSouth"/>
-        <Button fx:id="east" translateX="40" text="E" translateY="80" onAction="#travelEast"/>
-        <Button fx:id="west" translateX="105" text="W" translateY="80" onAction="#travelWest"/>
-        <Button fx:id="north" translateX="75" translateY="40" text="N" onAction="#travelNorth"/>
-
-    </ScrollPane>
-
+    <Label fx:id="roomDescription" StackPane.alignment="CENTER" text=""/>
+    <Button fx:id="travelButton" StackPane.alignment="BOTTOM_RIGHT" onAction="#openTravel" text="Map"/>
+    <StackPane fx:id="travelPane" StackPane.alignment="BOTTOM_RIGHT"  maxHeight="150" maxWidth="150" visible="false">
+        <Button fx:id="closeTravelButton" StackPane.alignment="BOTTOM_RIGHT" translateX="0" text="   X   " onAction="#closeTravel"/>
+        <Button fx:id="north" StackPane.alignment="TOP_CENTER" translateX="0" translateY="20" text="N" onAction="#travelNorth"/>
+        <Button fx:id="south" StackPane.alignment="BOTTOM_CENTER" translateX="0" translateY="-20" text="S"  onAction="#travelSouth"/>
+        <Button fx:id="east" StackPane.alignment="CENTER_RIGHT" translateX="-20" translateY="0" text="E"  onAction="#travelEast"/>
+        <Button fx:id="west" StackPane.alignment= "CENTER_LEFT" translateX="20" translateY="0" text="W"  onAction="#travelWest"/>
+    </StackPane>
 
     <Button fx:id="clickToBattle" StackPane.alignment="TOP_LEFT" text="Click to start battle" onAction="#startBattle"/>
 </StackPane>

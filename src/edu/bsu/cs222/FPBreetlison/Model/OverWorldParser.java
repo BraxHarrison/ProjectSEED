@@ -21,7 +21,6 @@ public class OverWorldParser {
     NodeList nodeList;
     Map<String, Room> rooms;
 
-
     private void createDoc() throws ParserConfigurationException, IOException, SAXException {
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("database/GameInfo.xml");
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -30,16 +29,9 @@ public class OverWorldParser {
     }
 
     Map<String, Room> parseRoomInfo() throws ParserConfigurationException, IOException, SAXException {
-
         createDoc();
         rooms = createRoomMap();
-        setRoomDescriptions();
         return rooms;
-
-    }
-
-    private void setRoomDescriptions() {
-
     }
 
     private Map<String, Room> createRoomMap(){
@@ -52,10 +44,7 @@ public class OverWorldParser {
             Room room = new Room(createRoomString(roomEle));
             rooms.put(room.getName(),room);
         }
-
-
         return rooms;
-
     }
 
     private String createRoomString(Element roomElement) {
@@ -69,9 +58,4 @@ public class OverWorldParser {
         return strBuilder.toString();
 
     }
-
-
-
-
-
 }

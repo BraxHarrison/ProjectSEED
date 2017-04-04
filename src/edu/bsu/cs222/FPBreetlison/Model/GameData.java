@@ -13,22 +13,17 @@ import java.util.Map;
 
 public class GameData {
 
-    public static GameData gameData;
     private ArrayList<Fighter> team;
     private ArrayList<Fighter> allFighters;
     private ArrayList<Fighter> enemyTeam;
     private ArrayList<Item> allItems;
     private ArrayList<Item> inventory;
     private Map<String, Room> allRooms;
-    private Fighter target;
     private Stage stage;
-    private Room currentRoom;
     private int tp;
     private int maxTP;
-    private int selectedUser;
     private int selectedTarget;
 
-    private GameManager game;
 
     public GameData() throws IOException, SAXException, ParserConfigurationException {
         init();
@@ -42,7 +37,6 @@ public class GameData {
         addHeroes();
         addEnemies();
         initItems();
-        currentRoom = allRooms.get("FirstSteps");
         maxTP = 10;
         tp = maxTP;
 
@@ -89,43 +83,16 @@ public class GameData {
 
     }
 
-    public void collectItem(Item item){
-        inventory.add(item);
-    }
-
     public void resetHeroTP(){
         tp = maxTP;
     }
 
-    public void changeRoom(String direction){
-
-    }
-
-    public Room getCurrentRoom(){return currentRoom;}
     public Map<String, Room> getAllRooms(){return allRooms;}
     public ArrayList<Fighter> getTeam() {
         return team;
     }
-    public void setTeam(ArrayList<Fighter> team) {
-        this.team = team;
-    }
     public ArrayList<Fighter> getEnemyTeam() {
         return enemyTeam;
-    }
-    public void setEnemyTeam(ArrayList<Fighter> enemyTeam) {
-        this.enemyTeam = enemyTeam;
-    }
-    public Fighter getTarget() {
-        return target;
-    }
-    public void setTarget(Fighter target) {
-        this.target = target;
-    }
-    public GameManager getGame() {
-        return game;
-    }
-    public void setGame(GameManager game) {
-        this.game = game;
     }
     public Stage getStage() {
         return stage;
@@ -138,12 +105,6 @@ public class GameData {
     }
     public int getCurrentTp() {
         return tp;
-    }
-    public int getSelectedUser() {
-        return selectedUser;
-    }
-    public void setSelectedUser(int selectedUser) {
-        this.selectedUser = selectedUser;
     }
     public int getSelectedTarget() {
         return selectedTarget;

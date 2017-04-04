@@ -38,6 +38,7 @@ public class GameManager {
         try {
             Parent root = fxmlLoader.load(getClass().getResource("/edu/bsu/cs222/FPBreetlison/View/OverworldUI.fxml").openStream());
             setOverworldAsStage(root);
+            updateStageTitle();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -45,11 +46,14 @@ public class GameManager {
         overworld.initialize(this);
     }
     private void setOverworldAsStage(Parent root){
-        currentStage.setTitle("Overworld: "+gameData.getCurrentRoom().getName());
         currentStage.getIcons().add(new Image("/images/battleGraphics/itemGraphics/item_undefined.png"));
         currentStage.setScene(new Scene(root, 900, 600));
         currentStage.show();
 
+    }
+
+    public void updateStageTitle(){
+        currentStage.setTitle("Overworld: "+getCurrentRoom().getName());
     }
     //endregion
 
@@ -123,9 +127,11 @@ public class GameManager {
     }
 
     public void travelNorth() {
-        if(currentRoom.getNorth().equals("null")) {
+        if(Objects.equals(currentRoom.getNorth(),"null")){
+            System.out.println("no room north");
             return;
         }
+
         currentRoom = gameData.getAllRooms().get(currentRoom.getNorth());
 
     }
@@ -133,9 +139,9 @@ public class GameManager {
     public void travelSouth() {
         if(currentRoom.getSouth().equals("null")){
             return;
+
         }
         currentRoom = gameData.getAllRooms().get(currentRoom.getSouth());
-
     }
 
     public void travelEast() {
@@ -147,11 +153,9 @@ public class GameManager {
     }
 
     public void travelWest() {
-
         if(currentRoom.getWest().equals("null")) {
             return;
         }
         currentRoom = gameData.getAllRooms().get(currentRoom.getWest());
-
     }
 }
