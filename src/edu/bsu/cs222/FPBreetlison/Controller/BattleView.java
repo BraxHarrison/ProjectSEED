@@ -5,7 +5,7 @@ import edu.bsu.cs222.FPBreetlison.Model.GameData;
 import edu.bsu.cs222.FPBreetlison.Model.GameManager;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
-import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
@@ -276,10 +276,7 @@ public class BattleView {
         for(int i = 0; i< team.size();i++){
             ImageView image = new ImageView(new Image(team.get(i).getBattlerGraphicPath()));
             image.setId(Integer.toString(i));
-            image.setFitHeight(300);
-            image.setFitWidth(200);
-            image.setOnMouseEntered(event -> showCharacterInfo(image));
-            image.setOnMouseExited(event -> hideCharacterInfo());
+
             heroGraphicsArea.getChildren().add(image);
         }
     }
@@ -287,15 +284,15 @@ public class BattleView {
     private void showCharacterInfo(ImageView image){
         battlerInfoDisplay.setVisible(true);
         int index = Integer.parseInt(image.getId());
-        showCharacterMiniImage();
+        showCharacterMiniImage(index);
         showHeroUpperLabels(index);
         showHeroLowerLabels();
 
     }
 
-    private void showCharacterMiniImage(){
+    private void showCharacterMiniImage(int index){
         ImageView display = (ImageView)battlerInfoDisplay.getChildren().get(0);
-        display.setImage(new Image("/images/battleGraphics/itemGraphics/item_undefined.png"));
+        display.setImage(new Image(team.get(index).getMiniGraphicPath()));
         display.setFitHeight(80);
         display.setFitWidth(80);
     }
@@ -326,27 +323,30 @@ public class BattleView {
     }
 
     private void populateEnemyUIElements(ImageView enemy) {
-        enemy.setFitHeight(100);
-        enemy.setFitWidth(100);
+        int index = Integer.parseInt(enemy.getId());
+        enemy.setFitHeight(enemyTeam.get(index).getSizeY());
+        enemy.setFitWidth(enemyTeam.get(index).getSizeX());
 
     }
 
-    private void selectEnemy(ImageView selected) {
-        gameData.setSelectedTarget(Integer.parseInt(selected.getId()));
+    private void selectEnemy(ImageView enemy) {
+        int index = enemySelectorArea.getChildren().indexOf(enemy);
+        System.out.println(index);
+        gameData.setSelectedTarget(index);
         triggerAttack();
     }
 
     private void showEnemyInfo(ImageView enemy){
         int index = Integer.parseInt(enemy.getId());
         battlerInfoDisplay.setVisible(true);
-        showEnemyMiniImage();
+        showEnemyMiniImage(index);
         showEnemyUpperLabels(index);
 
     }
 
-    private void showEnemyMiniImage(){
+    private void showEnemyMiniImage(int index){
         ImageView display = (ImageView)battlerInfoDisplay.getChildren().get(0);
-        display.setImage(new Image("/images/battleGraphics/itemGraphics/item_undefined.png"));
+        display.setImage(new Image(enemyTeam.get(index).getMiniGraphicPath()));
         display.setFitHeight(80);
         display.setFitWidth(80);
     }
@@ -363,8 +363,7 @@ public class BattleView {
     }
 
     private void createItemsButtons(){
-        ArrayList<Item> inventory = gameData.getInventory();
-        for(int i = 0; i<inventory.size();i++){
+        for(int i = 0; i<gameData.getInventory().size();i++){
             Label item = new Label(inventory.get(i).getName());
             item.setId(Integer.toString(i));
             formatItemSelector(item);
@@ -384,15 +383,15 @@ public class BattleView {
     }
 
     private void hoverItem(Label item) {
-        selectedItem = Integer.parseInt(item.getId());
+        int index = itemSelectorArea.getChildren().indexOf(item);
         itemInfoDisplay.setVisible(true);
-        loadItemImage();
-        loadItemDescription();
+        loadItemImage(index);
+        loadItemDescription(index);
     }
 
-    private void loadItemImage() {
+    private void loadItemImage(int index) {
         ImageView infoGraphic = (ImageView) itemInfoDisplay.getChildren().get(0);
-        infoGraphic.setImage(new Image(inventory.get(selectedItem).getImagePath()));
+        infoGraphic.setImage(new Image(gameData.getInventory().get(index).getImagePath()));
         infoGraphic.setFitWidth(50);
         infoGraphic.setFitHeight(50);
     }
@@ -406,11 +405,11 @@ public class BattleView {
         item.setFont(darwinFont);
     }
 
-    private void loadItemDescription() {
+    private void loadItemDescription(int index) {
         Label quickSummary = (Label) itemInfoDisplay.getChildren().get(1);
         Label infoText = (Label) itemInfoDisplay.getChildren().get(2);
-        quickSummary.setText(inventory.get(selectedItem).getQuickSummary());
-        infoText.setText(inventory.get(selectedItem).getDescription());
+        quickSummary.setText(gameData.getInventory().get(index).getQuickSummary());
+        infoText.setText(gameData.getInventory().get(index).getDescription());
 
     }
 
@@ -447,7 +446,7 @@ public class BattleView {
     }
 
     private void selectItem(Label item){
-        selectedItem = itemSelectorArea.getChildren().lastIndexOf(item);
+        int selectedItem = itemSelectorArea.getChildren().indexOf(item);
         updateInventoryUI();
         battleLogic.useItem(selectedItem);
         updateSingleHeroBar();
@@ -465,7 +464,7 @@ public class BattleView {
     }
 
     private void updateInventoryUI(){
-        pushMessage(team.get(selectedUser).getName() +  " used the " + inventory.get(selectedItem).getName() + " !");
+        pushMessage(team.get(selectedUser).getName() +  " used the " + gameData.getInventory().get(selectedItem).getName() + " !");
         itemSelectorArea.getChildren().remove(selectedItem);
         itemSelectorArea.setVisible(false);
         heroSelectorArea.setVisible(true);

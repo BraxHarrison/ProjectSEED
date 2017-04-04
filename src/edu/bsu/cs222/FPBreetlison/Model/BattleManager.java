@@ -255,7 +255,7 @@ public class BattleManager {
 
     public void useItem(int itemNo) {
         gameData.getInventory().get(itemNo).activate(gameData.getTeam().get(battleView.selectedUser));
-        gameData.getInventory().remove(itemNo);
+        gameData.removeObjectFromInventory(itemNo);
     }
 
     public ArrayList<String> getMessageQueue() {
