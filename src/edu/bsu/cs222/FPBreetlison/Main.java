@@ -11,8 +11,8 @@ import java.io.IOException;
 
 public class Main extends Application {
 
-GameData gameData = new GameData();
-GameManager game = new GameManager();
+private GameData gameData = new GameData();
+private GameManager game = new GameManager();
 
     public Main() throws ParserConfigurationException, SAXException, IOException {
     }

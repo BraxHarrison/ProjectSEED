@@ -15,11 +15,9 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-public class OverWorldParser {
+class OverWorldParser {
 
-    Document document;
-    NodeList nodeList;
-    Map<String, Room> rooms;
+    private Document document;
 
     private void createDoc() throws ParserConfigurationException, IOException, SAXException {
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("database/GameInfo.xml");
@@ -30,14 +28,13 @@ public class OverWorldParser {
 
     Map<String, Room> parseRoomInfo() throws ParserConfigurationException, IOException, SAXException {
         createDoc();
-        rooms = createRoomMap();
-        return rooms;
+        return createRoomMap();
     }
 
     private Map<String, Room> createRoomMap(){
         Map<String, Room> rooms = new HashMap<>();
-        nodeList = this.document.getElementsByTagName("room");
-        for(int i = 0; i< nodeList.getLength();i++){
+        NodeList nodeList = this.document.getElementsByTagName("room");
+        for(int i = 0; i< nodeList.getLength(); i++){
 
             Node roomInfo = nodeList.item(i);
             Element roomEle = (Element)roomInfo;
@@ -48,14 +45,12 @@ public class OverWorldParser {
     }
 
     private String createRoomString(Element roomElement) {
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append(roomElement.getAttribute("name") + ",");
-        strBuilder.append(roomElement.getAttribute("des") + ",");
-        strBuilder.append(roomElement.getAttribute("north") + ",");
-        strBuilder.append(roomElement.getAttribute("south") + ",");
-        strBuilder.append(roomElement.getAttribute("east") + ",");
-        strBuilder.append(roomElement.getAttribute("west") + ",");
-        return strBuilder.toString();
+        return (roomElement.getAttribute("name") + ",") +
+                roomElement.getAttribute("des") + "," +
+                roomElement.getAttribute("north") + "," +
+                roomElement.getAttribute("south") + "," +
+                roomElement.getAttribute("east") + "," +
+                roomElement.getAttribute("west") + ",";
 
     }
 }

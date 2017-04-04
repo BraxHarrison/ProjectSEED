@@ -18,9 +18,8 @@ public class GameManager {
 
     private GameData gameData;
     private BattleManager battleLogic;
-    private OverworldView overworld;
     private BattleView battleControl;
-    Stage currentStage;
+    private Stage currentStage;
     private Room currentRoom;
 
 
@@ -42,7 +41,7 @@ public class GameManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        overworld = fxmlLoader.getController();
+        OverworldView overworld = fxmlLoader.getController();
         overworld.initialize(this);
     }
     private void setOverworldAsStage(Parent root){
@@ -58,7 +57,6 @@ public class GameManager {
     //endregion
 
     public void play(){
-        this.gameData = gameData;
     }
 
     public void createBattle(){
@@ -93,10 +91,8 @@ public class GameManager {
     public GameData getGameData(){
         return gameData;
     }
-    public OverworldView getOverworld() {
-        return overworld;
-    }
-    public BattleView getBattleControl() {
+
+    BattleView getBattleControl() {
         return battleControl;
     }
     public BattleManager getBattleLogic() {

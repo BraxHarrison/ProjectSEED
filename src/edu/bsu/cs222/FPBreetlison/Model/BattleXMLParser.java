@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class BattleXMLParser {
 
-    Document document;
-    NodeList nodeList;
-    ArrayList<Fighter> fighters;
+    private Document document;
+    private NodeList nodeList;
+    private ArrayList<Fighter> fighters;
 
     //region Initialization Functions
 
@@ -39,7 +39,7 @@ public class BattleXMLParser {
     }
 
     private ArrayList<Fighter> createFighterList(){
-        ArrayList<Fighter> fighters = new ArrayList<Fighter>();
+        ArrayList<Fighter> fighters = new ArrayList<>();
         nodeList = this.document.getElementsByTagName("chara");
         for(int i = 0; i< nodeList.getLength();i++){
 
@@ -53,19 +53,16 @@ public class BattleXMLParser {
     }
 
     private void setBattleDescriptions (){
-        for(int i = 0; i < fighters.size();i++){
-            Fighter fighter = fighters.get(i);
+        for (Fighter fighter : fighters) {
             ArrayList<String> battleDescriptions = loadBattleDescriptions(fighter);
             fighter.setBattleStrings(battleDescriptions);
         }
     }
 
     private ArrayList<String> loadBattleDescriptions(Fighter fighter) {
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append(fighter.getName());
-        strBuilder.append("BattleString");
-        String elementName = strBuilder.toString();
-        ArrayList<String> strings = new ArrayList<String>();
+        String elementName = fighter.getName() +
+                "BattleString";
+        ArrayList<String> strings = new ArrayList<>();
         nodeList = this.document.getElementsByTagName(elementName);
         for(int i = 0; i<nodeList.getLength();i++){
             Element battleDesc = (Element)nodeList.item(i);
@@ -79,18 +76,16 @@ public class BattleXMLParser {
 
 
     private String createFighterString(Element battler) {
-        StringBuilder strBuilder = new StringBuilder();
-        strBuilder.append(battler.getAttribute("name") + ",");
-        strBuilder.append(battler.getAttribute("maxHP") + ",");
-        strBuilder.append(battler.getAttribute("attack") + ",");
-        strBuilder.append(battler.getAttribute("defense") + ",");
-        strBuilder.append(battler.getAttribute("enAttack") + ",");
-        strBuilder.append(battler.getAttribute("enDefense") + ",");
-        strBuilder.append(battler.getAttribute("agility") + ",");
-        strBuilder.append(battler.getAttribute("tpCost") + ",");
-        strBuilder.append(battler.getAttribute("battlerGraphicPath"));
 
-        return strBuilder.toString();
+        return (battler.getAttribute("name") + ",") +
+                battler.getAttribute("maxHP") + "," +
+                battler.getAttribute("attack") + "," +
+                battler.getAttribute("defense") + "," +
+                battler.getAttribute("enAttack") + "," +
+                battler.getAttribute("enDefense") + "," +
+                battler.getAttribute("agility") + "," +
+                battler.getAttribute("tpCost") + "," +
+                battler.getAttribute("battlerGraphicPath");
 
     }
 

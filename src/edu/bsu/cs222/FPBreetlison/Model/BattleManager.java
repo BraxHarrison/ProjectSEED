@@ -12,7 +12,6 @@ import java.util.Random;
 
 public class BattleManager {
 
-    private GameManager game;
     private GameData gameData;
     private BattleView battleView;
 
@@ -26,7 +25,6 @@ public class BattleManager {
     private ArrayList<String> messageQueue;
 
     public void getGameInfo(GameManager game){
-        this.game = game;
         this.gameData = game.getGameData();
         this.battleView = game.getBattleControl();
 
@@ -40,24 +38,28 @@ public class BattleManager {
         checkSpeeds();
     }
 
-    public void updateTurn(String phase) {
-        if(phase.equals("hero")){
-            enableCharacterMenu();
-        }
-        else if(phase.equals("enemy")) {
-            disableCharacterMenu();
-            tryEnemyAttack();
-            resetTP();
-            endEnemyTurn();
-        }
-        else if(phase.equals("enemyWin")){
-            battleView.blockEnemySelectors();
-            battleView.uiLocked = true;
-        }
-        else if(phase.equals("heroWin")){
-            battleView.blockEnemySelectors();
-            battleView.heroSelectorArea.setVisible(false);
-            battleView.uiLocked = true;
+    private void updateTurn(String phase) {
+        switch (phase) {
+            case "hero":
+                enableCharacterMenu();
+                break;
+            case "enemy":
+                disableCharacterMenu();
+                tryEnemyAttack();
+                resetTP();
+                endEnemyTurn();
+                break;
+            case "enemyWin":
+                battleView.blockEnemySelectors();
+                battleView.uiLocked = true;
+                battleView.backButton.setVisible(false);
+                break;
+            case "heroWin":
+                battleView.blockEnemySelectors();
+                battleView.heroSelectorArea.setVisible(false);
+                battleView.uiLocked = true;
+                battleView.backButton.setVisible(false);
+                break;
         }
     }
 
@@ -69,21 +71,19 @@ public class BattleManager {
     private void tryEnemyAttack() {
 
         ArrayList<Fighter> remainingEnemies = getRemainingEnemies();
-        for(int i = 0; i<remainingEnemies.size();i++){
+        for (Fighter remainingEnemy : remainingEnemies) {
             fighterSnapshot = new Snapshot();
-            Fighter user = remainingEnemies.get(i);
             targetNo = makeRandom(gameData.getTeam().size());
             Fighter target = gameData.getTeam().get(targetNo);
-            if(target.isKO()){
+            if (target.isKO()) {
                 target = findNextTarget();
             }
-            if(target != null){
+            if (target != null) {
                 fighterSnapshot.setIndex(targetNo);
-                doEnemyAttack(user,target);
-            }
-            else{
+                doEnemyAttack(remainingEnemy, target);
+            } else {
                 fighterSnapshot.setIndex(targetNo);
-                fighterSnapshot.calcHPPercent(target);
+                fighterSnapshot.calcHPPercent(null);
                 fighterSnapshot.setKOState(true);
                 targetQueue.add(fighterSnapshot);
                 updateTurn("enemyWin");
@@ -94,9 +94,9 @@ public class BattleManager {
     private ArrayList<Fighter> getRemainingEnemies() {
         ArrayList<Fighter> fighters = gameData.getEnemyTeam();
         ArrayList<Fighter> ableFighters = new ArrayList<>();
-        for(int i = 0; i < fighters.size();i++){
-            if(fighters.get(i).getKOLvl() == 0){
-                ableFighters.add(fighters.get(i));
+        for (Fighter fighter : fighters) {
+            if (fighter.getKOLvl() == 0) {
+                ableFighters.add(fighter);
             }
         }
         return ableFighters;
@@ -142,14 +142,13 @@ public class BattleManager {
         battleView.queueBarUpdates(targetQueue);
     }
 
-    public boolean detectHeroKO() {
-        ObservableList<Node> selectors = battleView.heroSelectorArea.getChildren();
+    private boolean detectHeroKO() {
         ArrayList<Fighter> fighters = gameData.getTeam();
         int KOamt = 0;
 
-        for (int i = 0; i < fighters.size(); i++) {
-            fighters.get(i).checkKOLevel();
-            if (fighters.get(i).getKOLvl() > 0) {
+        for (Fighter fighter : fighters) {
+            fighter.checkKOLevel();
+            if (fighter.getKOLvl() > 0) {
                 KOamt++;
 
             }
@@ -157,10 +156,7 @@ public class BattleManager {
 //                battleView.removeHero(i);
 //            }
         }
-        if (KOamt == fighters.size()) {
-            return true;
-        }
-        return false;
+        return KOamt == fighters.size();
     }
 
     private int makeRandom(int bound) {
@@ -221,7 +217,7 @@ public class BattleManager {
         requestTPUpdate();
     }
 
-    public void detectEnemyKO() {
+    private void detectEnemyKO() {
         ObservableList<Node> selectors = battleView.enemySelectorArea.getChildren();
         ArrayList<Fighter> fighters = gameData.getEnemyTeam();
         int KOamt = 0;
@@ -262,9 +258,6 @@ public class BattleManager {
         gameData.removeObjectFromInventory(itemNo);
     }
 
-    public ArrayList<Snapshot> getTargetQueue() {
-        return targetQueue;
-    }
     public ArrayList<String> getMessageQueue() {
         return messageQueue;
     }

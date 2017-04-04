@@ -43,10 +43,10 @@ public class GameData {
     }
 
     private void loadLists() {
-        team = new ArrayList<Fighter>();
-        allItems = new ArrayList<Item>();
-        inventory = new ArrayList<Item>();
-        enemyTeam = new ArrayList<Fighter>();
+        team = new ArrayList<>();
+        allItems = new ArrayList<>();
+        inventory = new ArrayList<>();
+        enemyTeam = new ArrayList<>();
     }
 
     private void loadRooms() throws IOException, SAXException, ParserConfigurationException {
@@ -88,18 +88,18 @@ public class GameData {
 
     }
 
-    public void resetHeroTP(){
+    void resetHeroTP(){
         tp = maxTP;
     }
 
-    public Map<String, Room> getAllRooms(){return allRooms;}
+    Map<String, Room> getAllRooms(){return allRooms;}
     public ArrayList<Fighter> getTeam() {
         return team;
     }
     public ArrayList<Fighter> getEnemyTeam() {
         return enemyTeam;
     }
-    public Stage getStage() {
+    Stage getStage() {
         return stage;
     }
     public void setStage(Stage stage) {
@@ -111,13 +111,13 @@ public class GameData {
     public int getCurrentTp() {
         return tp;
     }
-    public int getSelectedTarget() {
+    int getSelectedTarget() {
         return selectedTarget;
     }
     public void setSelectedTarget(int selectedTarget) {
         this.selectedTarget = selectedTarget;
     }
-    public void subtractTp(int cost) {
+    void subtractTp(int cost) {
         tp -= cost;
         if(tp < 0){
             tp = 0;
