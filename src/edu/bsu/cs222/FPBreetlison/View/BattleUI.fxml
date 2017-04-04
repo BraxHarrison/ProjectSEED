@@ -57,10 +57,13 @@
                 </content>
             </ScrollPane>
 
-            <HBox fx:id="enemySelectorArea" spacing="5"  translateX="400" maxWidth="500" maxHeight="300" translateY="0">
+            <HBox fx:id="enemySelectorArea" spacing="40"  translateX="350" maxWidth="500" maxHeight="300" translateY="-20">
+                <children>
+
+                </children>
 
             </HBox>
-            <HBox fx:id="heroGraphicsArea" StackPane.alignment="CENTER" spacing="5" translateY="50" translateX="-55" maxWidth="500" maxHeight="300"/>
+            <HBox fx:id="heroGraphicsArea" StackPane.alignment="CENTER" spacing="2" translateY="50" translateX="-25" maxWidth="500" maxHeight="300"/>
 
         </StackPane>
 

@@ -64,12 +64,17 @@ public class GameData {
 
     private void addHeroes(){
         team.add(allFighters.get(0));
+        team.add(allFighters.get(1));
     }
 
     private void addEnemies(){
-//        enemyTeam.add(new Fighter("Jag,25,10,3,3,3,7,2,images/Ragtime_Pepe.jpg"));
 //        enemyTeam.add(new Fighter("Blisterbulb,30,6,6,7,7,3,6,images/Ragtime_Pepe.jpg"));
-        enemyTeam.add(new Fighter("Harshmallow,20,3,4,9,11,4,4,images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png"));
+        enemyTeam.add(new Fighter("Jag,25,10,3,3,3,7,2,images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png,images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png,100,100"));
+        enemyTeam.add(new Fighter("Harshmallow,20,3,4,9,11,4,4,images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png,images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png,100,100"));
+    }
+
+    public void removeObjectFromInventory(int index ){
+        inventory.remove(index);
     }
 
     private void initItems() {

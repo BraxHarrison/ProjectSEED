@@ -22,6 +22,9 @@ public class Fighter {
     private ArrayList<String> battleStrings;
     private String actionString;
     private String battlerGraphicPath;
+    private String miniGraphicPath;
+    private int sizeX;
+    private int sizeY;
     private boolean KOState;
     private int KOLevel;
 
@@ -41,6 +44,9 @@ public class Fighter {
         this.agility = Integer.parseInt(characterInfo.get(6));
         this.tpCost = Integer.parseInt(characterInfo.get(7));
         this.battlerGraphicPath = characterInfo.get(8);
+        this.miniGraphicPath = characterInfo.get(9);
+        this.sizeX = Integer.parseInt(characterInfo.get(10));
+        this.sizeY = Integer.parseInt(characterInfo.get(11));
     }
 
     //region In-Battle Functionality
@@ -190,6 +196,9 @@ public class Fighter {
     public String getBattlerGraphicPath() {
         return battlerGraphicPath;
     }
+    public String getMiniGraphicPath(){return miniGraphicPath;}
+    public int getSizeX(){return sizeX;}
+    public int getSizeY(){return sizeY;}
     //endregion
 
 }
