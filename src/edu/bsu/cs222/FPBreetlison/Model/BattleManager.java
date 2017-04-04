@@ -3,8 +3,11 @@ package edu.bsu.cs222.FPBreetlison.Model;
 import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
 import javafx.scene.Node;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -13,6 +16,7 @@ import java.util.Random;
 public class BattleManager {
 
     private GameData gameData;
+    private GameManager game;
     private BattleView battleView;
 
     private Fighter attacker;
@@ -25,6 +29,7 @@ public class BattleManager {
     private ArrayList<String> messageQueue;
 
     public void getGameInfo(GameManager game){
+        this.game = game;
         this.gameData = game.getGameData();
         this.battleView = game.getBattleControl();
 
@@ -53,14 +58,24 @@ public class BattleManager {
                 battleView.blockEnemySelectors();
                 battleView.uiLocked = true;
                 battleView.backButton.setVisible(false);
+                endBattle();
                 break;
             case "heroWin":
                 battleView.blockEnemySelectors();
                 battleView.heroSelectorArea.setVisible(false);
                 battleView.uiLocked = true;
                 battleView.backButton.setVisible(false);
+                endBattle();
                 break;
         }
+    }
+
+    private void endBattle(){
+        Timeline counter = new Timeline();
+        counter.getKeyFrames().add(new KeyFrame(
+                Duration.millis(2000),
+                ae -> game.setUpOverworld()));
+        counter.play();
     }
 
     private void resetTP() {
@@ -140,6 +155,7 @@ public class BattleManager {
         }
         battleView.queueMessages(messageQueue);
         battleView.queueBarUpdates(targetQueue);
+        battleView.uiLocked = true;
     }
 
     private boolean detectHeroKO() {
@@ -152,9 +168,6 @@ public class BattleManager {
                 KOamt++;
 
             }
-//            if(fighters.get(i).getKOLvl() == 1){
-//                battleView.removeHero(i);
-//            }
         }
         return KOamt == fighters.size();
     }
@@ -250,6 +263,7 @@ public class BattleManager {
         battleView.blockEnemySelectors();
         updateTurn("enemy");
         battleView.queueMessages(messageQueue);
+        battleView.uiLocked = true;
 
     }
 
@@ -261,4 +275,5 @@ public class BattleManager {
     public ArrayList<String> getMessageQueue() {
         return messageQueue;
     }
+
 }

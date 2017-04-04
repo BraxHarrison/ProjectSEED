@@ -32,7 +32,7 @@ public class GameManager {
         setUpOverworld();
     }
 
-    private void setUpOverworld() {
+    public void setUpOverworld() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         try {
             Parent root = fxmlLoader.load(getClass().getResource("/edu/bsu/cs222/FPBreetlison/View/OverworldUI.fxml").openStream());
