@@ -1,8 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Controller;
 
-import edu.bsu.cs222.FPBreetlison.Model.GameData;
 import edu.bsu.cs222.FPBreetlison.Model.GameManager;
-import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -14,8 +12,7 @@ import java.util.Map;
 public class OverworldView {
 
 
-    GameManager game;
-    GameData gameData;
+    private GameManager game;
     public Label roomDescription;
     public StackPane travelPane;
     public Button north;
@@ -26,7 +23,6 @@ public class OverworldView {
 
     public void initialize(GameManager game){
         this.game = game;
-        this.gameData = game.getGameData();
         updateRoom();
     }
 
@@ -36,7 +32,7 @@ public class OverworldView {
         game.updateStageTitle();
     }
 
-    public void setDirectionButtonsVisible() {
+    private void setDirectionButtonsVisible() {
         ArrayList<Button> directionButtons = new ArrayList<>();
         directionButtons.add(north);
         directionButtons.add(south);
@@ -53,31 +49,31 @@ public class OverworldView {
         game.createBattle();
     }
 
-    public void openTravel(ActionEvent actionEvent) {
+    public void openTravel() {
         travelPane.setVisible(true);
     }
 
-    public void closeTravel(ActionEvent actionEvent) {
+    public void closeTravel() {
         travelPane.setVisible(false);
     }
 
 
-    public void travelNorth(ActionEvent actionEvent) {
+    public void travelNorth() {
         game.travelNorth();
         updateRoom();
     }
 
-    public void travelSouth(ActionEvent actionEvent) {
+    public void travelSouth() {
         game.travelSouth();
         updateRoom();
     }
 
-    public void travelEast(ActionEvent actionEvent) {
+    public void travelEast() {
         game.travelEast();
         updateRoom();
     }
 
-    public void travelWest(ActionEvent actionEvent) {
+    public void travelWest() {
         game.travelWest();
         updateRoom();
     }
