@@ -132,10 +132,6 @@ public class Fighter {
         return attack;
     }
 
-    public int getDefense() {
-        return defense;
-    }
-
     public int getTpCost() {
         return tpCost;
     }

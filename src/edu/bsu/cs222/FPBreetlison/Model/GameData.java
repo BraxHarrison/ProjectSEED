@@ -73,7 +73,7 @@ public class GameData {
         enemyTeam.add(new Fighter("Harshmallow,20,3,4,9,11,4,4,images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png,images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png,100,100"));
     }
 
-    public void removeObjectFromInventory(int index ){
+    void removeObjectFromInventory(int index){
         inventory.remove(index);
     }
 
@@ -92,7 +92,7 @@ public class GameData {
         tp = maxTP;
     }
 
-    Map<String, Room> getAllRooms(){return allRooms;}
+    public Map<String, Room> getAllRooms(){return allRooms;}
     public ArrayList<Fighter> getTeam() {
         return team;
     }

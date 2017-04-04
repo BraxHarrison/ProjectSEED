@@ -32,7 +32,7 @@ public class GameManager {
         setUpOverworld();
     }
 
-    public void setUpOverworld() {
+    void setUpOverworld() {
         FXMLLoader fxmlLoader = new FXMLLoader();
         try {
             Parent root = fxmlLoader.load(getClass().getResource("/edu/bsu/cs222/FPBreetlison/View/OverworldUI.fxml").openStream());
@@ -119,12 +119,13 @@ public class GameManager {
                 availableDirections.put(i,true);
             }
         }
+
         return  availableDirections;
+
     }
 
     public void travelNorth() {
         if(Objects.equals(currentRoom.getNorth(),"null")){
-            System.out.println("no room north");
             return;
         }
 
