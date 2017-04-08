@@ -345,7 +345,6 @@ public class BattleView {
 
     private void selectEnemy(ImageView enemy) {
         int index = enemySelectorArea.getChildren().indexOf(enemy);
-        System.out.println(index);
         gameData.setSelectedTarget(index);
         triggerAttack();
     }
@@ -446,6 +445,7 @@ public class BattleView {
     }
 
     public void selectSkill() {
+        System.out.println(team.get(selectedUser).getSkillList());
 
     }
 
@@ -460,7 +460,7 @@ public class BattleView {
     }
 
     private void selectItem(Label item){
-        int selectedItem = itemSelectorArea.getChildren().indexOf(item);
+        selectedItem = itemSelectorArea.getChildren().indexOf(item);
         updateInventoryUI();
         battleLogic.useItem(selectedItem);
         updateSingleHeroBar();
@@ -486,7 +486,7 @@ public class BattleView {
     }
 
     public void selectFlee(javafx.scene.input.MouseEvent event) {
-        pushMessage("You ran away. Everyone's disappointed.");
+        pushMessage("You ran away. Everyone is disappointed.");
         battleLogic.endBattle();
     }
 

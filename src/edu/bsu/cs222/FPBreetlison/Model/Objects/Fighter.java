@@ -1,10 +1,9 @@
 package edu.bsu.cs222.FPBreetlison.Model.Objects;
 
 import edu.bsu.cs222.FPBreetlison.Model.DamageCalculator;
+import sun.plugin.javascript.navig.Array;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Fighter {
 
@@ -21,6 +20,8 @@ public class Fighter {
     //private int agility;
 
     private ArrayList<String> battleStrings;
+    private HashMap<String,Skill> skillList;
+    private HashMap<String,Integer> stats;
     private String battlerGraphicPath;
     private String miniGraphicPath;
     private int sizeX;
@@ -31,8 +32,15 @@ public class Fighter {
     public Fighter(String info){
 
         List<String> characterInfo = stringParser(info);
+        skillList =  new HashMap<String,Skill>();
+        ArrayList<Object> attributes = new ArrayList<>();
         KOLevel = 0;
+        loadInfo(characterInfo);
+       // associateStats();
+    }
 
+    private void loadInfo(List<String> characterInfo) {
+        System.out.println(characterInfo);
         this.name = characterInfo.get(0);
         this.maxHP = Integer.parseInt(characterInfo.get(1));
         this.hp = maxHP;
@@ -48,12 +56,30 @@ public class Fighter {
         this.sizeY = Integer.parseInt(characterInfo.get(11));
     }
 
+    private void associateStats(){
+        stats.put("hp",hp);
+        stats.put("maxHP",maxHP);
+        stats.put("attack",attack);
+        stats.put("defense",defense);
+        stats.put("tpCost",tpCost);
+    }
+
     //region In-Battle Functionality
 
     public void doBasicAttack(Fighter target){
         DamageCalculator damageCalculator = new DamageCalculator(this);
         target.takeDamage(damageCalculator.calculateDamage());
         chooseActionString();
+    }
+
+    public void useSkill(String skill){
+        Skill usedSkill = skillList.get(skill);
+        System.out.println(name + " used " + usedSkill.getName());
+        usedSkill.use(this,this );
+    }
+
+    public void addSkill(Skill skill){
+        skillList.put(skill.getName(),skill);
     }
 
     //endregion
@@ -74,6 +100,18 @@ public class Fighter {
         }
     }
 
+    void strengthenStat(String stat, int factor){
+        int oldValue = stats.get(stat);
+        int newValue = factor + oldValue;
+        stats.replace(stat,oldValue,newValue);
+    }
+
+    void weakenStat(String stat, int factor){
+        int oldValue = stats.get(stat);
+        int newValue = factor - oldValue;
+        stats.replace(stat,oldValue,newValue);
+    }
+
     void buffer(String type, int amt){
         if(type.equals("speed")){
             tpCost-=amt;
@@ -92,7 +130,6 @@ public class Fighter {
     }
 
     private List<String> stringParser(String info){
-
         return Arrays.asList(info.split(","));
     }
 
@@ -116,26 +153,26 @@ public class Fighter {
 
     //region Setters and Getters
 
-    //Will be cleaned up, and hopefully most will be gone by iteration 2.
+
+    public HashMap<String, Skill> getSkillList() {
+        return skillList;
+    }
+
     public String getName() {
         return name;
     }
-
     public int getHp() {
         return hp;
     }
     public int getMaxHP() {
         return maxHP;
     }
-
     public int getAttack() {
         return attack;
     }
-
     public int getTpCost() {
         return tpCost;
     }
-
     public ArrayList<String> getBattleStrings() {
         return battleStrings;
     }

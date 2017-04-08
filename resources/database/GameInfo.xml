@@ -4,9 +4,10 @@
             <!--To be added later
             <chara name="Prota" maxHP="30" attack="7" defense="5" enAttack="2" enDefense="5" agility="7" tpCost="3" battlerGraphicPath="/images/Bulba_Pepe.png"/>
             -->
-            <chara name="Roxy" maxHP="20" attack="5" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Roxy.png,images/battleGraphics/miniBattlerGraphics/Battle_Mini_Roxy.png,200,300"/>
-            <chara name="Smitty" maxHP="45" attack="12" defense="10" enAttack="1" enDefense="4" agility="5" tpCost="5" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Smitty.png,images/battleGraphics/miniBattlerGraphics/Battle_Mini_Smitty.png,400,300"/>
-
+            <hero name="Smitty" maxHP="45" attack="12" defense="10" enAttack="1" enDefense="4" agility="5" tpCost="5" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Smitty.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Smitty.png" sizeX="400" sizeY="300"/>
+            <heroSkill starter="Steel Crusher"/>
+            <hero name="Roxy" maxHP="20" attack="5" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Roxy.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Roxy.png" sizeX="200" sizeY="300"/>
+            <heroSkill starter="Sniffle,Sharpen"/>
         </CharacterBattleInfo>
         <CharacterBattleStrings>
             <ProtaBattleString string="You fire a quick shot at the enemy. It grazes them."/>
@@ -18,8 +19,35 @@
             <SmittyBattleString string="Smitty clips the ground with his hammer, flinging a light field of rubble at the enemy."/>
             <SmittyBattleString string ="Smitty slams the ground, causing a fissure to open up under the enemy."/>
         </CharacterBattleStrings>
-    </BattleInfo>
 
+        <EnemyBattleInfo>
+            <enemy name="Jag" maxHP="20" attack="5" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png" sizeX="100" sizeY="100"/>
+            <enemySkill starter="Sharpen"/>
+            <enemy name="Harshmallow" maxHP="20" attack="5" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="100" sizeY="100"/>
+            <enemySkill starter="Sniffle"/>
+
+
+
+        </EnemyBattleInfo>
+
+        <Skills>
+            <Skill name="Sniffle" affectAmt="1" type="debuff" type2="attack"/>
+            <Skill name="Sharpen" affectAmt="1" type="buff" type2="debuff"/>
+            <Skill name="Steel Crusher" affectAmt="8" type="attack" type2="null"/>
+            <Skill name="Spring-Kick" affectAmt="1" type="debuff" type2="attack"/>
+            <Skill name="ElectroPulse" affectAmt="1" type="buff" type2="debuff"/>
+            <Skill name="Sweep-Kick" affectAmt="8" type="attack" type2="null"/>
+
+
+
+        </Skills>
+
+
+    </BattleInfo>
+    <ItemInfo>
+        <item name="Patch" description="Integrates with the user's body to recover health." quickSummary="Recover 15 HP" affectAmt="15" type="heal" type2="null" imagePath="/images/battleGraphics/itemGraphics/item_patch.png"/>
+        <item name="Overclock" description="A bizarre pocketwatch that creates a bubble of sped-up time around the user. Allows user to attack more quickly." quickSummary="-1 TP Cost" affectAmt="1" type="selfDebuff" type2="tpCost" imagePath="/images/battleGraphics/itemGraphics/item_overclock.png"/>
+    </ItemInfo>
     <OverWorldInfo>
         <Islands>
             <Sectors>
@@ -28,6 +56,7 @@
                     <room name="TheDesert" des="The Desert. Nothing. That's all there is other than the endless sand that is. It's impressive to think that there are some creatures that can survive out here." north="null" south="FirstSteps" east="null" west="null" />
                     <room name="TheForest" des="Trees. Trees taller than you can see. Sometimes you like to wonder about all of the creatures that might live up in the tops of these trees." north="FirstSteps" south="null" east="TheShore" west="null"/>
                     <room name="TheShore" des="The white sands are always beautiful but the sudden drop into the vast nothingness beoynd still manages to evoke a bit of fear deep in your heart." north="null" south="null" east="null" west="TheForest"/>
+
                 </Rooms>
             </Sectors>
         </Islands>

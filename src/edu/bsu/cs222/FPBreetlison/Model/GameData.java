@@ -3,20 +3,24 @@ package edu.bsu.cs222.FPBreetlison.Model;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Skill;
 import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 public class GameData {
 
     private ArrayList<Fighter> team;
-    private ArrayList<Fighter> allFighters;
+    private HashMap<String,Fighter> allHeroes;
+    private HashMap<String,Fighter> allEnemies;
     private ArrayList<Fighter> enemyTeam;
-    private ArrayList<Item> allItems;
+    private HashMap<String,Skill> allSkills;
+    private HashMap<String,Item> allItems;
     private ArrayList<Item> inventory;
     private Map<String, Room> allRooms;
     private Stage stage;
@@ -31,9 +35,8 @@ public class GameData {
     }
 
     private void init() throws ParserConfigurationException, SAXException, IOException {
-        loadFighters();
-        loadRooms();
-        loadLists();
+        initLists();
+        loadData();
         addHeroes();
         addEnemies();
         initItems();
@@ -42,35 +45,53 @@ public class GameData {
 
     }
 
-    private void loadLists() {
+    private void loadData() throws ParserConfigurationException, SAXException, IOException {
+        OverWorldParser overworldLoader = new OverWorldParser();
+        BattleXMLParser battleLoader = new BattleXMLParser();
+        loadSkills(battleLoader);
+        loadFighters(battleLoader);
+        loadRooms(overworldLoader);
+        loadItems(overworldLoader);
+    }
+
+    private void loadItems(OverWorldParser loader) {
+
+        allItems = loader.createItemDatabase();
+    }
+
+    private void loadSkills(BattleXMLParser loader) {
+        allSkills = loader.getSkills();
+    }
+
+    private void initLists() {
         team = new ArrayList<>();
-        allItems = new ArrayList<>();
+        allSkills = new HashMap<>();
+        allItems = new HashMap<>();
         inventory = new ArrayList<>();
         enemyTeam = new ArrayList<>();
     }
 
-    private void loadRooms() throws IOException, SAXException, ParserConfigurationException {
+    private void loadRooms(OverWorldParser loader) throws IOException, SAXException, ParserConfigurationException {
 
-        OverWorldParser loader = new OverWorldParser();
         allRooms = loader.parseRoomInfo();
 
     }
 
-    private void loadFighters() throws IOException, SAXException, ParserConfigurationException {
-        BattleXMLParser loader = new BattleXMLParser();
-        allFighters = loader.parseFighterInfo();
+    private void loadFighters(BattleXMLParser loader) throws IOException, SAXException, ParserConfigurationException {
+        loader.parseBattleData();
+        allHeroes = loader.getHeroes();
+        allEnemies = loader.getEnemies();
 
     }
 
     private void addHeroes(){
-        team.add(allFighters.get(0));
-        team.add(allFighters.get(1));
+        team.add(allHeroes.get("Roxy"));
+        team.add(allHeroes.get("Smitty"));
     }
 
     private void addEnemies(){
-//        enemyTeam.add(new Fighter("Blisterbulb,30,6,6,7,7,3,6,images/Ragtime_Pepe.jpg"));
-        enemyTeam.add(new Fighter("Jag,25,10,3,3,3,7,2,images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png,images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png,100,100"));
-        enemyTeam.add(new Fighter("Harshmallow,20,3,4,9,11,4,4,images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png,images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png,100,100"));
+        enemyTeam.add(allEnemies.get("Jag"));
+        enemyTeam.add(allEnemies.get("Harshmallow"));
     }
 
     void removeObjectFromInventory(int index){
@@ -78,12 +99,8 @@ public class GameData {
     }
 
     private void initItems() {
-        allItems.add(new Item("Patch, A cluster of raw pixels. " +
-                "Integrates with the user's body to recover health.,Recover 15 HP,15,/images/battleGraphics/itemGraphics/item_patch.png,heal"));
-        allItems.add(new Item("Overclock,A bizarre pocketwatch that creates a bubble of " +
-                "sped-up time around the user. Allows user to attack more quickly.,-1 TP Cost,1,/images/battleGraphics/itemGraphics/item_overclock.png,buff,speed"));
-        inventory.add(allItems.get(0));
-        inventory.add(allItems.get(1));
+        inventory.add(allItems.get("Patch"));
+        inventory.add(allItems.get("Overclock"));
 
 
     }
