@@ -54,6 +54,10 @@ public class GameData {
         loadItems(overworldLoader);
     }
 
+    public void subtractTP(int amount){
+        tp -= amount;
+    }
+
     private void loadItems(OverWorldParser loader) {
 
         allItems = loader.createItemDatabase();

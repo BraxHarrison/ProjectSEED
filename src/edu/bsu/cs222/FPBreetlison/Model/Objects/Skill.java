@@ -6,18 +6,22 @@ import java.util.List;
 public class Skill {
     String name;
     int affectAmt;
+    int tpCost;
     String type;
     String type2;
+    String quickInfo;
+    String extraMessage;
 
 
     public Skill(String info){
-        System.out.println(info);
         List<String> skillInfo = stringParser(info);
-        System.out.println(skillInfo.get(1));
         this.name = skillInfo.get(0);
         this.affectAmt = Integer.parseInt(skillInfo.get(1));
-        this.type = skillInfo.get(2);
-        this.type2 = skillInfo.get(3);
+        this.tpCost = Integer.parseInt(skillInfo.get(2));
+        this.type = skillInfo.get(3);
+        this.type2 = skillInfo.get(4);
+        this.quickInfo = skillInfo.get(5);
+        this.extraMessage =  skillInfo.get(6);
     }
 
     public void use(Fighter user, Fighter target){
@@ -25,7 +29,9 @@ public class Skill {
             user.recoverHealth(affectAmt);
         }
         else if(type.equals("attack")){
-
+            double damage = user.getAttack()*affectAmt/target.getDefense();
+            int finalDamage = (int)Math.round(damage);
+            target.takeDamage(finalDamage);
         }
         else if(type.equals("debuff")){
             target.weakenStat("attack",affectAmt);
@@ -45,7 +51,16 @@ public class Skill {
     public String getName() {
         return name;
     }
-    public void setName(String name) {
-        this.name = name;
+    public String getQuickInfo() {
+        return quickInfo;
+    }
+    public String getExtraMessage() {
+        return extraMessage;
+    }
+    public String getType() {
+        return type;
+    }
+    public int getTpCost() {
+        return tpCost;
     }
 }

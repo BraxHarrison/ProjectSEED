@@ -1,7 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model.Objects;
 
 import edu.bsu.cs222.FPBreetlison.Model.DamageCalculator;
-import sun.plugin.javascript.navig.Array;
 
 import java.util.*;
 
@@ -20,10 +19,12 @@ public class Fighter {
     //private int agility;
 
     private ArrayList<String> battleStrings;
-    private HashMap<String,Skill> skillList;
-    private HashMap<String,Integer> stats;
+    private ArrayList<Skill> skillList;
+    private HashMap<String,Integer> currStats;
+    private HashMap<String,Integer> baseStats;
     private String battlerGraphicPath;
     private String miniGraphicPath;
+    private Skill queuedSkill;
     private int sizeX;
     private int sizeY;
     private boolean KOState;
@@ -32,15 +33,15 @@ public class Fighter {
     public Fighter(String info){
 
         List<String> characterInfo = stringParser(info);
-        skillList =  new HashMap<String,Skill>();
+        currStats = new HashMap<>();
+        skillList =  new ArrayList<Skill>();
         ArrayList<Object> attributes = new ArrayList<>();
         KOLevel = 0;
         loadInfo(characterInfo);
-       // associateStats();
+        associateStats();
     }
 
     private void loadInfo(List<String> characterInfo) {
-        System.out.println(characterInfo);
         this.name = characterInfo.get(0);
         this.maxHP = Integer.parseInt(characterInfo.get(1));
         this.hp = maxHP;
@@ -57,39 +58,44 @@ public class Fighter {
     }
 
     private void associateStats(){
-        stats.put("hp",hp);
-        stats.put("maxHP",maxHP);
-        stats.put("attack",attack);
-        stats.put("defense",defense);
-        stats.put("tpCost",tpCost);
+        currStats.put("hp",hp);
+        currStats.put("maxHP",maxHP);
+        currStats.put("attack",attack);
+        currStats.put("defense",defense);
+        currStats.put("tpCost",tpCost);
     }
 
     //region In-Battle Functionality
 
     public void doBasicAttack(Fighter target){
-        DamageCalculator damageCalculator = new DamageCalculator(this);
-        target.takeDamage(damageCalculator.calculateDamage());
+        double damage = this.getCurrStats().get("attack")*5/target.getDefense();
+        System.out.println(damage);
+        int finalDamage = (int)Math.round(damage);
+        System.out.println(finalDamage);
+        target.takeDamage(finalDamage);
         chooseActionString();
     }
 
-    public void useSkill(String skill){
-        Skill usedSkill = skillList.get(skill);
+    public void useSkill(int index){
+        Skill usedSkill = skillList.get(index);
         System.out.println(name + " used " + usedSkill.getName());
         usedSkill.use(this,this );
     }
 
     public void addSkill(Skill skill){
-        skillList.put(skill.getName(),skill);
+        skillList.add(skill);
     }
 
     //endregion
 
     //region Reaction Functionality
 
-    private void takeDamage(int damage){
-        hp -=damage;
-        if(hp < 0){
-            hp = 0;
+    public void takeDamage(int damage){
+        int oldHP = currStats.get("hp");
+        currStats.replace("hp",oldHP,oldHP-damage);
+        if(currStats.get("hp") < 0){
+            oldHP = currStats.get("hp");
+            currStats.replace("hp",oldHP,0);
         }
     }
 
@@ -101,15 +107,15 @@ public class Fighter {
     }
 
     void strengthenStat(String stat, int factor){
-        int oldValue = stats.get(stat);
+        int oldValue = currStats.get(stat);
         int newValue = factor + oldValue;
-        stats.replace(stat,oldValue,newValue);
+        currStats.replace(stat,oldValue,newValue);
     }
 
     void weakenStat(String stat, int factor){
-        int oldValue = stats.get(stat);
+        int oldValue = currStats.get(stat);
         int newValue = factor - oldValue;
-        stats.replace(stat,oldValue,newValue);
+        currStats.replace(stat,oldValue,newValue);
     }
 
     void buffer(String type, int amt){
@@ -140,7 +146,7 @@ public class Fighter {
             KOState = true;
             KOLevel = 2;
         }
-        else if(hp<=0 && KOLevel ==0){
+        else if(currStats.get("hp")==0 && KOLevel ==0){
             KOState = true;
             KOLevel = 1;
         }
@@ -154,7 +160,7 @@ public class Fighter {
     //region Setters and Getters
 
 
-    public HashMap<String, Skill> getSkillList() {
+    public ArrayList<Skill> getSkillList() {
         return skillList;
     }
 
@@ -169,6 +175,9 @@ public class Fighter {
     }
     public int getAttack() {
         return attack;
+    }
+    public int getDefense() {
+        return defense;
     }
     public int getTpCost() {
         return tpCost;
@@ -188,6 +197,15 @@ public class Fighter {
     public String getMiniGraphicPath(){return miniGraphicPath;}
     public int getSizeX(){return sizeX;}
     public int getSizeY(){return sizeY;}
+    public Skill getQueuedSkill() {
+        return queuedSkill;
+    }
+    public void setQueuedSkill(Skill queuedSkill) {
+        this.queuedSkill = queuedSkill;
+    }
+    public HashMap<String, Integer> getCurrStats() {
+        return currStats;
+    }
     //endregion
 
 }

@@ -11,13 +11,15 @@ public class Snapshot {
     private String hpString;
 
     public void calcHPPercent(Fighter fighter){
+        int hp = fighter.getCurrStats().get("hp");
+        int maxHP = fighter.getHp();
         if(fighter == null){
             hpPercent=0;
             hpString = "HP: " + 0 + "/" + 0;
         }
         else{
-            hpPercent = (double)fighter.getHp()/(double)fighter.getMaxHP();
-            hpString = "HP: " + fighter.getHp() + "/" + fighter.getMaxHP();
+            hpPercent = (double)hp/(double)maxHP;
+            hpString = "HP: " + hp + "/" + maxHP;
         }
 
     }

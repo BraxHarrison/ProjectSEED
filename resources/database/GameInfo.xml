@@ -21,9 +21,9 @@
         </CharacterBattleStrings>
 
         <EnemyBattleInfo>
-            <enemy name="Jag" maxHP="20" attack="5" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png" sizeX="100" sizeY="100"/>
+            <enemy name="Jag" maxHP="20" attack="5" defense="8" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png" sizeX="100" sizeY="100"/>
             <enemySkill starter="Sharpen"/>
-            <enemy name="Harshmallow" maxHP="20" attack="5" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="100" sizeY="100"/>
+            <enemy name="Harshmallow" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="100" sizeY="100"/>
             <enemySkill starter="Sniffle"/>
 
 
@@ -31,12 +31,12 @@
         </EnemyBattleInfo>
 
         <Skills>
-            <Skill name="Sniffle" affectAmt="1" type="debuff" type2="attack"/>
-            <Skill name="Sharpen" affectAmt="1" type="buff" type2="debuff"/>
-            <Skill name="Steel Crusher" affectAmt="8" type="attack" type2="null"/>
-            <Skill name="Spring-Kick" affectAmt="1" type="debuff" type2="attack"/>
-            <Skill name="ElectroPulse" affectAmt="1" type="buff" type2="debuff"/>
-            <Skill name="Sweep-Kick" affectAmt="8" type="attack" type2="null"/>
+            <Skill name="Sniffle" affectAmt="1" tpCost= "4" type="debuff" type2="attack" quickInfo="Enemy Attack Down" extraMessage="The enemy's attack was lowered!"/>
+            <Skill name="Sharpen" affectAmt="2" tpCost= "3" type="buff" type2="none" quickInfo="User Attack Up" extraMessage="The user's attack increased!"/>
+            <Skill name="Steel Crusher" affectAmt="6" tpCost= "6" type="attack" type2="null" quickInfo="Heavy Steel Damage" extraMessage="null"/>
+            <Skill name="Spring-Kick" affectAmt="1" tpCost= "3" type="debuff" type2="attack" quickInfo="Medium Impact Damage" extraMessage="null"/>
+            <Skill name="ElectroPulse" affectAmt="1" tpCost= "3" type="buff" type2="debuff" quickInfo="Light Volt Damage" extraMessage="null"/>
+            <Skill name="Sweep-Kick" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null"/>
 
 
 

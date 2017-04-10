@@ -14,7 +14,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class BattleXMLParser {
 
@@ -95,32 +97,29 @@ public class BattleXMLParser {
     }
 
     private void setStarterSkills(Fighter fighter, int index){
-        ArrayList<String> starterSkillNames = loadStarterSkills(index);
+        List<String> starterSkillNames = loadStarterSkills(index);
         ArrayList<Skill> skills = fetchSkills(starterSkillNames);
         for(int i = 0; i<skills.size();i++){
+            System.out.println(fighter.getName() + ":" + skills.get(i).getName());
             fighter.addSkill(skills.get(i));
 
         }
     }
 
-    private ArrayList<String> loadStarterSkills(int index){
-        ArrayList<String> skillStrings = new ArrayList<>();
+    private List<String> loadStarterSkills(int index){
         NodeList nodeList = this.document.getElementsByTagName(keyword+"Skill");
-        Element skillStringSource = (Element)nodeList.item(0);
+        Element skillStringSource = (Element)nodeList.item(index);
         String skillString = skillStringSource.getAttribute("starter");
-        skillStrings.add(skillString);
-        return skillStrings;
+        return Arrays.asList(skillString.split(","));
 
     }
 
-    private ArrayList<Skill> fetchSkills(ArrayList<String> skillStrings){
+    private ArrayList<Skill> fetchSkills(List<String> skillStrings){
         ArrayList<Skill> fullSkills = new ArrayList<>();
         for(int i = 0; i<skillStrings.size();i++){
-            //Skills strings are populating just fine. Something's wrong with the
-            //full skill list
+            System.out.println(skillStrings.get(i));
             String skillName = skillStrings.get(i);
             fullSkills.add(skills.get(skillName));
-            System.out.println(skills.get(skillName).getName());
         }
         return fullSkills;
     }
@@ -150,8 +149,11 @@ public class BattleXMLParser {
 
         return (skill.getAttribute("name") + ",") +
                 skill.getAttribute("affectAmt") + "," +
+                skill.getAttribute("tpCost") + "," +
                 skill.getAttribute("type") + "," +
-                skill.getAttribute("type2");
+                skill.getAttribute("type2") + "," +
+                skill.getAttribute("quickInfo") + "," +
+                skill.getAttribute("extraMessage");
     }
 
     public HashMap<String,Fighter> getHeroes() {

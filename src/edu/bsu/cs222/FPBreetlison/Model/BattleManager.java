@@ -1,6 +1,7 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
 import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Skill;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import javafx.animation.KeyFrame;
@@ -38,12 +39,12 @@ public class BattleManager {
     public void start(){
         messageQueue = new ArrayList<>();
         targetQueue = new ArrayList<>();
-
-        requestTPUpdate();
+        battleView.updateTP();
         checkSpeeds();
     }
 
     private void updateTurn(String phase) {
+
         switch (phase) {
             case "hero":
                 enableCharacterMenu();
@@ -80,7 +81,7 @@ public class BattleManager {
 
     private void resetTP() {
         gameData.resetHeroTP();
-        requestTPUpdate();
+        battleView.updateTP();
     }
 
     private void tryEnemyAttack() {
@@ -122,6 +123,7 @@ public class BattleManager {
         fighterSnapshot.calcHPPercent(target);
         detectHeroKO();
         fighterSnapshot.setKOState(target.isKO());
+       // System.out.println("MaxHP: " + target.getHp() + "/CurrHP: " + target.getCurrStats().get("hp"));
         messageQueue.add(user.getName() + " strikes " + target.getName() + " !");
         targetQueue.add(fighterSnapshot);
 
@@ -197,7 +199,7 @@ public class BattleManager {
 //        }
     }
 
-    public void tryBasicAttack(){
+    public void tryHeroBasicAttack(){
         attacker = gameData.getTeam().get(battleView.selectedUser);
         target = gameData.getEnemyTeam().get(gameData.getSelectedTarget());
         int cost = attacker.getTpCost();
@@ -227,7 +229,7 @@ public class BattleManager {
         int random = makeRandom(attacker.getBattleStrings().size());
         battleView.pushMessage(attacker.getBattleStrings().get(random));
         battleView.blockEnemySelectors();
-        requestTPUpdate();
+        battleView.updateTP();
     }
 
     private void detectEnemyKO() {
@@ -249,14 +251,6 @@ public class BattleManager {
             battleView.queueMessages(messageQueue);
             updateTurn("heroWin");
         }
-
-
-
-    }
-
-    private void requestTPUpdate(){
-        double percentage = (double)gameData.getCurrentTp()/(double)gameData.getMaxTP();
-        battleView.updateTP(percentage);
     }
 
     public void endPlayerTurn() {
@@ -276,4 +270,30 @@ public class BattleManager {
         return messageQueue;
     }
 
+    public void tryActivateSkill(Fighter user, Fighter target) {
+        Skill skill = user.getQueuedSkill();
+        if(gameData.getCurrentTp() >= skill.getTpCost()){
+            activateSkill(user, target);
+        }
+        else{
+            battleView.pushMessage("There's not enough time to use that skill!");
+        }
+
+    }
+    private void activateSkill(Fighter user, Fighter target){
+        Skill skill = user.getQueuedSkill();
+        user.getQueuedSkill().use(user, target);
+        gameData.subtractTP(skill.getTpCost());
+        battleView.updateTP();
+        messageQueue.add(user.getName() + " used " + skill.getName() + "!");
+        extraMessage(skill);
+        battleView.queueMessages(messageQueue);
+    }
+
+    private void extraMessage(Skill skill){
+        if(!skill.getExtraMessage().equals("null")){
+            messageQueue.add(skill.getExtraMessage());
+        }
+
+    }
 }
