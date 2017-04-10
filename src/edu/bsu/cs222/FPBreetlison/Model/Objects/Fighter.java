@@ -12,11 +12,12 @@ public class Fighter {
     private int attack;
     private int defense;
     private int tpCost;
-    //Following three character types are not being factored into calculation yet.
-    //Leaving in place for easier understanding of needed calculations in future development.
-    //private int enAttack;
-    //private int enDefense;
-    //private int agility;
+
+    private double expModifier;
+    private int lvl;
+    private int experience;
+    private int expToNextLevel;
+    private boolean isLeveledUp;
 
     private ArrayList<String> battleStrings;
     private ArrayList<Skill> skillList;
@@ -33,10 +34,12 @@ public class Fighter {
     public Fighter(String info){
 
         List<String> characterInfo = stringParser(info);
+        expToNextLevel=150;
         currStats = new HashMap<>();
         skillList =  new ArrayList<Skill>();
         ArrayList<Object> attributes = new ArrayList<>();
         KOLevel = 0;
+        lvl = 1;
         loadInfo(characterInfo);
         associateStats();
     }
@@ -51,18 +54,28 @@ public class Fighter {
         //this.enDefense = Integer.parseInt(characterInfo.get(5));
         //this.agility = Integer.parseInt(characterInfo.get(6));
         this.tpCost = Integer.parseInt(characterInfo.get(7));
-        this.battlerGraphicPath = characterInfo.get(8);
-        this.miniGraphicPath = characterInfo.get(9);
-        this.sizeX = Integer.parseInt(characterInfo.get(10));
-        this.sizeY = Integer.parseInt(characterInfo.get(11));
+        this.expModifier = Double.parseDouble(characterInfo.get(8));
+        this.battlerGraphicPath = characterInfo.get(9);
+        this.miniGraphicPath = characterInfo.get(10);
+        this.sizeX = Integer.parseInt(characterInfo.get(11));
+        this.sizeY = Integer.parseInt(characterInfo.get(12));
+    }
+
+    public double calcHPPercentage(){
+        return (double)currStats.get(("hp"))/(double)hp;
     }
 
     private void associateStats(){
         currStats.put("hp",hp);
-        currStats.put("maxHP",maxHP);
         currStats.put("attack",attack);
         currStats.put("defense",defense);
         currStats.put("tpCost",tpCost);
+    }
+
+    public void revertStats(){
+        currStats.replace("attack",currStats.get("attack"),attack);
+        currStats.replace("defense",currStats.get("defense"),defense);
+        currStats.replace("tpCost",currStats.get("tpCost"),tpCost);
     }
 
     //region In-Battle Functionality
@@ -84,6 +97,31 @@ public class Fighter {
 
     public void addSkill(Skill skill){
         skillList.add(skill);
+    }
+
+    public void getExp(int amount){
+        experience += amount;
+    }
+
+
+    public void checkLevel(){
+        if(experience >= expToNextLevel){
+            levelUp();
+        }
+
+    }
+
+    private void levelUp(){
+        lvl +=1;
+        attack+=2;
+        defense+=2;
+        int levelDifference = experience-expToNextLevel;
+        double nextLevelRaw = expToNextLevel + expToNextLevel*expModifier;
+        expToNextLevel = (int)Math.round(nextLevelRaw);
+        experience = levelDifference;
+        revertStats();
+        isLeveledUp=true;
+
     }
 
     //endregion
@@ -118,15 +156,6 @@ public class Fighter {
         currStats.replace(stat,oldValue,newValue);
     }
 
-    void buffer(String type, int amt){
-        if(type.equals("speed")){
-            tpCost-=amt;
-        }
-        else if(type.equals("attack")){
-            attack+=amt;
-        }
-    }
-
     //endregion
 
     //region Text-Related Functionality
@@ -142,7 +171,7 @@ public class Fighter {
     //endregion
 
     public int checkKOLevel(){
-        if(hp<=0 && KOLevel == 1){
+        if(currStats.get("hp")<=0 && KOLevel == 1){
             KOState = true;
             KOLevel = 2;
         }
@@ -205,6 +234,15 @@ public class Fighter {
     }
     public HashMap<String, Integer> getCurrStats() {
         return currStats;
+    }
+    public boolean isLeveledUp() {
+        return isLeveledUp;
+    }
+    public void setLeveledUp(boolean leveledUp) {
+        isLeveledUp = leveledUp;
+    }
+    public int getLvl() {
+        return lvl;
     }
     //endregion
 

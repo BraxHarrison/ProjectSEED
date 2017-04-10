@@ -136,6 +136,7 @@ public class BattleXMLParser {
                 battler.getAttribute("enDefense") + "," +
                 battler.getAttribute("agility") + "," +
                 battler.getAttribute("tpCost") + "," +
+                battler.getAttribute("expModifier") + "," +
                 battler.getAttribute("battlerGraphicPath") + "," +
                 battler.getAttribute("miniGraphicPath") + "," +
                 battler.getAttribute("sizeX") + "," +

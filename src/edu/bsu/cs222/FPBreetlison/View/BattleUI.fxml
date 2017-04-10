@@ -86,6 +86,7 @@
             <Group fx:id="battlerInfoDisplay" translateX="5" translateY="5">
                 <ImageView fx:id="battlerGraphic"/>
                 <Label fx:id="nameDisplay" translateX="90" translateY="20"/>
+                <Label fx:id="lvlDisplay" translateX="200" translateY="20"/>
                 <Label fx:id="hpDisplay" translateX="90" translateY="40"/>
             </Group>
             <Group fx:id="skillInfoDisplay" translateX="5" translateY="5">

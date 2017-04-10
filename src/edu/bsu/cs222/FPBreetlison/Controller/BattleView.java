@@ -126,7 +126,12 @@ public class BattleView {
     private void updateHeroQuickInfo(Snapshot heroSnapshot){
         ImageView heroImage = (ImageView)heroGraphicsArea.getChildren().get(heroSnapshot.getIndex());
         if(heroImage.isHover()){
-            Label hpInfo = (Label)battlerInfoDisplay.getChildren().get(1);
+            Label nameInfo = (Label)battlerInfoDisplay.getChildren().get(1);
+            Label lvlInfo = (Label)battlerInfoDisplay.getChildren().get(2);
+            Label hpInfo = (Label)battlerInfoDisplay.getChildren().get(3);
+
+            nameInfo.setText(team.get(heroSnapshot.getIndex()).getName());
+            lvlInfo.setText("Lvl: "+team.get(heroSnapshot.getIndex()).getLvl());
             hpInfo.setText(heroSnapshot.getHpString());
         }
     }
@@ -235,9 +240,18 @@ public class BattleView {
             hero.setId(Integer.toString(i));
             populateHeroUIElements(hero);
             formatHeroButton((Label)hero.getChildren().get(0));
-            formatHeroBar((ProgressBar)hero.getChildren().get(1));
+            formatHeroBar((ProgressBar)hero.getChildren().get(1),i);
             hero.setOnMousePressed(event -> selectHero(hero));
+            checkForKO(hero,i);
             heroSelectorArea.getChildren().add(hero);
+        }
+    }
+
+    private void checkForKO(StackPane hero, int i) {
+        if(team.get(i).calcHPPercentage() == 0.0){
+            Label heroLabel = (Label)hero.getChildren().get(0);
+            heroLabel.setTextFill(Color.web("0x333c47"));
+            hero.setOnMousePressed(null);
         }
     }
 
@@ -260,14 +274,14 @@ public class BattleView {
         hero.setFont(darwinFont);
     }
 
-    private void formatHeroBar(ProgressBar hBar) {
+    private void formatHeroBar(ProgressBar hBar, int index) {
         hBar.setRotate(270);
         hBar.setScaleX(.30);
         hBar.setScaleY(.80);
         hBar.setTranslateX(26);
         hBar.getStyleClass().add("healthBar");
         hBar.getStyleClass().add("green-bar");
-        hBar.setProgress(1);
+        hBar.setProgress(team.get(index).calcHPPercentage());
 
     }
 
@@ -281,12 +295,10 @@ public class BattleView {
         for (int i = 0; i < team.size(); i++) {
             ImageView image = new ImageView(new Image(team.get(i).getBattlerGraphicPath()));
             image.setId(Integer.toString(i));
-            image.setFitHeight(team.get(i).getSizeY());
-            image.setFitWidth(team.get(i).getSizeX());
             image.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    showCharacterInfo(image);
+                    showHeroInfo(image);
                 }
             });
             image.setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -295,11 +307,20 @@ public class BattleView {
                     hideCharacterInfo();
                 }
             });
+            formatHeroGraphic(image,i);
             heroGraphicsArea.getChildren().add(image);
         }
     }
 
-    private void showCharacterInfo(ImageView image){
+    private void formatHeroGraphic(ImageView image, int index) {
+        image.setFitHeight(team.get(index).getSizeY());
+        image.setFitWidth(team.get(index).getSizeX());
+        if(team.get(index).calcHPPercentage() == 0.00){
+            image.setOpacity(.30);
+        }
+    }
+
+    private void showHeroInfo(ImageView image){
         battlerInfoDisplay.setVisible(true);
         int index = Integer.parseInt(image.getId());
         showCharacterMiniImage(index);
@@ -316,8 +337,10 @@ public class BattleView {
     }
     private void showHeroUpperLabels(int index){
         Label name = (Label)battlerInfoDisplay.getChildren().get(1);
-        Label hp = (Label)battlerInfoDisplay.getChildren().get(2);
+        Label lvl = (Label)battlerInfoDisplay.getChildren().get(2);
+        Label hp = (Label)battlerInfoDisplay.getChildren().get(3);
         name.setText(team.get(index).getName());
+        lvl.setText("Lvl: "+team.get(index).getLvl());
         hp.setText("HP: " + team.get(index).getCurrStats().get("hp") + "/" + team.get(index).getMaxHP());
     }
     private void showHeroLowerLabels(){
@@ -356,6 +379,7 @@ public class BattleView {
         else{
             triggerAttack();
         }
+        backButton.setVisible(false);
 
     }
 
@@ -375,8 +399,10 @@ public class BattleView {
     }
     private void showEnemyUpperLabels(int index){
         Label name = (Label)battlerInfoDisplay.getChildren().get(1);
-        Label hp = (Label)battlerInfoDisplay.getChildren().get(2);
+        Label lvl = (Label)battlerInfoDisplay.getChildren().get(2);
+        Label hp = (Label)battlerInfoDisplay.getChildren().get(3);
         name.setText(enemyTeam.get(index).getName());
+        lvl.setText("Lvl: " + enemyTeam.get(index).getLvl());
         hp.setText("HP: " + enemyTeam.get(index).getCurrStats().get("hp") + "/" + enemyTeam.get(index).getMaxHP());
     }
 
@@ -513,6 +539,7 @@ public class BattleView {
         skill.setTranslateX(-8);
         skill.setMaxWidth(60);
         skill.setMinWidth(40);
+        skill.setWrapText(true);
         skill.setTextFill(Color.web("0xfffff1"));
         skill.setFont(darwinFont);
     }
@@ -658,7 +685,7 @@ public class BattleView {
     public void updateEnemyQuickInfo(Snapshot enemyState) {
         if(enemySelectorArea.getChildren().get(enemyState.getIndex()).isHover()){
             Fighter enemy = enemyTeam.get(enemyState.getIndex());
-            Label enemyHP = (Label)battlerInfoDisplay.getChildren().get(2);
+            Label enemyHP = (Label)battlerInfoDisplay.getChildren().get(3);
             System.out.println(team.get(0).getCurrStats().get("hp")+"/"+team.get(0).getHp());
             enemyHP.setText("HP: " + enemy.getCurrStats().get("hp") + "/" + enemy.getMaxHP());
         }

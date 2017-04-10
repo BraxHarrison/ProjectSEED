@@ -58,25 +58,33 @@ public class BattleManager {
             case "enemyWin":
                 battleView.blockEnemySelectors();
                 battleView.uiLocked = true;
-                battleView.backButton.setVisible(false);
                 endBattle();
                 break;
             case "heroWin":
                 battleView.blockEnemySelectors();
                 battleView.heroSelectorArea.setVisible(false);
                 battleView.uiLocked = true;
-                battleView.backButton.setVisible(false);
+                gainExp();
                 endBattle();
                 break;
         }
+        battleView.backButton.setVisible(false);
     }
 
+
     public void endBattle(){
+        revertFighterStats();
         Timeline counter = new Timeline();
         counter.getKeyFrames().add(new KeyFrame(
-                Duration.millis(2000),
+                Duration.millis(6000),
                 ae -> game.setUpOverworld()));
         counter.play();
+    }
+
+    private void revertFighterStats() {
+        for(int i = 0; i< gameData.getTeam().size();i++){
+            gameData.getTeam().get(i).revertStats();
+        }
     }
 
     private void resetTP() {
@@ -272,8 +280,11 @@ public class BattleManager {
 
     public void tryActivateSkill(Fighter user, Fighter target) {
         Skill skill = user.getQueuedSkill();
+        attacker = user;
+        this.target = target;
         if(gameData.getCurrentTp() >= skill.getTpCost()){
             activateSkill(user, target);
+            updateUIForHeroAttack();
         }
         else{
             battleView.pushMessage("There's not enough time to use that skill!");
@@ -294,6 +305,20 @@ public class BattleManager {
         if(!skill.getExtraMessage().equals("null")){
             messageQueue.add(skill.getExtraMessage());
         }
+
+    }
+
+    private void gainExp() {
+        for(int i = 0; i<gameData.getTeam().size();i++){
+            Fighter fighter = gameData.getTeam().get(i);
+            fighter.getExp(200);
+            fighter.checkLevel();
+            if(fighter.isLeveledUp()){
+                messageQueue.add(fighter.getName() + " leveled up!");
+                fighter.setLeveledUp(false);
+            }
+        }
+        battleView.queueMessages(messageQueue);
 
     }
 }
