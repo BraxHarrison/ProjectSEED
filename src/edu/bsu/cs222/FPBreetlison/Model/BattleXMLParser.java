@@ -52,7 +52,6 @@ public class BattleXMLParser {
             Node battleInfo = nodeList.item(i);
             Element skillSource = (Element)battleInfo;
             Skill skill = new Skill(createSkillString(skillSource));
-            System.out.println(skill.getName());
             skills.put(skill.getName(),skill);
         }
         return skills;
@@ -100,7 +99,6 @@ public class BattleXMLParser {
         List<String> starterSkillNames = loadStarterSkills(index);
         ArrayList<Skill> skills = fetchSkills(starterSkillNames);
         for(int i = 0; i<skills.size();i++){
-            System.out.println(fighter.getName() + ":" + skills.get(i).getName());
             fighter.addSkill(skills.get(i));
 
         }
@@ -117,7 +115,6 @@ public class BattleXMLParser {
     private ArrayList<Skill> fetchSkills(List<String> skillStrings){
         ArrayList<Skill> fullSkills = new ArrayList<>();
         for(int i = 0; i<skillStrings.size();i++){
-            System.out.println(skillStrings.get(i));
             String skillName = skillStrings.get(i);
             fullSkills.add(skills.get(skillName));
         }

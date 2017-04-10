@@ -23,6 +23,7 @@ public class Fighter {
     private ArrayList<Skill> skillList;
     private HashMap<String,Integer> currStats;
     private HashMap<String,Integer> baseStats;
+    private String skillAnim;
     private String battlerGraphicPath;
     private String miniGraphicPath;
     private Skill queuedSkill;
@@ -81,17 +82,14 @@ public class Fighter {
     //region In-Battle Functionality
 
     public void doBasicAttack(Fighter target){
-        double damage = this.getCurrStats().get("attack")*5/target.getDefense();
-        System.out.println(damage);
+        double damage = this.getCurrStats().get("attack")*2/target.getCurrStats().get("defense");
         int finalDamage = (int)Math.round(damage);
-        System.out.println(finalDamage);
         target.takeDamage(finalDamage);
         chooseActionString();
     }
 
     public void useSkill(int index){
         Skill usedSkill = skillList.get(index);
-        System.out.println(name + " used " + usedSkill.getName());
         usedSkill.use(this,this );
     }
 
@@ -113,6 +111,7 @@ public class Fighter {
 
     private void levelUp(){
         lvl +=1;
+        hp+=5;
         attack+=2;
         defense+=2;
         int levelDifference = experience-expToNextLevel;
@@ -152,7 +151,7 @@ public class Fighter {
 
     void weakenStat(String stat, int factor){
         int oldValue = currStats.get(stat);
-        int newValue = factor - oldValue;
+        int newValue = oldValue - factor;
         currStats.replace(stat,oldValue,newValue);
     }
 
@@ -243,6 +242,12 @@ public class Fighter {
     }
     public int getLvl() {
         return lvl;
+    }
+    public String getSkillAnim() {
+        return skillAnim;
+    }
+    public void setSkillAnim(String skillAnim) {
+        this.skillAnim = skillAnim;
     }
     //endregion
 

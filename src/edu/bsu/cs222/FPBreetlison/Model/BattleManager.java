@@ -212,6 +212,9 @@ public class BattleManager {
         target = gameData.getEnemyTeam().get(gameData.getSelectedTarget());
         int cost = attacker.getTpCost();
         if(gameData.getCurrentTp() >= cost ){
+            int random = makeRandom(attacker.getBattleStrings().size());
+            messageQueue.add(attacker.getBattleStrings().get(random));
+            battleView.queueMessages(messageQueue);
             startBasicAttack(cost);
         }
         else{
@@ -226,6 +229,7 @@ public class BattleManager {
         attacker.doBasicAttack(target);
         updateUIForHeroAttack();
         detectEnemyKO();
+        battleView.queueMessages(messageQueue);
 
     }
 
@@ -234,8 +238,6 @@ public class BattleManager {
         enemyState.setIndex(gameData.getSelectedTarget());
         enemyState.calcHPPercent(target);
         battleView.updateEnemyQuickInfo(enemyState);
-        int random = makeRandom(attacker.getBattleStrings().size());
-        battleView.pushMessage(attacker.getBattleStrings().get(random));
         battleView.blockEnemySelectors();
         battleView.updateTP();
     }
@@ -285,10 +287,13 @@ public class BattleManager {
         if(gameData.getCurrentTp() >= skill.getTpCost()){
             activateSkill(user, target);
             updateUIForHeroAttack();
+            detectEnemyKO();
+            battleView.queueMessages(messageQueue);
         }
         else{
             battleView.pushMessage("There's not enough time to use that skill!");
         }
+
 
     }
     private void activateSkill(Fighter user, Fighter target){

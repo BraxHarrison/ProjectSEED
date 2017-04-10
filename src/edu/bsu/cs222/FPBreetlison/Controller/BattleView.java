@@ -1,5 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Controller;
 
+import edu.bsu.cs222.FPBreetlison.Model.Animator;
 import edu.bsu.cs222.FPBreetlison.Model.BattleManager;
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
 import edu.bsu.cs222.FPBreetlison.Model.GameManager;
@@ -54,14 +55,15 @@ public class BattleView {
     public Group itemInfoDisplay;
     public Group battlerInfoDisplay;
 
-
     public int selectedUser;
+    public int selectedEnemy;
     private int selectedItem;
     public boolean uiLocked;
     private boolean finishedLoading;
 
     private GameData gameData;
     private BattleManager battleLogic;
+    Animator animator;
 
     private Font darwinFont;
     private boolean usingSkill;
@@ -181,6 +183,7 @@ public class BattleView {
     private void transferBattleData(GameManager game) {
         this.gameData = game.getGameData();
         this.battleLogic = game.getBattleLogic();
+        animator = new Animator(this);
         battleLogic.getGameInfo(game);
 
     }
@@ -372,6 +375,7 @@ public class BattleView {
 
     private void selectEnemy(ImageView enemy) {
         int index = enemySelectorArea.getChildren().indexOf(enemy);
+        selectedEnemy = index;
         gameData.setSelectedTarget(index);
         if(usingSkill){
             triggerSkill(index);
@@ -483,10 +487,11 @@ public class BattleView {
     }
 
     public void selectSkills() {
-        populateSkills();
-        skillSelectorArea.setVisible(true);
-        actionMenu.setVisible(false);
-        System.out.println(team.get(selectedUser).getSkillList());
+        if(!uiLocked){
+            populateSkills();
+            skillSelectorArea.setVisible(true);
+            actionMenu.setVisible(false);
+        }
 
     }
 
@@ -506,12 +511,15 @@ public class BattleView {
     }
 
     private void selectSkill(Label skillLabel) {
-        Fighter user = team.get(selectedUser);
-        usingSkill = true;
-        int index = skillSelectorArea.getChildren().indexOf(skillLabel);
-        Skill skill = team.get(selectedUser).getSkillList().get(index);
-        user.setQueuedSkill(skill);
-        checkSkillType(skill);
+        if(!uiLocked){
+            Fighter user = team.get(selectedUser);
+            usingSkill = true;
+            int index = skillSelectorArea.getChildren().indexOf(skillLabel);
+            Skill skill = team.get(selectedUser).getSkillList().get(index);
+            user.setQueuedSkill(skill);
+            checkSkillType(skill);
+        }
+
 
 
 
@@ -547,9 +555,7 @@ public class BattleView {
     private void showSkillInfo(Label skill) {
 
         int index = skillSelectorArea.getChildren().indexOf(skill);
-        System.out.println(index);
         Label skillQuickInfo = (Label)skillInfoDisplay.getChildren().get(1);
-        System.out.println(team.get(selectedUser).getSkillList().get(index).getName());
         skillQuickInfo.setText(team.get(selectedUser).getSkillList().get(index).getQuickInfo());
         skillInfoDisplay.setVisible(true);
 
@@ -618,11 +624,15 @@ public class BattleView {
     }
 
     private void triggerAttack() {
-
         battleLogic.tryHeroBasicAttack();
+        handleAnimation("lunge");
         actionMenu.setVisible(false);
         heroSelectorArea.setVisible(true);
 
+    }
+
+    public void handleAnimation(String animationType){
+        animator.lunge(heroGraphicsArea.getChildren().get(selectedUser),enemySelectorArea.getChildren().get(selectedEnemy));
     }
 
     public void updateTP(){
@@ -686,7 +696,6 @@ public class BattleView {
         if(enemySelectorArea.getChildren().get(enemyState.getIndex()).isHover()){
             Fighter enemy = enemyTeam.get(enemyState.getIndex());
             Label enemyHP = (Label)battlerInfoDisplay.getChildren().get(3);
-            System.out.println(team.get(0).getCurrStats().get("hp")+"/"+team.get(0).getHp());
             enemyHP.setText("HP: " + enemy.getCurrStats().get("hp") + "/" + enemy.getMaxHP());
         }
     }
