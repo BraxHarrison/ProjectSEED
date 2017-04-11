@@ -13,6 +13,7 @@ import org.xml.sax.SAXException;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class BattleTests {
@@ -20,6 +21,8 @@ public class BattleTests {
     private DamageCalculator damageCalc;
     private BattleXMLParser parser;
     private Document characterInfo;
+
+    HashMap<String,Fighter> allHeroes;
     private Fighter attacker;
     private Fighter defender;
 
@@ -32,11 +35,13 @@ public class BattleTests {
 
     }
 
-    private void initFighters(){
+    private void initFighters() throws IOException, SAXException, ParserConfigurationException {
         attacker = new Fighter("Attacker,2,2,2,2,2,2,2");
         defender = new Fighter("Attacker,2,2,2,2,2,2,2");
         damageCalc = new DamageCalculator(attacker);
         parser = new BattleXMLParser();
+        parser.parseBattleData();
+        allHeroes = parser.getHeroes();
     }
 
     private void setUpCharacterInfo() throws ParserConfigurationException, IOException, SAXException {
@@ -57,16 +62,14 @@ public class BattleTests {
 
     @Test
     public void TestFighterXMLParse() throws IOException, SAXException, ParserConfigurationException {
-        ArrayList<Fighter> fighters = parser.parseFighterInfo();
-        Fighter fighter = fighters.get(0);
+        Fighter fighter = allHeroes.get(0);
         Assert.assertEquals("Prota",fighter.getName());
 
     }
 
     @Test
     public void TestMoveDescriptionXMLParse() throws IOException, SAXException, ParserConfigurationException {
-        ArrayList<Fighter> fighters = parser.parseFighterInfo();
-        ArrayList<String> battleDesc = fighters.get(0).getBattleStrings();
+        ArrayList<String> battleDesc = allHeroes.get(0).getBattleStrings();
         Assert.assertEquals("You fire a quick shot at the enemy. It grazes them.",battleDesc.get(0));
     }
 

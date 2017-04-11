@@ -8,9 +8,9 @@ public class Item {
     private String name;
     private String description;
     private String quickSummary;
+    private int affectAmt;
     private String type;
-    private int amount;
-    private String buffType;
+    private String type2;
     private String imagePath;
 
     public Item(String info){
@@ -19,12 +19,10 @@ public class Item {
         this.name = itemInfo.get(0);
         this.description = itemInfo.get(1);
         this.quickSummary = itemInfo.get(2);
-        this.amount = Integer.parseInt(itemInfo.get(3));
-        this.imagePath = itemInfo.get(4);
-        this.type = itemInfo.get(5);
-        if(type.equals("buff")){
-            this.buffType = itemInfo.get(6);
-        }
+        this.affectAmt = Integer.parseInt(itemInfo.get(3));
+        this.type = itemInfo.get(4);
+        this.type2 = itemInfo.get(5);
+        this.imagePath = itemInfo.get(6);
     }
 
 
@@ -35,13 +33,23 @@ public class Item {
         else if(type.equals("buff")){
             triggerBuff(user);
         }
+        else if(type.equals("debuff")){
+
+        }
+        else if(type.equals("selfDebuff")){
+
+        }
     }
     private void triggerHeal(Fighter user){
-        user.recoverHealth(amount);
+        user.recoverHealth(affectAmt);
     }
     private void triggerBuff(Fighter user){
-        user.buffer(buffType,amount);
+        user.strengthenStat(type2, affectAmt);
     }
+    private void triggerDebuff(Fighter target){
+        target.weakenStat(type2,affectAmt);
+    }
+
 
     private List<String> stringParser(String info){
 

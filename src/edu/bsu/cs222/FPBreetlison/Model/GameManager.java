@@ -100,7 +100,7 @@ public class GameManager {
     }
 
 
-    public HashMap<Integer, Boolean> checkAvalibleDirections() {
+    public HashMap<Integer, Boolean> checkAvailableDirections() {
 
         HashMap<Integer, Boolean> availableDirections = new HashMap<>();
         ArrayList<String> allDirections = new ArrayList<>();

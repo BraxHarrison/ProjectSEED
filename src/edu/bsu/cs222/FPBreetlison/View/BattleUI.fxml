@@ -43,10 +43,16 @@
 
                             </children>
                         </VBox>
+                        <VBox fx:id="skillSelectorArea" visible="false" translateX="45" prefHeight="600" translateY="15" spacing="40">
+                            <children>
+
+                            </children>
+                        </VBox>
+
                         <VBox fx:id="actionMenu" visible="false" prefHeight="400" translateX="30" translateY="10" spacing="40">
 
                             <Label fx:id="attack" maxWidth="40" minWidth="40" text="Attack" scaleX="2.2" scaleY="2.2" onMousePressed="#selectAttack" textFill="white"/>
-                            <Label fx:id="skills" maxWidth="40" minWidth="40" text="Skills" scaleX="2.2" scaleY="2.2" onMousePressed="#selectSkill" textFill="white"/>
+                            <Label fx:id="skills" maxWidth="40" minWidth="40" text="Skills" scaleX="2.2" scaleY="2.2" onMousePressed="#selectSkills" textFill="white"/>
                             <Label fx:id="bag" maxWidth="40" minWidth="40" text="Items" scaleX="2.2" scaleY="2.2" onMousePressed="#selectBag" textFill="white"/>
                             <Label fx:id="flee" maxWidth="40" minWidth="40" text="Flee" scaleX="2.2" scaleY="2.2" onMousePressed="#selectFlee" textFill="white"/>
                             <Label fx:id="endTurn" maxWidth="40" minWidth="40" text="End Turn" scaleX="2.2" scaleY="2.2" onMousePressed="#selectEndTurn" textFill="white"/>
@@ -75,11 +81,19 @@
                 <ImageView fx:id="itemIGraphic"/>
                 <Label fx:id="itemQuickSummary" wrapText="true" translateX="80" translateY="20" maxWidth="85" minWidth="85"/>
                 <Label fx:id="itemInfoText" wrapText="true" translateY="55" maxWidth="200" maxHeight="90"/>
+
             </Group>
             <Group fx:id="battlerInfoDisplay" translateX="5" translateY="5">
                 <ImageView fx:id="battlerGraphic"/>
                 <Label fx:id="nameDisplay" translateX="90" translateY="20"/>
+                <Label fx:id="lvlDisplay" translateX="200" translateY="20"/>
                 <Label fx:id="hpDisplay" translateX="90" translateY="40"/>
+            </Group>
+            <Group fx:id="skillInfoDisplay" translateX="5" translateY="5">
+                <ImageView fx:id="skillGraphic"/>
+                <Label fx:id="skillQuickSummary" wrapText="true" translateX="80" translateY="20" maxWidth="85" minWidth="85"/>
+                <Label fx:id="skillInfoText" wrapText="true" translateY="55" maxWidth="200" maxHeight="90"/>
+
             </Group>
 
         </Pane>

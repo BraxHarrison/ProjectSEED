@@ -38,7 +38,7 @@ public class OverworldView {
         directionButtons.add(south);
         directionButtons.add(east);
         directionButtons.add(west);
-        Map<Integer, Boolean> directions = game.checkAvalibleDirections();
+        Map<Integer, Boolean> directions = game.checkAvailableDirections();
         for (int i = 0; i<directionButtons.size();i++){
             directionButtons.get(i).setVisible(directions.get(i));
         }

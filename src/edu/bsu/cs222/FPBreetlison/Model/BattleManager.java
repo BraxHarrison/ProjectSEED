@@ -1,6 +1,7 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
 import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Skill;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import javafx.animation.KeyFrame;
@@ -18,6 +19,7 @@ public class BattleManager {
     private GameData gameData;
     private GameManager game;
     private BattleView battleView;
+    private Animator animator;
 
     private Fighter attacker;
     private Fighter target;
@@ -32,18 +34,19 @@ public class BattleManager {
         this.game = game;
         this.gameData = game.getGameData();
         this.battleView = game.getBattleControl();
+        animator = new Animator(battleView);
 
     }
 
     public void start(){
         messageQueue = new ArrayList<>();
         targetQueue = new ArrayList<>();
-
-        requestTPUpdate();
+        battleView.updateTP();
         checkSpeeds();
     }
 
     private void updateTurn(String phase) {
+
         switch (phase) {
             case "hero":
                 enableCharacterMenu();
@@ -57,37 +60,47 @@ public class BattleManager {
             case "enemyWin":
                 battleView.blockEnemySelectors();
                 battleView.uiLocked = true;
-                battleView.backButton.setVisible(false);
                 endBattle();
                 break;
             case "heroWin":
                 battleView.blockEnemySelectors();
                 battleView.heroSelectorArea.setVisible(false);
                 battleView.uiLocked = true;
-                battleView.backButton.setVisible(false);
+                gainExp();
                 endBattle();
                 break;
         }
+        battleView.backButton.setVisible(false);
     }
 
+
     public void endBattle(){
+        revertFighterStats();
         Timeline counter = new Timeline();
         counter.getKeyFrames().add(new KeyFrame(
-                Duration.millis(2000),
+                Duration.millis(6000),
                 ae -> game.setUpOverworld()));
         counter.play();
     }
 
+    private void revertFighterStats() {
+        for(int i = 0; i< gameData.getTeam().size();i++){
+            gameData.getTeam().get(i).revertStats();
+        }
+    }
+
     private void resetTP() {
         gameData.resetHeroTP();
-        requestTPUpdate();
+        battleView.updateTP();
     }
 
     private void tryEnemyAttack() {
 
         ArrayList<Fighter> remainingEnemies = getRemainingEnemies();
-        for (Fighter remainingEnemy : remainingEnemies) {
+        for (int i = 0; i< remainingEnemies.size();i++) {
             fighterSnapshot = new Snapshot();
+            fighterSnapshot.setUserIndex(i);
+            fighterSnapshot.setAnimType("enemylunge");
             targetNo = makeRandom(gameData.getTeam().size());
             Fighter target = gameData.getTeam().get(targetNo);
             if (target.isKO()) {
@@ -95,7 +108,7 @@ public class BattleManager {
             }
             if (target != null) {
                 fighterSnapshot.setIndex(targetNo);
-                doEnemyAttack(remainingEnemy, target);
+                doEnemyAttack(remainingEnemies.get(i), target);
             } else {
                 fighterSnapshot.setIndex(targetNo);
                 fighterSnapshot.calcHPPercent(null);
@@ -122,6 +135,7 @@ public class BattleManager {
         fighterSnapshot.calcHPPercent(target);
         detectHeroKO();
         fighterSnapshot.setKOState(target.isKO());
+       // System.out.println("MaxHP: " + target.getHp() + "/CurrHP: " + target.getCurrStats().get("hp"));
         messageQueue.add(user.getName() + " strikes " + target.getName() + " !");
         targetQueue.add(fighterSnapshot);
 
@@ -129,14 +143,12 @@ public class BattleManager {
 
     private Fighter findNextTarget() {
 
-        //Seems like this isn't functioning properly
         for(int i = 0; i<gameData.getTeam().size();i++){
             Fighter target = gameData.getTeam().get(i);
             if(!target.isKO()){
                 targetNo = i;
                 return target;
             }
-            //The problem is that when nothing is chosen, they still send the last instance of snapshot. We need to find a way to remove the snapshot if the hero is already KOd
         }
         return null;
     }
@@ -197,12 +209,15 @@ public class BattleManager {
 //        }
     }
 
-    public void tryBasicAttack(){
+    public void tryHeroBasicAttack(){
         attacker = gameData.getTeam().get(battleView.selectedUser);
         target = gameData.getEnemyTeam().get(gameData.getSelectedTarget());
         int cost = attacker.getTpCost();
         if(gameData.getCurrentTp() >= cost ){
-            startBasicAttack(cost);
+            int random = makeRandom(attacker.getBattleStrings().size());
+            messageQueue.add(attacker.getBattleStrings().get(random));
+            battleView.queueMessages(messageQueue);
+            startHeroBasicAttack(cost);
         }
         else{
             battleView.pushMessage("There's not enough time left for " + attacker.getName()
@@ -211,11 +226,13 @@ public class BattleManager {
 
     }
 
-    private void startBasicAttack(int cost) {
+    private void startHeroBasicAttack(int cost) {
         gameData.subtractTp(cost);
         attacker.doBasicAttack(target);
+        battleView.handleAnimation("herolunge");
         updateUIForHeroAttack();
         detectEnemyKO();
+        battleView.queueMessages(messageQueue);
 
     }
 
@@ -224,10 +241,8 @@ public class BattleManager {
         enemyState.setIndex(gameData.getSelectedTarget());
         enemyState.calcHPPercent(target);
         battleView.updateEnemyQuickInfo(enemyState);
-        int random = makeRandom(attacker.getBattleStrings().size());
-        battleView.pushMessage(attacker.getBattleStrings().get(random));
         battleView.blockEnemySelectors();
-        requestTPUpdate();
+        battleView.updateTP();
     }
 
     private void detectEnemyKO() {
@@ -249,14 +264,6 @@ public class BattleManager {
             battleView.queueMessages(messageQueue);
             updateTurn("heroWin");
         }
-
-
-
-    }
-
-    private void requestTPUpdate(){
-        double percentage = (double)gameData.getCurrentTp()/(double)gameData.getMaxTP();
-        battleView.updateTP(percentage);
     }
 
     public void endPlayerTurn() {
@@ -276,4 +283,50 @@ public class BattleManager {
         return messageQueue;
     }
 
+    public void tryActivateSkill(Fighter user, Fighter target) {
+        Skill skill = user.getQueuedSkill();
+        attacker = user;
+        this.target = target;
+        if(gameData.getCurrentTp() >= skill.getTpCost()){
+            activateSkill(user, target);
+            updateUIForHeroAttack();
+            detectEnemyKO();
+            battleView.queueMessages(messageQueue);
+        }
+        else{
+            battleView.pushMessage("There's not enough time to use that skill!");
+        }
+
+
+    }
+    private void activateSkill(Fighter user, Fighter target){
+        Skill skill = user.getQueuedSkill();
+        user.getQueuedSkill().use(user, target);
+        gameData.subtractTP(skill.getTpCost());
+        battleView.updateTP();
+        messageQueue.add(user.getName() + " used " + skill.getName() + "!");
+        extraMessage(skill);
+        battleView.queueMessages(messageQueue);
+    }
+
+    private void extraMessage(Skill skill){
+        if(!skill.getExtraMessage().equals("null")){
+            messageQueue.add(skill.getExtraMessage());
+        }
+
+    }
+
+    private void gainExp() {
+        for(int i = 0; i<gameData.getTeam().size();i++){
+            Fighter fighter = gameData.getTeam().get(i);
+            fighter.getExp(200);
+            fighter.checkLevel();
+            if(fighter.isLeveledUp()){
+                messageQueue.add(fighter.getName() + " leveled up!");
+                fighter.setLeveledUp(false);
+            }
+        }
+        battleView.queueMessages(messageQueue);
+
+    }
 }

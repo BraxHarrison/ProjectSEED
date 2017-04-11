@@ -1,11 +1,13 @@
 package edu.bsu.cs222.FPBreetlison.Controller;
 
+import edu.bsu.cs222.FPBreetlison.Model.Animator;
 import edu.bsu.cs222.FPBreetlison.Model.BattleManager;
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
 import edu.bsu.cs222.FPBreetlison.Model.GameManager;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Skill;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -27,6 +29,8 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 
 public class BattleView {
+    public VBox skillSelectorArea;
+    public Group skillInfoDisplay;
 
     //region Variables
 
@@ -51,15 +55,18 @@ public class BattleView {
     public Group itemInfoDisplay;
     public Group battlerInfoDisplay;
 
-
     public int selectedUser;
+    public int selectedEnemy;
     private int selectedItem;
     public boolean uiLocked;
+    private boolean finishedLoading;
 
     private GameData gameData;
     private BattleManager battleLogic;
+    Animator animator;
 
     private Font darwinFont;
+    private boolean usingSkill;
 
 
     //endregion
@@ -84,6 +91,11 @@ public class BattleView {
         timeline.setOnFinished(e -> clearBarInfo(targets));
         int dur = 40;
         for (Snapshot heroSnapshot : targets) {
+            selectedUser = heroSnapshot.getUserIndex();
+            selectedEnemy = heroSnapshot.getIndex();
+            timeline.getKeyFrames().add(new KeyFrame(
+                    Duration.millis(dur),
+                    ae -> handleAnimation(heroSnapshot.getAnimType())));
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
                     ae -> updateHeroBars(heroSnapshot)));
@@ -108,21 +120,25 @@ public class BattleView {
 
     private void updateHeroBars(Snapshot heroSnapshot){
         StackPane selector = (StackPane)heroSelectorArea.getChildren().get(heroSnapshot.getIndex());
-        ProgressBar hbar = (ProgressBar)selector.getChildren().get(1);
-        hbar.setProgress(heroSnapshot.getHpPercent());
-        roundHPPercent(hbar,heroSnapshot);
+        ProgressBar hBar = (ProgressBar)selector.getChildren().get(1);
+        hBar.setProgress(heroSnapshot.getHpPercent());
+        roundHPPercent(hBar,heroSnapshot);
         updateHeroQuickInfo(heroSnapshot);
-        updateColor(hbar,heroSnapshot.getHpPercent());
+        updateColor(hBar,heroSnapshot.getHpPercent());
         if(heroSnapshot.getKOState()){
              removeHero(heroSnapshot.getIndex());
         }
-
     }
 
     private void updateHeroQuickInfo(Snapshot heroSnapshot){
         ImageView heroImage = (ImageView)heroGraphicsArea.getChildren().get(heroSnapshot.getIndex());
         if(heroImage.isHover()){
-            Label hpInfo = (Label)battlerInfoDisplay.getChildren().get(1);
+            Label nameInfo = (Label)battlerInfoDisplay.getChildren().get(1);
+            Label lvlInfo = (Label)battlerInfoDisplay.getChildren().get(2);
+            Label hpInfo = (Label)battlerInfoDisplay.getChildren().get(3);
+
+            nameInfo.setText(team.get(heroSnapshot.getIndex()).getName());
+            lvlInfo.setText("Lvl: "+team.get(heroSnapshot.getIndex()).getLvl());
             hpInfo.setText(heroSnapshot.getHpString());
         }
     }
@@ -172,6 +188,7 @@ public class BattleView {
     private void transferBattleData(GameManager game) {
         this.gameData = game.getGameData();
         this.battleLogic = game.getBattleLogic();
+        animator = new Animator(this);
         battleLogic.getGameInfo(game);
 
     }
@@ -231,9 +248,18 @@ public class BattleView {
             hero.setId(Integer.toString(i));
             populateHeroUIElements(hero);
             formatHeroButton((Label)hero.getChildren().get(0));
-            formatHeroBar((ProgressBar)hero.getChildren().get(1));
+            formatHeroBar((ProgressBar)hero.getChildren().get(1),i);
             hero.setOnMousePressed(event -> selectHero(hero));
+            checkForKO(hero,i);
             heroSelectorArea.getChildren().add(hero);
+        }
+    }
+
+    private void checkForKO(StackPane hero, int i) {
+        if(team.get(i).calcHPPercentage() == 0.0){
+            Label heroLabel = (Label)hero.getChildren().get(0);
+            heroLabel.setTextFill(Color.web("0x333c47"));
+            hero.setOnMousePressed(null);
         }
     }
 
@@ -256,14 +282,14 @@ public class BattleView {
         hero.setFont(darwinFont);
     }
 
-    private void formatHeroBar(ProgressBar hBar) {
+    private void formatHeroBar(ProgressBar hBar, int index) {
         hBar.setRotate(270);
         hBar.setScaleX(.30);
         hBar.setScaleY(.80);
         hBar.setTranslateX(26);
         hBar.getStyleClass().add("healthBar");
         hBar.getStyleClass().add("green-bar");
-        hBar.setProgress(1);
+        hBar.setProgress(team.get(index).calcHPPercentage());
 
     }
 
@@ -277,12 +303,10 @@ public class BattleView {
         for (int i = 0; i < team.size(); i++) {
             ImageView image = new ImageView(new Image(team.get(i).getBattlerGraphicPath()));
             image.setId(Integer.toString(i));
-            image.setFitHeight(team.get(i).getSizeY());
-            image.setFitWidth(team.get(i).getSizeX());
             image.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    showCharacterInfo(image);
+                    showHeroInfo(image);
                 }
             });
             image.setOnMouseExited(new EventHandler<MouseEvent>() {
@@ -291,11 +315,20 @@ public class BattleView {
                     hideCharacterInfo();
                 }
             });
+            formatHeroGraphic(image,i);
             heroGraphicsArea.getChildren().add(image);
         }
     }
 
-    private void showCharacterInfo(ImageView image){
+    private void formatHeroGraphic(ImageView image, int index) {
+        image.setFitHeight(team.get(index).getSizeY());
+        image.setFitWidth(team.get(index).getSizeX());
+        if(team.get(index).calcHPPercentage() == 0.00){
+            image.setOpacity(.30);
+        }
+    }
+
+    private void showHeroInfo(ImageView image){
         battlerInfoDisplay.setVisible(true);
         int index = Integer.parseInt(image.getId());
         showCharacterMiniImage(index);
@@ -312,9 +345,11 @@ public class BattleView {
     }
     private void showHeroUpperLabels(int index){
         Label name = (Label)battlerInfoDisplay.getChildren().get(1);
-        Label hp = (Label)battlerInfoDisplay.getChildren().get(2);
+        Label lvl = (Label)battlerInfoDisplay.getChildren().get(2);
+        Label hp = (Label)battlerInfoDisplay.getChildren().get(3);
         name.setText(team.get(index).getName());
-        hp.setText("HP: " + team.get(index).getHp() + "/" + team.get(index).getMaxHP());
+        lvl.setText("Lvl: "+team.get(index).getLvl());
+        hp.setText("HP: " + team.get(index).getCurrStats().get("hp") + "/" + team.get(index).getMaxHP());
     }
     private void showHeroLowerLabels(){
 
@@ -345,9 +380,16 @@ public class BattleView {
 
     private void selectEnemy(ImageView enemy) {
         int index = enemySelectorArea.getChildren().indexOf(enemy);
-        System.out.println(index);
+        selectedEnemy = index;
         gameData.setSelectedTarget(index);
-        triggerAttack();
+        if(usingSkill){
+            triggerSkill(index);
+        }
+        else{
+            triggerAttack();
+        }
+        backButton.setVisible(false);
+
     }
 
     private void showEnemyInfo(ImageView enemy){
@@ -366,9 +408,11 @@ public class BattleView {
     }
     private void showEnemyUpperLabels(int index){
         Label name = (Label)battlerInfoDisplay.getChildren().get(1);
-        Label hp = (Label)battlerInfoDisplay.getChildren().get(2);
+        Label lvl = (Label)battlerInfoDisplay.getChildren().get(2);
+        Label hp = (Label)battlerInfoDisplay.getChildren().get(3);
         name.setText(enemyTeam.get(index).getName());
-        hp.setText("HP: " + enemyTeam.get(index).getHp() + "/" + enemyTeam.get(index).getMaxHP());
+        lvl.setText("Lvl: " + enemyTeam.get(index).getLvl());
+        hp.setText("HP: " + enemyTeam.get(index).getCurrStats().get("hp") + "/" + enemyTeam.get(index).getMaxHP());
     }
 
 
@@ -432,8 +476,10 @@ public class BattleView {
 
     public void selectAttack() {
         if(!uiLocked){
+            usingSkill = false;
             pushMessage("Who will " + team.get(selectedUser).getName() + " attack?");
             unblockEnemySelectors();
+
         }
 
     }
@@ -445,7 +491,75 @@ public class BattleView {
 
     }
 
-    public void selectSkill() {
+    public void selectSkills() {
+        if(!uiLocked){
+            populateSkills();
+            skillSelectorArea.setVisible(true);
+            actionMenu.setVisible(false);
+        }
+
+    }
+
+    private void populateSkills() {
+        finishedLoading = false;
+        skillSelectorArea.getChildren().clear();
+        Fighter user = team.get(selectedUser);
+        for (int i = 0; i<user.getSkillList().size();i++){
+            Label skill = new Label(user.getSkillList().get(i).getName());
+            formatSkill(skill);
+            skill.setOnMouseEntered(event -> showSkillInfo(skill));
+            skill.setOnMouseExited(event -> hideSkillInfo());
+            skill.setOnMousePressed(event -> selectSkill(skill));
+            skillSelectorArea.getChildren().add(skill);
+        }
+        finishedLoading = true;
+    }
+
+    private void selectSkill(Label skillLabel) {
+        if(!uiLocked){
+            Fighter user = team.get(selectedUser);
+            usingSkill = true;
+            int index = skillSelectorArea.getChildren().indexOf(skillLabel);
+            Skill skill = team.get(selectedUser).getSkillList().get(index);
+            user.setQueuedSkill(skill);
+            checkSkillType(skill);
+        }
+    }
+
+    private void checkSkillType(Skill skill) {
+        Fighter user = team.get(selectedUser);
+        if(skill.getType().equals("buff")){
+            battleLogic.tryActivateSkill(user,user);
+        }
+        else{
+            pushMessage("Who will " + user.getName() + " use this skill on?");
+            unblockEnemySelectors();
+        }
+
+    }
+
+    private void hideSkillInfo() {
+        skillInfoDisplay.setVisible(false);
+    }
+
+    private void formatSkill(Label skill) {
+        skill.setScaleX(2);
+        skill.setScaleY(2);
+        skill.setTranslateX(-8);
+        skill.setMaxWidth(60);
+        skill.setMinWidth(40);
+        skill.setWrapText(true);
+        skill.setTextFill(Color.web("0xfffff1"));
+        skill.setFont(darwinFont);
+    }
+
+    private void showSkillInfo(Label skill) {
+
+        int index = skillSelectorArea.getChildren().indexOf(skill);
+        Label skillQuickInfo = (Label)skillInfoDisplay.getChildren().get(1);
+        skillQuickInfo.setText(team.get(selectedUser).getSkillList().get(index).getQuickInfo());
+        skillInfoDisplay.setVisible(true);
+
 
     }
 
@@ -460,7 +574,7 @@ public class BattleView {
     }
 
     private void selectItem(Label item){
-        int selectedItem = itemSelectorArea.getChildren().indexOf(item);
+        selectedItem = itemSelectorArea.getChildren().indexOf(item);
         updateInventoryUI();
         battleLogic.useItem(selectedItem);
         updateSingleHeroBar();
@@ -486,7 +600,7 @@ public class BattleView {
     }
 
     public void selectFlee(javafx.scene.input.MouseEvent event) {
-        pushMessage("You ran away. Everyone's disappointed.");
+        pushMessage("You ran away. Everyone is disappointed.");
         battleLogic.endBattle();
     }
 
@@ -501,15 +615,29 @@ public class BattleView {
     }
 
 
-    private void triggerAttack() {
+    private void triggerSkill(int index){
+        Fighter user = team.get(selectedUser);
+        Fighter target = enemyTeam.get(index);
+        battleLogic.tryActivateSkill(user,target);
+        skillSelectorArea.setVisible(false);
+        skillInfoDisplay.setVisible(false);
+        heroSelectorArea.setVisible(true);
+    }
 
-        battleLogic.tryBasicAttack();
+    private void triggerAttack() {
+        battleLogic.tryHeroBasicAttack();
+        handleAnimation("heroLunge");
         actionMenu.setVisible(false);
         heroSelectorArea.setVisible(true);
 
     }
 
-    public void updateTP(double percentage){
+    public void handleAnimation(String animationType){
+        animator.playAnimation(animationType);
+    }
+
+    public void updateTP(){
+        double percentage = (double)gameData.getCurrentTp()/(double)gameData.getMaxTP();
         tpBar.setProgress(percentage);
         tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getMaxTP());
         battleLogic.checkPlayerTP();
@@ -558,14 +686,18 @@ public class BattleView {
             itemSelectorArea.setVisible(false);
 
         }
+        else if(skillSelectorArea.isVisible()){
+            actionMenu.setVisible(true);
+            skillSelectorArea.setVisible(false);
+        }
 
     }
 
     public void updateEnemyQuickInfo(Snapshot enemyState) {
         if(enemySelectorArea.getChildren().get(enemyState.getIndex()).isHover()){
             Fighter enemy = enemyTeam.get(enemyState.getIndex());
-            Label enemyHP = (Label)battlerInfoDisplay.getChildren().get(2);
-            enemyHP.setText("HP: " + enemy.getHp() + "/" + enemy.getMaxHP());
+            Label enemyHP = (Label)battlerInfoDisplay.getChildren().get(3);
+            enemyHP.setText("HP: " + enemy.getCurrStats().get("hp") + "/" + enemy.getMaxHP());
         }
     }
 

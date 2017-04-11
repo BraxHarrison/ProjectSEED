@@ -1,5 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -19,6 +20,18 @@ class OverWorldParser {
 
     private Document document;
 
+    public OverWorldParser(){
+        try {
+            createDoc();
+        } catch (ParserConfigurationException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (SAXException e) {
+            e.printStackTrace();
+        }
+    }
+
     private void createDoc() throws ParserConfigurationException, IOException, SAXException {
         InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("database/GameInfo.xml");
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -35,7 +48,6 @@ class OverWorldParser {
         Map<String, Room> rooms = new HashMap<>();
         NodeList nodeList = this.document.getElementsByTagName("room");
         for(int i = 0; i< nodeList.getLength(); i++){
-
             Node roomInfo = nodeList.item(i);
             Element roomEle = (Element)roomInfo;
             Room room = new Room(createRoomString(roomEle));
@@ -53,4 +65,29 @@ class OverWorldParser {
                 roomElement.getAttribute("west") + ",";
 
     }
+
+    public HashMap<String, Item> createItemDatabase(){
+        HashMap<String, Item> items = new HashMap<>();
+        NodeList nodeList = document.getElementsByTagName("item");
+        for(int i = 0; i< nodeList.getLength(); i++){
+            Node itemInfo = nodeList.item(i);
+            Element sourceItem = (Element)itemInfo;
+            Item item = new Item(createItemString(sourceItem));
+            items.put(item.getName(),item);
+        }
+        return items;
+    }
+
+    private String createItemString(Element sourceItem) {
+        return (sourceItem.getAttribute("name") + ",") +
+                sourceItem.getAttribute("description") + "," +
+                sourceItem.getAttribute("quickSummary") + "," +
+                sourceItem.getAttribute("affectAmt") + "," +
+                sourceItem.getAttribute("type") + "," +
+                sourceItem.getAttribute("type2") + "," +
+                sourceItem.getAttribute("imagePath") + ",";
+    }
+
+
+
 }
