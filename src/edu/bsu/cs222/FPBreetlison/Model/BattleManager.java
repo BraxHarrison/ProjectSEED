@@ -19,6 +19,7 @@ public class BattleManager {
     private GameData gameData;
     private GameManager game;
     private BattleView battleView;
+    private Animator animator;
 
     private Fighter attacker;
     private Fighter target;
@@ -33,6 +34,7 @@ public class BattleManager {
         this.game = game;
         this.gameData = game.getGameData();
         this.battleView = game.getBattleControl();
+        animator = new Animator(battleView);
 
     }
 
@@ -95,8 +97,10 @@ public class BattleManager {
     private void tryEnemyAttack() {
 
         ArrayList<Fighter> remainingEnemies = getRemainingEnemies();
-        for (Fighter remainingEnemy : remainingEnemies) {
+        for (int i = 0; i< remainingEnemies.size();i++) {
             fighterSnapshot = new Snapshot();
+            fighterSnapshot.setUserIndex(i);
+            fighterSnapshot.setAnimType("enemylunge");
             targetNo = makeRandom(gameData.getTeam().size());
             Fighter target = gameData.getTeam().get(targetNo);
             if (target.isKO()) {
@@ -104,7 +108,7 @@ public class BattleManager {
             }
             if (target != null) {
                 fighterSnapshot.setIndex(targetNo);
-                doEnemyAttack(remainingEnemy, target);
+                doEnemyAttack(remainingEnemies.get(i), target);
             } else {
                 fighterSnapshot.setIndex(targetNo);
                 fighterSnapshot.calcHPPercent(null);
@@ -139,14 +143,12 @@ public class BattleManager {
 
     private Fighter findNextTarget() {
 
-        //Seems like this isn't functioning properly
         for(int i = 0; i<gameData.getTeam().size();i++){
             Fighter target = gameData.getTeam().get(i);
             if(!target.isKO()){
                 targetNo = i;
                 return target;
             }
-            //The problem is that when nothing is chosen, they still send the last instance of snapshot. We need to find a way to remove the snapshot if the hero is already KOd
         }
         return null;
     }
@@ -215,7 +217,7 @@ public class BattleManager {
             int random = makeRandom(attacker.getBattleStrings().size());
             messageQueue.add(attacker.getBattleStrings().get(random));
             battleView.queueMessages(messageQueue);
-            startBasicAttack(cost);
+            startHeroBasicAttack(cost);
         }
         else{
             battleView.pushMessage("There's not enough time left for " + attacker.getName()
@@ -224,9 +226,10 @@ public class BattleManager {
 
     }
 
-    private void startBasicAttack(int cost) {
+    private void startHeroBasicAttack(int cost) {
         gameData.subtractTp(cost);
         attacker.doBasicAttack(target);
+        battleView.handleAnimation("herolunge");
         updateUIForHeroAttack();
         detectEnemyKO();
         battleView.queueMessages(messageQueue);

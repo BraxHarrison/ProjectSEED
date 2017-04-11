@@ -91,6 +91,11 @@ public class BattleView {
         timeline.setOnFinished(e -> clearBarInfo(targets));
         int dur = 40;
         for (Snapshot heroSnapshot : targets) {
+            selectedUser = heroSnapshot.getUserIndex();
+            selectedEnemy = heroSnapshot.getIndex();
+            timeline.getKeyFrames().add(new KeyFrame(
+                    Duration.millis(dur),
+                    ae -> handleAnimation(heroSnapshot.getAnimType())));
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
                     ae -> updateHeroBars(heroSnapshot)));
@@ -519,10 +524,6 @@ public class BattleView {
             user.setQueuedSkill(skill);
             checkSkillType(skill);
         }
-
-
-
-
     }
 
     private void checkSkillType(Skill skill) {
@@ -625,14 +626,14 @@ public class BattleView {
 
     private void triggerAttack() {
         battleLogic.tryHeroBasicAttack();
-        handleAnimation("lunge");
+        handleAnimation("heroLunge");
         actionMenu.setVisible(false);
         heroSelectorArea.setVisible(true);
 
     }
 
     public void handleAnimation(String animationType){
-        animator.lunge(heroGraphicsArea.getChildren().get(selectedUser),enemySelectorArea.getChildren().get(selectedEnemy));
+        animator.playAnimation(animationType);
     }
 
     public void updateTP(){

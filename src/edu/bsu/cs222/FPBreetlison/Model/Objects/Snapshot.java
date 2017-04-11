@@ -8,6 +8,9 @@ public class Snapshot {
     private int index;
     private double hpPercent;
     private boolean KOState;
+    private int userIndex;
+    private int targetIndex;
+    private String animType;
     private String hpString;
 
     public void calcHPPercent(Fighter fighter){
@@ -47,6 +50,25 @@ public class Snapshot {
     public void setKOState(boolean KOState) {
         this.KOState = KOState;
     }
+    public int getUserIndex() {
+        return userIndex;
+    }
+    public void setUserIndex(int userIndex) {
+        this.userIndex = userIndex;
+    }
+    public int getTargetIndex() {
+        return targetIndex;
+    }
 
+    public void setTargetIndex(int targetIndex) {
+        this.targetIndex = targetIndex;
+    }
 
+    public String getAnimType() {
+        return animType;
+    }
+
+    public void setAnimType(String animType) {
+        this.animType = animType;
+    }
 }
