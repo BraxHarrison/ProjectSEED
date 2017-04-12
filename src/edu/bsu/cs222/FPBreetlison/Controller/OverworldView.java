@@ -3,7 +3,10 @@ package edu.bsu.cs222.FPBreetlison.Controller;
 import edu.bsu.cs222.FPBreetlison.Model.GameManager;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -12,6 +15,8 @@ import java.util.Map;
 public class OverworldView {
 
 
+    public VBox sideBar;
+    public ImageView sideBarGraphic;
     private GameManager game;
     public Label roomDescription;
     public StackPane travelPane;
@@ -23,7 +28,20 @@ public class OverworldView {
 
     public void initialize(GameManager game){
         this.game = game;
+        setUpGraphics();
         updateRoom();
+    }
+
+    private void setUpGraphics() {
+        setUpBarGraphic();
+        ImageView partyButton = (ImageView)sideBar.getChildren().get(0);
+        partyButton.setImage(new Image("/images/system/system_undefined.png"));
+        partyButton.setFitHeight(50);
+        partyButton.setFitWidth(50);
+    }
+
+    private void setUpBarGraphic() {
+        sideBarGraphic.setImage(new Image("/images/system/system_sidebar.png"));
     }
 
     private void updateRoom() {
