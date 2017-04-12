@@ -5,8 +5,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -24,7 +23,7 @@ public class OverworldView {
     public Button south;
     public Button east;
     public Button west;
-
+    public HBox backgroundImage;
 
     public void initialize(GameManager game){
         this.game = game;
@@ -47,7 +46,16 @@ public class OverworldView {
     private void updateRoom() {
         roomDescription.setText(game.getCurrentRoom().getDescription());
         setDirectionButtonsVisible();
+        setBackground();
         game.updateStageTitle();
+    }
+
+    private void setBackground() {
+        String backgroundImageURL = game.getCurrentRoom().getImageURL();
+        BackgroundImage battleBack = new BackgroundImage(new Image( backgroundImageURL,900,500,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+        backgroundImage.setBackground(new Background(battleBack));
+        backgroundImage.toBack();
+
     }
 
     private void setDirectionButtonsVisible() {

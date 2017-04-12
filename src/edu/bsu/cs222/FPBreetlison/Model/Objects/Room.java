@@ -11,6 +11,7 @@ public class Room {
     private String south;
     private String east;
     private String west;
+    private String image;
     //private ArrayList<Item> itemsInRoom;
 
     public Room(String info){
@@ -22,6 +23,9 @@ public class Room {
         this.south = roomInfo.get(3);
         this.east = roomInfo.get(4);
         this.west = roomInfo.get(5);
+        this.image = roomInfo.get(6);
+        System.out.println(roomInfo.size());
+
     }
 
     private List<String> stringParser(String info) {
@@ -40,6 +44,13 @@ public class Room {
     }
     public String getWest(){
         return west;
+    }
+    public String getImageURL(){
+        if (this.image.equals("null")){
+        return "images/system/system_undefined.png";
+        }
+        else return image;
+
     }
 
     public String getDescription(){

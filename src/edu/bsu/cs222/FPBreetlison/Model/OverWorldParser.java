@@ -62,7 +62,8 @@ class OverWorldParser {
                 roomElement.getAttribute("north") + "," +
                 roomElement.getAttribute("south") + "," +
                 roomElement.getAttribute("east") + "," +
-                roomElement.getAttribute("west") + ",";
+                roomElement.getAttribute("west") + "," +
+                roomElement.getAttribute("image") + ",";
 
     }
 

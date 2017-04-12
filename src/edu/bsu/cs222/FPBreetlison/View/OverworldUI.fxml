@@ -3,9 +3,18 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
 <StackPane fx:controller="edu.bsu.cs222.FPBreetlison.Controller.OverworldView" xmlns:fx="http://javafx.com/fxml" stylesheets="/stylesheets/customClasses.css" alignment="center">
-    <Label fx:id="roomDescription" StackPane.alignment="CENTER" text=""/>
-    <Button fx:id="travelButton" StackPane.alignment="BOTTOM_RIGHT" onAction="#openTravel" text="Map"/>
+
+    <StackPane fx:id="descriptionBox" StackPane.alignment="BOTTOM_CENTER" maxHeight="150" maxWidth="900"  styleClass="description-box">
+        <Label fx:id="roomDescription" StackPane.alignment="CENTER"  text="" styleClass="description-text"/>
+    </StackPane>
+    <ImageView fx:id="sideBarGraphic" StackPane.alignment="TOP_LEFT" fitWidth="85" fitHeight="400" translateX="-10" translateY="-10"/>
+    <VBox fx:id="sideBar" StackPane.alignment="TOP_LEFT">
+        <ImageView fx:id="partyButton" translateX="6" translateY="4"/>
+    </VBox>
+    <Button fx:id="clickToBattle" StackPane.alignment="CENTER" translateY="50" text="Click to start battle" onAction="#startBattle"/>
+    <Button fx:id="travelButton" StackPane.alignment="BOTTOM_RIGHT" onAction="#openTravel" text="Map" />
     <StackPane fx:id="travelPane" StackPane.alignment="BOTTOM_RIGHT"  maxHeight="150" maxWidth="150" visible="false">
         <Button fx:id="closeTravelButton" StackPane.alignment="BOTTOM_RIGHT" translateX="0" text="   X   " onAction="#closeTravel"/>
         <Button fx:id="north" StackPane.alignment="TOP_CENTER" translateX="0" translateY="20" text="N" onAction="#travelNorth"/>
@@ -13,17 +22,8 @@
         <Button fx:id="east" StackPane.alignment="CENTER_RIGHT" translateX="-20" translateY="0" text="E"  onAction="#travelEast"/>
         <Button fx:id="west" StackPane.alignment= "CENTER_LEFT" translateX="20" translateY="0" text="W"  onAction="#travelWest"/>
     </StackPane>
-
-    <ImageView fx:id="sideBarGraphic" StackPane.alignment="TOP_LEFT" fitWidth="85" fitHeight="400" translateX="-10" translateY="-10"/>
-    <VBox fx:id="sideBar" StackPane.alignment="TOP_LEFT">
-        <ImageView fx:id="partyButton" translateX="6" translateY="4"/>
-    </VBox>
-
-    <Button fx:id="clickToBattle" StackPane.alignment="CENTER" translateY="50" text="Click to start battle" onAction="#startBattle"/>
-
-    <StackPane fx:id="partyBox" StackPane.alignment="CENTER" visible="false" styleClass="party-Box" scaleX=".5" scaleY=".5">
-
-
+    <HBox fx:id="backgroundImage" StackPane.alignment="TOP_CENTER"/>
+    <StackPane fx:id="partyBox" StackPane.alignment="CENTER" visible="false" styleClass="party-box" scaleX=".5" scaleY=".5">
     </StackPane>
 
 </StackPane>

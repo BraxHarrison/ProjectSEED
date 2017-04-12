@@ -30,7 +30,15 @@
     -fx-color:#ffffff;
 }
 
-.party-Box{
+/* Overworld Styles */
+.party-box{
     -fx-background-color:"black";
 }
 
+.description-box{
+    -fx-background-color:"black";
+}
+
+.description-text{
+    color:#f44242;
+}
