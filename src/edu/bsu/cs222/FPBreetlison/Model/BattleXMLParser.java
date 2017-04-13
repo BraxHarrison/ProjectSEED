@@ -151,7 +151,8 @@ public class BattleXMLParser {
                 skill.getAttribute("type") + "," +
                 skill.getAttribute("type2") + "," +
                 skill.getAttribute("quickInfo") + "," +
-                skill.getAttribute("extraMessage");
+                skill.getAttribute("extraMessage") + "," +
+                skill.getAttribute("animType");
     }
 
     public HashMap<String,Fighter> getHeroes() {

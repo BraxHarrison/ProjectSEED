@@ -11,6 +11,7 @@ public class Skill {
     String type2;
     String quickInfo;
     String extraMessage;
+    String animType;
 
 
     public Skill(String info){
@@ -22,6 +23,7 @@ public class Skill {
         this.type2 = skillInfo.get(4);
         this.quickInfo = skillInfo.get(5);
         this.extraMessage =  skillInfo.get(6);
+        this.animType = skillInfo.get(7);
     }
 
     public void use(Fighter user, Fighter target){
@@ -62,5 +64,8 @@ public class Skill {
     }
     public int getTpCost() {
         return tpCost;
+    }
+    public String getAnimType() {
+        return animType;
     }
 }

@@ -75,7 +75,7 @@ public class BattleView {
     public void queueMessages(ArrayList<String> messages){
         Timeline timeline = new Timeline();
         timeline.setOnFinished(e -> clearMessages(messages));
-        int dur = 40;
+        int dur = 80;
         for (String message : messages) {
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
@@ -89,10 +89,11 @@ public class BattleView {
     public void queueBarUpdates(ArrayList<Snapshot> targets){
         Timeline timeline = new Timeline();
         timeline.setOnFinished(e -> clearBarInfo(targets));
-        int dur = 40;
+        int dur = 80;
         for (Snapshot heroSnapshot : targets) {
-            selectedUser = heroSnapshot.getUserIndex();
-            selectedEnemy = heroSnapshot.getIndex();
+            //Only sets the enemy and user for the last event because it doesn't use a snapshot
+            selectedEnemy = heroSnapshot.getUserIndex();
+            selectedUser = heroSnapshot.getIndex();
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
                     ae -> handleAnimation(heroSnapshot.getAnimType())));

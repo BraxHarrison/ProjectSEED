@@ -100,7 +100,7 @@ public class BattleManager {
         for (int i = 0; i< remainingEnemies.size();i++) {
             fighterSnapshot = new Snapshot();
             fighterSnapshot.setUserIndex(i);
-            fighterSnapshot.setAnimType("enemylunge");
+            fighterSnapshot.setAnimType("enemyLunge");
             targetNo = makeRandom(gameData.getTeam().size());
             Fighter target = gameData.getTeam().get(targetNo);
             if (target.isKO()) {
@@ -229,7 +229,7 @@ public class BattleManager {
     private void startHeroBasicAttack(int cost) {
         gameData.subtractTp(cost);
         attacker.doBasicAttack(target);
-        battleView.handleAnimation("herolunge");
+        battleView.handleAnimation("heroLunge");
         updateUIForHeroAttack();
         detectEnemyKO();
         battleView.queueMessages(messageQueue);
@@ -291,6 +291,7 @@ public class BattleManager {
             activateSkill(user, target);
             updateUIForHeroAttack();
             detectEnemyKO();
+            battleView.handleAnimation(skill.getAnimType());
             battleView.queueMessages(messageQueue);
         }
         else{

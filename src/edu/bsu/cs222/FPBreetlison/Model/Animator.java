@@ -29,8 +29,9 @@ public class Animator {
 
     public void playAnimation(String animationType){
         //This is incredibly frail. Needs simple refactoring
-        if(animationType.equals("herolunge")){heroLunge();}
-        else if(animationType.equals("enemylunge")){enemyLunge();}
+        if(animationType.equals("heroLunge")){heroLunge();}
+        else if(animationType.equals("enemyLunge")){enemyLunge();}
+        else if(animationType.equals("heroQuickStretch")){heroQuickStretch();}
     }
 
     private void setUpHeroOrientation(){
@@ -94,6 +95,25 @@ public class Animator {
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();
         System.out.println("This is calling");
+    }
+
+    public void heroQuickStretch(){
+        setUpHeroOrientation();
+
+        Timeline timeline = new Timeline();
+        KeyValue userShrink = new KeyValue(user.scaleYProperty(),.75, Interpolator.EASE_BOTH);
+        KeyValue userMoveDown = new KeyValue(user.translateYProperty(),40,Interpolator.EASE_BOTH);
+        KeyValue userStill = new KeyValue(user.scaleYProperty(),.75,Interpolator.EASE_BOTH);
+        KeyValue userPuffBack = new KeyValue(user.scaleYProperty(),1,Interpolator.EASE_BOTH);
+        KeyValue userMoveBack = new KeyValue(user.translateYProperty(),0,Interpolator.EASE_BOTH);
+
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(100),userShrink,userMoveDown);
+        KeyFrame keyFrame2 = new KeyFrame(Duration.millis(200),userStill,userMoveDown);
+        KeyFrame keyFrame3 = new KeyFrame(Duration.millis(400),userStill,userMoveDown);
+        KeyFrame keyFrame4 = new KeyFrame(Duration.millis(700),userPuffBack,userMoveBack);
+
+        timeline.getKeyFrames().addAll(keyFrame,keyFrame2,keyFrame3,keyFrame4);
+        timeline.play();
     }
 
 }
