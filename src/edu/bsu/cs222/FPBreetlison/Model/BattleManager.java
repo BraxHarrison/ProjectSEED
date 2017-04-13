@@ -70,7 +70,7 @@ public class BattleManager {
                 endBattle();
                 break;
         }
-        battleView.backButton.setVisible(false);
+        animator.backButtonSlideIn();
     }
 
 
@@ -195,7 +195,7 @@ public class BattleManager {
 
     private void enableCharacterMenu() {
         battleView.heroSelectorArea.setVisible(true);
-        battleView.backButton.setVisible(false);
+        animator.backButtonSlideIn();
     }
 
     private void disableCharacterMenu(){

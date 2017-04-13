@@ -21,7 +21,6 @@
     <StackPane fx:id="battleDisplay" visible="false">
 
         <StackPane fx:id="backgrounds">
-            <Pane fx:id="selectorBackground" maxWidth="125" maxHeight="600" StackPane.alignment="CENTER_LEFT" stylesheets="/stylesheets/pane.css" styleClass="pane"/>
         </StackPane>
 
         <ScrollPane fx:id="historyScroller" visible="false" maxWidth="300" hbarPolicy="NEVER" >
@@ -29,7 +28,8 @@
         </ScrollPane>
 
         <StackPane fx:id="mainSelectorArea" stylesheets="/stylesheets/pane.css">
-            <Button fx:id="backButton" visible="false" text="(Back)" onAction="#goBack" StackPane.alignment="CENTER_LEFT" translateY="120"/>
+            <ImageView fx:id="backButton" StackPane.alignment="TOP_LEFT" translateX="-70" fitHeight="37" fitWidth="150"/>
+            <Pane fx:id="selectorBackground" maxWidth="125" maxHeight="600" StackPane.alignment="CENTER_LEFT" stylesheets="/stylesheets/pane.css" styleClass="pane"/>
             <ScrollPane fx:id="selectorMenu" maxHeight="375" fitToHeight="true" prefViewportHeight="200" vbarPolicy="NEVER" maxWidth="125" stylesheets="/stylesheets/scrollpane.css" styleClass="edge-to-edge" StackPane.alignment="TOP_LEFT">
                 <content>
                     <StackPane fx:id="selectorHolder">
@@ -108,6 +108,7 @@
 
         </HBox>
     </StackPane>
+
 
 </StackPane>
 

@@ -51,7 +51,7 @@ public class BattleView {
     public ScrollPane selectorMenu;
     public Pane loaderScreen;
     public StackPane battleDisplay;
-    public Button backButton;
+    public ImageView backButton;
     public Group itemInfoDisplay;
     public Group battlerInfoDisplay;
 
@@ -178,11 +178,17 @@ public class BattleView {
     public void initialize(GameManager game){
         transferBattleData(game);
         readBattleData();
+        initBackButton();
         startLoader();
         loadFonts();
         setBackground();
         formatDisplayArea();
         setupBattle();
+    }
+
+    private void initBackButton() {
+        backButton.setImage(new Image("/images/system/system_backButton.png"));
+        backButton.setOnMouseClicked(e->goBack());
     }
 
     private void transferBattleData(GameManager game) {
@@ -388,7 +394,6 @@ public class BattleView {
         else{
             triggerAttack();
         }
-        backButton.setVisible(false);
 
     }
 
@@ -487,6 +492,7 @@ public class BattleView {
     public void selectEndTurn() {
         if(!uiLocked){
             battleLogic.endPlayerTurn();
+            animator.backButtonSlideIn();
         }
 
     }
@@ -619,16 +625,14 @@ public class BattleView {
         Fighter user = team.get(selectedUser);
         Fighter target = enemyTeam.get(index);
         battleLogic.tryActivateSkill(user,target);
-        skillSelectorArea.setVisible(false);
-        skillInfoDisplay.setVisible(false);
-        heroSelectorArea.setVisible(true);
+//        skillSelectorArea.setVisible(false);
+//        skillInfoDisplay.setVisible(false);
+//        heroSelectorArea.setVisible(true);
     }
 
     private void triggerAttack() {
         battleLogic.tryHeroBasicAttack();
         handleAnimation("heroLunge");
-        actionMenu.setVisible(false);
-        heroSelectorArea.setVisible(true);
 
     }
 
@@ -659,7 +663,7 @@ public class BattleView {
 
     private void showActionMenu() {
         actionMenu.setVisible(true);
-        backButton.setVisible(true);
+        animator.backButtonSlideOut();
         pushMessage("What will " + team.get(selectedUser).getName() + " do?" );
     }
 
@@ -672,13 +676,14 @@ public class BattleView {
         battleLogic.getMessageQueue().add(team.get(index).getName() + " is down!");
     }
 
-    public void goBack() {
+    private void goBack() {
         selectorMenu.setVvalue(0);
+        System.out.println("This is calling, too");
         if(actionMenu.isVisible()){
             heroSelectorArea.setVisible(true);
             actionMenu.setVisible(false);
             blockEnemySelectors();
-            backButton.setVisible(false);
+            animator.backButtonSlideIn();
 
         }
         else if(itemSelectorArea.isVisible()){

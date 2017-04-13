@@ -18,11 +18,13 @@ public class Animator {
 
     ImageView user;
     ImageView target;
+    ImageView backButton;
 
     public Animator(BattleView battleView){
         this.battleView = battleView;
         heroGraphicsArea = battleView.heroGraphicsArea;
         enemySelectorArea = battleView.enemySelectorArea;
+        backButton = battleView.backButton;
     }
 
     public void playAnimation(String animationType){
@@ -71,6 +73,27 @@ public class Animator {
         timeline.getKeyFrames().addAll(keyFrame,keyFrame2,keyFrame3);
         timeline.play();
 
+    }
+
+    public void backButtonSlideOut(){
+        Timeline timeline = new Timeline();
+        KeyValue slideOut = new KeyValue(backButton.translateXProperty(),120,Interpolator.EASE_BOTH);
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(240),slideOut);
+
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
+        System.out.println("This is calling");
+
+    }
+
+    public void backButtonSlideIn(){
+        Timeline timeline = new Timeline();
+        KeyValue slideIn = new KeyValue(backButton.translateXProperty(),-70,Interpolator.EASE_BOTH);
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(240),slideIn);
+
+        timeline.getKeyFrames().add(keyFrame);
+        timeline.play();
+        System.out.println("This is calling");
     }
 
 }
