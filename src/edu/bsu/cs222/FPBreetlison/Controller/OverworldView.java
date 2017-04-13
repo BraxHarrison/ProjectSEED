@@ -16,6 +16,7 @@ public class OverworldView {
 
     public VBox sideBar;
     public ImageView sideBarGraphic;
+    public ImageView travelButton;
     private GameManager game;
     public Label roomDescription;
     public StackPane travelPane;
@@ -29,8 +30,13 @@ public class OverworldView {
         this.game = game;
         setUpGraphics();
         updateRoom();
+        initializeTravel();
     }
 
+    private void initializeTravel(){
+        travelButton.setOnMousePressed(e->openTravel());
+        travelButton.setImage(new Image("/images/system/system_travel.png"));
+    }
     private void setUpGraphics() {
         setUpBarGraphic();
         ImageView partyButton = (ImageView)sideBar.getChildren().get(0);

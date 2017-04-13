@@ -1,3 +1,8 @@
+@font-face {
+    src: url("/fonts/Exo-Light.otf");
+
+}
+/* Battle Styles */
 .infoBox{
     -fx-background-color: #4286f4;
 }
@@ -31,6 +36,8 @@
 }
 
 /* Overworld Styles */
+
+
 .party-box{
     -fx-background-color:"black";
 }
@@ -40,5 +47,20 @@
 }
 
 .description-text{
-    color:#f44242;
+    -fx-text-fill: white;
+    -fx-font-family: "Exo";
+    -fx-font-size: 14pt;
+}
+
+.map{
+
+    -fx-background-image: url("/images/system/system_map.png");
+
+
+}
+
+.side-bar{
+
+    -fx-background-image: url("/images/system/system_sidebar.png");
+
 }

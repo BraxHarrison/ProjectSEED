@@ -7,20 +7,21 @@
 <StackPane fx:controller="edu.bsu.cs222.FPBreetlison.Controller.OverworldView" xmlns:fx="http://javafx.com/fxml" stylesheets="/stylesheets/customClasses.css" alignment="center">
 
     <StackPane fx:id="descriptionBox" StackPane.alignment="BOTTOM_CENTER" maxHeight="150" maxWidth="900"  styleClass="description-box">
-        <Label fx:id="roomDescription" StackPane.alignment="CENTER"  text="" styleClass="description-text"/>
+        <Label fx:id="roomDescription" StackPane.alignment="CENTER"  text="" styleClass="description-text" wrapText="true" maxWidth="800" textAlignment="CENTER"/>
     </StackPane>
     <ImageView fx:id="sideBarGraphic" StackPane.alignment="TOP_LEFT" fitWidth="85" fitHeight="400" translateX="-10" translateY="-10"/>
-    <VBox fx:id="sideBar" StackPane.alignment="TOP_LEFT">
-        <ImageView fx:id="partyButton" translateX="6" translateY="4"/>
+    <VBox fx:id="sideBar" StackPane.alignment="TOP_LEFT" spacing="10">
+        <ImageView fx:id="partyButton"   fitHeight="50" fitWidth="50" translateX="6" translateY="4"/>
+        <ImageView fx:id="travelButton"  fitHeight="50" fitWidth="50" translateX="6" translateY="0"/>
+
     </VBox>
     <Button fx:id="clickToBattle" StackPane.alignment="CENTER" translateY="50" text="Click to start battle" onAction="#startBattle"/>
-    <Button fx:id="travelButton" StackPane.alignment="BOTTOM_RIGHT" onAction="#openTravel" text="Map" />
-    <StackPane fx:id="travelPane" StackPane.alignment="BOTTOM_RIGHT"  maxHeight="150" maxWidth="150" visible="false">
-        <Button fx:id="closeTravelButton" StackPane.alignment="BOTTOM_RIGHT" translateX="0" text="   X   " onAction="#closeTravel"/>
-        <Button fx:id="north" StackPane.alignment="TOP_CENTER" translateX="0" translateY="20" text="N" onAction="#travelNorth"/>
-        <Button fx:id="south" StackPane.alignment="BOTTOM_CENTER" translateX="0" translateY="-20" text="S"  onAction="#travelSouth"/>
-        <Button fx:id="east" StackPane.alignment="CENTER_RIGHT" translateX="-20" translateY="0" text="E"  onAction="#travelEast"/>
-        <Button fx:id="west" StackPane.alignment= "CENTER_LEFT" translateX="20" translateY="0" text="W"  onAction="#travelWest"/>
+    <StackPane fx:id="travelPane" StackPane.alignment="TOP_LEFT"  maxHeight="150" maxWidth="150" translateX="70" visible="false" styleClass="map">
+        <Button fx:id="closeTravelButton" StackPane.alignment="BOTTOM_RIGHT" text="   X   " translateX="-5" translateY="-5" onAction="#closeTravel"/>
+        <Button fx:id="north" StackPane.alignment="TOP_CENTER"  translateY="20" text="N" onAction="#travelNorth"/>
+        <Button fx:id="south" StackPane.alignment="BOTTOM_CENTER"  translateY="-20" text="S"  onAction="#travelSouth"/>
+        <Button fx:id="east" StackPane.alignment="CENTER_RIGHT" translateX="-20" text="E"  onAction="#travelEast"/>
+        <Button fx:id="west" StackPane.alignment= "CENTER_LEFT" translateX="20"  text="W"  onAction="#travelWest"/>
     </StackPane>
     <HBox fx:id="backgroundImage" StackPane.alignment="TOP_CENTER"/>
     <StackPane fx:id="partyBox" StackPane.alignment="CENTER" visible="false" styleClass="party-box" scaleX=".5" scaleY=".5">
