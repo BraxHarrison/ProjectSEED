@@ -31,6 +31,7 @@ public class Fighter {
     private int sizeY;
     private boolean KOState;
     private int KOLevel;
+    private int lastDamage;
 
     public Fighter(String info){
 
@@ -84,6 +85,7 @@ public class Fighter {
     public void doBasicAttack(Fighter target){
         double damage = this.getCurrStats().get("attack")*2/target.getCurrStats().get("defense");
         int finalDamage = (int)Math.round(damage);
+        lastDamage = finalDamage;
         target.takeDamage(finalDamage);
         chooseActionString();
     }
@@ -248,6 +250,9 @@ public class Fighter {
     }
     public void setSkillAnim(String skillAnim) {
         this.skillAnim = skillAnim;
+    }
+    public int getLastDamage() {
+        return lastDamage;
     }
     //endregion
 

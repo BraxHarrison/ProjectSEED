@@ -1,7 +1,11 @@
 @font-face {
     src: url("/fonts/Exo-Light.otf");
-
 }
+
+@font-face{
+    src: url("/fonts/underwhe.ttf");
+}
+
 /* Battle Styles */
 .infoBox{
     -fx-background-color: #4286f4;
@@ -50,6 +54,13 @@
     -fx-text-fill: white;
     -fx-font-family: "Exo";
     -fx-font-size: 14pt;
+}
+
+.damage-text{
+    -fx-text-fill: white;
+    -fx-font-family: "Underwhelmed BRK";
+    -fx-font-size: 20pt;
+
 }
 
 .map{

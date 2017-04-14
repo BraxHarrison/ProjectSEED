@@ -1,10 +1,13 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
 import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.geometry.Bounds;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
@@ -19,16 +22,23 @@ public class Animator {
     ImageView user;
     ImageView target;
     ImageView backButton;
+    ImageView airPuff;
+    Label damage;
 
     public Animator(BattleView battleView){
         this.battleView = battleView;
+        damage = battleView.damageDisplay;
         heroGraphicsArea = battleView.heroGraphicsArea;
         enemySelectorArea = battleView.enemySelectorArea;
         backButton = battleView.backButton;
+        initImages();
+    }
+
+    private void initImages() {
+        //airPuff = new ImageView(new Image("/images/battle/effects_puff.png"));
     }
 
     public void playAnimation(String animationType){
-        //This is incredibly frail. Needs simple refactoring
         if(animationType.equals("heroLunge")){heroLunge();}
         else if(animationType.equals("enemyLunge")){enemyLunge();}
         else if(animationType.equals("heroQuickStretch")){heroQuickStretch();}
@@ -36,10 +46,10 @@ public class Animator {
 
     private void setUpHeroOrientation(){
         user = (ImageView)heroGraphicsArea.getChildren().get(battleView.selectedUser);
-        target = (ImageView)enemySelectorArea.getChildren().get(battleView.selectedEnemy);
+        target = (ImageView)enemySelectorArea.getChildren().get(battleView.selectedTarget);
     }
     private void setUpEnemyOrientation(){
-        user = (ImageView)enemySelectorArea.getChildren().get(battleView.selectedEnemy);
+        user = (ImageView)enemySelectorArea.getChildren().get(battleView.selectedTarget);
         target = (ImageView)heroGraphicsArea.getChildren().get(battleView.selectedUser);
     }
 
@@ -57,7 +67,6 @@ public class Animator {
 
         timeline.getKeyFrames().addAll(keyFrame,keyFrame2,keyFrame3);
         timeline.play();
-
     }
 
     public void enemyLunge(){
@@ -73,7 +82,6 @@ public class Animator {
 
         timeline.getKeyFrames().addAll(keyFrame,keyFrame2,keyFrame3);
         timeline.play();
-
     }
 
     public void backButtonSlideOut(){
@@ -83,7 +91,6 @@ public class Animator {
 
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();
-        System.out.println("This is calling");
 
     }
 
@@ -94,7 +101,6 @@ public class Animator {
 
         timeline.getKeyFrames().add(keyFrame);
         timeline.play();
-        System.out.println("This is calling");
     }
 
     public void heroQuickStretch(){
@@ -113,6 +119,37 @@ public class Animator {
         KeyFrame keyFrame4 = new KeyFrame(Duration.millis(700),userPuffBack,userMoveBack);
 
         timeline.getKeyFrames().addAll(keyFrame,keyFrame2,keyFrame3,keyFrame4);
+        timeline.play();
+    }
+
+    public void airPuff(){
+        Timeline timeline = new Timeline();
+        KeyValue puffFade = new KeyValue(airPuff.opacityProperty(),.01,Interpolator.EASE_BOTH);
+        KeyValue puffMove = new KeyValue(airPuff.translateXProperty(),20,Interpolator.EASE_BOTH);
+
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(100),puffFade,puffMove);
+
+        timeline.getKeyFrames().addAll(keyFrame);
+        timeline.play();
+    }
+
+    public void animateDamageToEnemy(Snapshot info){
+        ImageView target = (ImageView)enemySelectorArea.getChildren().get(info.getTargetIndex());
+        damage.setVisible(true);
+
+        Bounds boundsInScene = target.localToScene(target.getBoundsInLocal());
+        damage.setLayoutX(boundsInScene.getMinX());
+        damage.setLayoutY(boundsInScene.getMinY());
+
+
+        Timeline timeline = new Timeline();
+        KeyValue damageFade = new KeyValue(damage.opacityProperty(),.01,Interpolator.EASE_BOTH);
+        KeyValue damageMove = new KeyValue(damage.translateYProperty(),-50,Interpolator.EASE_BOTH);
+
+
+        KeyFrame keyFrame = new KeyFrame(Duration.millis(800),damageFade,damageMove);
+
+        timeline.getKeyFrames().addAll(keyFrame);
         timeline.play();
     }
 

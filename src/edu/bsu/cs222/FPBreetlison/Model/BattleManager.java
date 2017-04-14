@@ -96,39 +96,45 @@ public class BattleManager {
 
     private void tryEnemyAttack() {
 
-        ArrayList<Fighter> remainingEnemies = getRemainingEnemies();
-        for (int i = 0; i< remainingEnemies.size();i++) {
-            fighterSnapshot = new Snapshot();
-            fighterSnapshot.setUserIndex(i);
-            fighterSnapshot.setAnimType("enemyLunge");
-            targetNo = makeRandom(gameData.getTeam().size());
-            Fighter target = gameData.getTeam().get(targetNo);
-            if (target.isKO()) {
-                target = findNextTarget();
-            }
-            if (target != null) {
-                fighterSnapshot.setIndex(targetNo);
-                doEnemyAttack(remainingEnemies.get(i), target);
-            } else {
-                fighterSnapshot.setIndex(targetNo);
-                fighterSnapshot.calcHPPercent(null);
-                fighterSnapshot.setKOState(true);
-                targetQueue.add(fighterSnapshot);
-                updateTurn("enemyWin");
+        for (int i = 0; i< gameData.getEnemyTeam().size();i++) {
+            if(!gameData.getEnemyTeam().get(i).isKO()){
+                findLivingHero(i);
             }
         }
     }
 
-    private ArrayList<Fighter> getRemainingEnemies() {
-        ArrayList<Fighter> fighters = gameData.getEnemyTeam();
-        ArrayList<Fighter> ableFighters = new ArrayList<>();
-        for (Fighter fighter : fighters) {
-            if (fighter.getKOLvl() == 0) {
-                ableFighters.add(fighter);
-            }
+    private void findLivingHero(int i) {
+        fighterSnapshot = new Snapshot();
+        fighterSnapshot.setAttackerIndex(i);
+        fighterSnapshot.setAnimType("enemyLunge");
+        targetNo = makeRandom(gameData.getTeam().size());
+        Fighter target = gameData.getTeam().get(targetNo);
+        if (target.isKO()) {
+            target = findNextTarget();
         }
-        return ableFighters;
+        if (target != null) {
+            fighterSnapshot.setIndex(targetNo);
+            doEnemyAttack(gameData.getEnemyTeam().get(i), target);
+        }
+        else {
+            fighterSnapshot.setIndex(targetNo);
+            fighterSnapshot.calcHPPercent(null);
+            fighterSnapshot.setKOState(true);
+            targetQueue.add(fighterSnapshot);
+            updateTurn("enemyWin");
+        }
     }
+//
+//    private ArrayList<Fighter> getRemainingEnemies() {
+//        ArrayList<Fighter> fighters = gameData.getEnemyTeam();
+//        ArrayList<Fighter> ableFighters = new ArrayList<>();
+//        for (Fighter fighter : fighters) {
+//            if (fighter.getKOLvl() == 0) {
+//                ableFighters.add(fighter);
+//            }
+//        }
+//        return ableFighters;
+//    }
 
     private void doEnemyAttack(Fighter user, Fighter target){
         user.doBasicAttack(target);
@@ -214,8 +220,7 @@ public class BattleManager {
         target = gameData.getEnemyTeam().get(gameData.getSelectedTarget());
         int cost = attacker.getTpCost();
         if(gameData.getCurrentTp() >= cost ){
-            int random = makeRandom(attacker.getBattleStrings().size());
-            messageQueue.add(attacker.getBattleStrings().get(random));
+            messageQueue.add(attacker.getName() + " attacks " + target.getName() +"!");
             battleView.queueMessages(messageQueue);
             startHeroBasicAttack(cost);
         }
@@ -232,8 +237,16 @@ public class BattleManager {
         battleView.handleAnimation("heroLunge");
         updateUIForHeroAttack();
         detectEnemyKO();
+        startDamageAnimation();
         battleView.queueMessages(messageQueue);
 
+    }
+
+    private void startDamageAnimation() {
+        Snapshot snapshot = new Snapshot();
+        snapshot.setAttackerIndex(battleView.selectedUser);
+        snapshot.setIndex(battleView.selectedTarget);
+        animator.animateDamageToEnemy(snapshot);
     }
 
     private void updateUIForHeroAttack(){

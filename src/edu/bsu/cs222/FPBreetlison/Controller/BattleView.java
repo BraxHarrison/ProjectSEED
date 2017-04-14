@@ -13,7 +13,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
@@ -37,6 +36,7 @@ public class BattleView {
     private ArrayList<Fighter> team;
     private ArrayList<Fighter> enemyTeam;
     private ArrayList<Item> inventory;
+    private ArrayList<Snapshot> targets;
 
     public VBox heroSelectorArea;
     public HBox heroGraphicsArea;
@@ -45,6 +45,7 @@ public class BattleView {
     public VBox itemSelectorArea;
     public Label mainDisplay;
     public Label historyDisplay;
+    public Label damageDisplay;
     public ProgressBar tpBar;
     public Label tpDisplay;
     public HBox backgroundImage;
@@ -56,7 +57,7 @@ public class BattleView {
     public Group battlerInfoDisplay;
 
     public int selectedUser;
-    public int selectedEnemy;
+    public int selectedTarget;
     private int selectedItem;
     public boolean uiLocked;
     private boolean finishedLoading;
@@ -87,22 +88,30 @@ public class BattleView {
     }
 
     public void queueBarUpdates(ArrayList<Snapshot> targets){
+        this.targets = targets;
         Timeline timeline = new Timeline();
         timeline.setOnFinished(e -> clearBarInfo(targets));
         int dur = 80;
-        for (Snapshot heroSnapshot : targets) {
+        for (int i = 0; i<targets.size();i++) {
+            int index = i;
             //Only sets the enemy and user for the last event because it doesn't use a snapshot
-            selectedEnemy = heroSnapshot.getUserIndex();
-            selectedUser = heroSnapshot.getIndex();
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
-                    ae -> handleAnimation(heroSnapshot.getAnimType())));
+                    ae -> convertSnapshot(index)));
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
-                    ae -> updateHeroBars(heroSnapshot)));
+                    ae -> updateHeroBars(targets.get(index))));
             dur += 1000;
         }
         timeline.play();
+    }
+
+    private void convertSnapshot(int index){
+        selectedUser =  targets.get(index).getIndex();
+        selectedTarget = targets.get(index).getAttackerIndex();
+
+        String anim = targets.get(index).getAnimType();
+        handleAnimation(anim);
     }
 
     private void clearMessages(ArrayList<String> messages){
@@ -387,7 +396,7 @@ public class BattleView {
 
     private void selectEnemy(ImageView enemy) {
         int index = enemySelectorArea.getChildren().indexOf(enemy);
-        selectedEnemy = index;
+        selectedTarget = index;
         gameData.setSelectedTarget(index);
         if(usingSkill){
             triggerSkill(index);

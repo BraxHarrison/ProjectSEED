@@ -6,9 +6,10 @@ public class Snapshot {
     //used in conjunction with timelines to allow for incremental updating of the UI
 
     private int index;
+    private int damage;
     private double hpPercent;
     private boolean KOState;
-    private int userIndex;
+    private int attackerIndex;
     private int targetIndex;
     private String animType;
     private String hpString;
@@ -50,11 +51,11 @@ public class Snapshot {
     public void setKOState(boolean KOState) {
         this.KOState = KOState;
     }
-    public int getUserIndex() {
-        return userIndex;
+    public int getAttackerIndex() {
+        return attackerIndex;
     }
-    public void setUserIndex(int userIndex) {
-        this.userIndex = userIndex;
+    public void setAttackerIndex(int attackerIndex) {
+        this.attackerIndex = attackerIndex;
     }
     public int getTargetIndex() {
         return targetIndex;
@@ -70,5 +71,12 @@ public class Snapshot {
 
     public void setAnimType(String animType) {
         this.animType = animType;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+    public void setDamage(int damage){
+        this.damage = damage;
     }
 }
