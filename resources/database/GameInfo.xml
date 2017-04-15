@@ -7,7 +7,7 @@
             <hero name="Smitty" maxHP="45" attack="12" defense="7" enAttack="1" enDefense="4" agility="5" tpCost="5" expModifier="2.65" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Smitty.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Smitty.png" sizeX="400" sizeY="300"/>
             <heroSkill starter="Steel Crusher,Glare"/>
             <hero name="Roxy" maxHP="20" attack="7" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.40" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Roxy.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Roxy.png" sizeX="200" sizeY="300"/>
-            <heroSkill starter="Sniffle,Sharpen,Steel Crusher,Sweep-Kick,Spring-Kick,ElectroPulse,Rock Shower,Analyze,Glare"/>
+            <heroSkill starter="Sniffle,Spring-Kick,Sharpen"/>
         </CharacterBattleInfo>
         <CharacterBattleStrings>
             <ProtaBattleString string="You fire a quick shot at the enemy. It grazes them."/>
@@ -34,12 +34,12 @@
             <Skill name="Sniffle" affectAmt="1" tpCost= "4" type="debuff" type2="attack" quickInfo="Enemy Attack Down" extraMessage="The enemy's attack was lowered!" animType="heroQuickStretch"/>
             <Skill name="Sharpen" affectAmt="2" tpCost= "3" type="buff" type2="none" quickInfo="User Attack Up" extraMessage="The user's attack increased!" animType="heroQuickStretch"/>
             <Skill name="Steel Crusher" affectAmt="6" tpCost= "8" type="attack" type2="null" quickInfo="Heavy Steel Damage" extraMessage="null" animType="heroLunge"/>
-            <Skill name="Spring-Kick" affectAmt="1" tpCost= "3" type="debuff" type2="attack" quickInfo="Medium Impact Damage" extraMessage="null" animType="heroLunge"/>
+            <Skill name="Spring-Kick" affectAmt="5" tpCost= "3" type="attack" type2="null" quickInfo="Medium Impact Damage" extraMessage="null" animType="heroLunge"/>
             <Skill name="ElectroPulse" affectAmt="1" tpCost= "3" type="buff" type2="debuff" quickInfo="Light Volt Damage" extraMessage="null" animType="heroLunge"/>
             <Skill name="Sweep-Kick" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroLunge"/>
             <Skill name="Rock Shower" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroLunge"/>\
             <Skill name="Analyze" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroQuickStretch"/>
-            <Skill name="Glare" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroQuickStretch"/>
+            <Skill name="Glare" affectAmt="3" tpCost= "4" type="debuff" type2="attack" quickInfo="Enemy Attack Down" extraMessage="null" animType="heroQuickStretch"/>
 
 
 

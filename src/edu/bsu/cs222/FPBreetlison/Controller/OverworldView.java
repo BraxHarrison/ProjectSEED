@@ -21,6 +21,7 @@ public class OverworldView {
     public ImageView sideBarGraphic;
     public ImageView travelButton;
     public ImageView saveLoadButton;
+    public ImageView inspectButton;
     public Label roomDescription;
     public StackPane travelPane;
     public Button north;
@@ -29,7 +30,7 @@ public class OverworldView {
     public Button west;
     public HBox backgroundImage;
     public StackPane loadSaveMenu;
-
+    public StackPane inspectMenu;
 
     private GameManager game;
     private GameData gameData;
@@ -41,19 +42,50 @@ public class OverworldView {
         updateRoom();
         initializeTravelButton();
         initializeSaveLoadButton();
+        initializeInspectButton();
     }
+
+
 
     private void initializeTravelButton(){
         travelButton.setOnMousePressed(e->openTravel());
+        travelButton.setOnMouseEntered(e->optionHover(travelButton));
+        travelButton.setOnMouseExited(e->optionUnhover(travelButton));
         travelButton.setImage(new Image("/images/system/system_sidebar_map.png"));
     }
+
+
+
     private void initializeSaveLoadButton(){
         saveLoadButton.setOnMousePressed(e->showSaveMenu());
+        saveLoadButton.setOnMouseEntered(e->optionHover(saveLoadButton));
+        saveLoadButton.setOnMouseExited(e->optionUnhover(saveLoadButton));
         saveLoadButton.setImage(new Image("/images/system/system_sidebar_save.png"));
+    }
+
+    private void initializeInspectButton() {
+        inspectButton.setOnMousePressed(e->showInspectMenu());
+        inspectButton.setOnMouseEntered(e->optionHover(inspectButton));
+        inspectButton.setOnMouseExited(e->optionUnhover(inspectButton));
+        inspectButton.setImage(new Image("/images/system/system_sidebar_inspect.png"));
     }
 
     private void showSaveMenu() {
         loadSaveMenu.setVisible(true);
+    }
+
+    private void showInspectMenu() {
+        inspectMenu.setVisible(true);
+    }
+
+    private void optionHover(ImageView button) {
+
+        button.setScaleX(1.5);
+        button.setScaleY(1.5);
+    }
+    private void optionUnhover(ImageView button){
+        button.setScaleX(1);
+        button.setScaleY(1);
     }
 
     private void setUpGraphics() {
@@ -140,5 +172,9 @@ public class OverworldView {
 
     public void hideLoadSaveMenu(ActionEvent actionEvent) {
         loadSaveMenu.setVisible(false);
+    }
+
+    public void hideInspectMenu(ActionEvent actionEvent) {
+        inspectMenu.setVisible(false);
     }
 }
