@@ -26,5 +26,7 @@
     <HBox fx:id="backgroundImage" StackPane.alignment="TOP_CENTER"/>
     <StackPane fx:id="partyBox" StackPane.alignment="CENTER" visible="false" styleClass="party-box" scaleX=".5" scaleY=".5">
     </StackPane>
+    <Button fx:id="save" text="Save" StackPane.alignment="TOP_RIGHT" onAction="#saveGame"/>
+    <Button fx:id="load" text="Load" StackPane.alignment="TOP_RIGHT" translateY="40" onAction="#loadGame"/>
 
 </StackPane>

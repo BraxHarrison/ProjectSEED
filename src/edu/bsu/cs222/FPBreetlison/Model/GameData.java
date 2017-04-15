@@ -13,7 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameData {
+
+public class GameData implements java.io.Serializable {
 
     private ArrayList<Fighter> team;
     private HashMap<String,Fighter> allHeroes;
@@ -23,7 +24,6 @@ public class GameData {
     private HashMap<String,Item> allItems;
     private ArrayList<Item> inventory;
     private Map<String, Room> allRooms;
-    private Stage stage;
     private int tp;
     private int maxTP;
     private int selectedTarget;
@@ -119,12 +119,6 @@ public class GameData {
     }
     public ArrayList<Fighter> getEnemyTeam() {
         return enemyTeam;
-    }
-    Stage getStage() {
-        return stage;
-    }
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
     public int getMaxTP() {
         return maxTP;

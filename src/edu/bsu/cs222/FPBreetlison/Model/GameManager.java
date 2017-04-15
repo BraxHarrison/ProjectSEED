@@ -9,12 +9,12 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class GameManager {
+public class GameManager implements java.io.Serializable {
 
     private GameData gameData;
     private BattleManager battleLogic;
@@ -27,7 +27,6 @@ public class GameManager {
     public void init(GameData gameData){
         currentRoom = gameData.getAllRooms().get("FirstSteps");
         this.gameData = gameData;
-        currentStage = gameData.getStage();
         currentStage.setResizable(true);
         setUpOverworld();
     }
@@ -87,42 +86,6 @@ public class GameManager {
         currentStage.setScene(new Scene(root, 900,600));
 
     }
-    public Room getCurrentRoom() {return currentRoom;}
-    public GameData getGameData(){
-        return gameData;
-    }
-
-    BattleView getBattleControl() {
-        return battleControl;
-    }
-    public BattleManager getBattleLogic() {
-        return battleLogic;
-    }
-
-
-    public HashMap<Integer, Boolean> checkAvailableDirections() {
-
-        HashMap<Integer, Boolean> availableDirections = new HashMap<>();
-        ArrayList<String> allDirections = new ArrayList<>();
-
-        allDirections.add(currentRoom.getNorth());
-        allDirections.add(currentRoom.getSouth());
-        allDirections.add(currentRoom.getEast());
-        allDirections.add(currentRoom.getWest());
-
-        for (int i = 0; i<allDirections.size();i++){
-            String roomDirection = allDirections.get(i);
-            if (roomDirection.equals("null")) {
-                availableDirections.put(i,false);
-            }
-            else{
-                availableDirections.put(i,true);
-            }
-        }
-
-        return  availableDirections;
-
-    }
 
     public void travelNorth() {
         if(Objects.equals(currentRoom.getNorth(),"null")){
@@ -155,4 +118,67 @@ public class GameManager {
         }
         currentRoom = gameData.getAllRooms().get(currentRoom.getWest());
     }
+
+    public void saveGame() throws IOException {
+        FileOutputStream saveFile = new FileOutputStream("saveFile.sav");
+        ObjectOutputStream save = new ObjectOutputStream(saveFile);
+        save.writeObject(gameData);
+        save.close();
+
+    }
+
+    public void loadGame() throws IOException, ClassNotFoundException {
+        try {
+            FileInputStream saveFile = new FileInputStream("saveFile.sav");
+            ObjectInputStream restore = new ObjectInputStream(saveFile);
+            gameData = (GameData)restore.readObject();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setStage(Stage stage){
+        currentStage = stage;
+    }
+    public Stage getStage(){
+        return currentStage;
+    }
+    public Room getCurrentRoom() {return currentRoom;}
+    public GameData getGameData(){
+        return gameData;
+    }
+    BattleView getBattleControl() {
+        return battleControl;
+    }
+    public void setBattleControl(BattleView battleView){
+        this.battleControl = battleView;
+    }
+    public BattleManager getBattleLogic() {
+        return battleLogic;
+    }
+    public HashMap<Integer, Boolean> checkAvailableDirections() {
+
+        HashMap<Integer, Boolean> availableDirections = new HashMap<>();
+        ArrayList<String> allDirections = new ArrayList<>();
+
+        allDirections.add(currentRoom.getNorth());
+        allDirections.add(currentRoom.getSouth());
+        allDirections.add(currentRoom.getEast());
+        allDirections.add(currentRoom.getWest());
+
+        for (int i = 0; i<allDirections.size();i++){
+            String roomDirection = allDirections.get(i);
+            if (roomDirection.equals("null")) {
+                availableDirections.put(i,false);
+            }
+            else{
+                availableDirections.put(i,true);
+            }
+        }
+
+        return  availableDirections;
+
+    }
+
 }

@@ -1,12 +1,14 @@
 package edu.bsu.cs222.FPBreetlison.Controller;
 
 import edu.bsu.cs222.FPBreetlison.Model.GameManager;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -108,5 +110,13 @@ public class OverworldView {
     public void travelWest() {
         game.travelWest();
         updateRoom();
+    }
+
+    public void saveGame(ActionEvent actionEvent) throws IOException {
+        game.saveGame();
+    }
+
+    public void loadGame(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+        game.loadGame();
     }
 }

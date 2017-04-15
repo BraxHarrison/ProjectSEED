@@ -3,7 +3,7 @@ package edu.bsu.cs222.FPBreetlison.Model.Objects;
 import java.util.Arrays;
 import java.util.List;
 
-public class Skill {
+public class Skill implements java.io.Serializable {
     String name;
     int affectAmt;
     int tpCost;

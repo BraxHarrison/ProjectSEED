@@ -14,7 +14,7 @@ import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
 
-public class Animator {
+public class Animator implements java.io.Serializable {
 
     BattleView battleView;
     HBox heroGraphicsArea;
@@ -28,9 +28,11 @@ public class Animator {
     Label damage;
 
     GameData gameData;
+    GameManager game;
 
-    public Animator(BattleView battleView){
-        this.battleView = battleView;
+    public Animator(GameManager game){
+        this.game = game;
+        battleView = this.game.getBattleControl();
         damage = battleView.damageDisplay;
         heroGraphicsArea = battleView.heroGraphicsArea;
         enemySelectorArea = battleView.enemySelectorArea;
@@ -166,7 +168,7 @@ public class Animator {
 
         Bounds boundsInScene = target.localToScene(target.getLayoutBounds());
         double locTemp = boundsInScene.getMaxX() - boundsInScene.getMinX();
-        double locx = gameData.getStage().getWidth()- boundsInScene.getWidth();
+        double locx = game.getStage().getWidth()- boundsInScene.getWidth();
         damage.setLayoutX(locx);
         damage.setLayoutY(boundsInScene.getMinY());
     }

@@ -36,7 +36,7 @@ public class BattleManager {
         this.game = game;
         this.gameData = game.getGameData();
         this.battleView = game.getBattleControl();
-        animator = new Animator(battleView);
+        animator = new Animator(game);
 
     }
 

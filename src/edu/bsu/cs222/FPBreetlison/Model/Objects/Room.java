@@ -3,7 +3,7 @@ package edu.bsu.cs222.FPBreetlison.Model.Objects;
 import java.util.Arrays;
 import java.util.List;
 
-public class Room {
+public class Room implements java.io.Serializable {
 
     private String description;
     private String name;

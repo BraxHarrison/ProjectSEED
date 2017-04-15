@@ -1,6 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model.Objects;
 
-public class Snapshot {
+public class Snapshot implements java.io.Serializable {
 
     //This class is responsible for recalling information about a character at a given time
     //used in conjunction with timelines to allow for incremental updating of the UI

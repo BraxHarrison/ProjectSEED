@@ -64,6 +64,7 @@ public class BattleView {
     private boolean finishedLoading;
 
     private GameData gameData;
+    private GameManager game;
     private BattleManager battleLogic;
     Animator animator;
 
@@ -188,6 +189,7 @@ public class BattleView {
 
     public void initialize(GameManager game){
         transferBattleData(game);
+        this.game = game;
         readBattleData();
         initBackButton();
         startLoader();
@@ -203,9 +205,11 @@ public class BattleView {
     }
 
     private void transferBattleData(GameManager game) {
+        this.game = game;
+        this.game.setBattleControl(this);
         this.gameData = game.getGameData();
         this.battleLogic = game.getBattleLogic();
-        animator = new Animator(this);
+        animator = new Animator(this.game);
         battleLogic.getGameInfo(game);
 
     }
