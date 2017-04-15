@@ -20,6 +20,7 @@ public class OverworldView {
     public VBox sideBar;
     public ImageView sideBarGraphic;
     public ImageView travelButton;
+    public ImageView saveLoadButton;
     public Label roomDescription;
     public StackPane travelPane;
     public Button north;
@@ -27,6 +28,8 @@ public class OverworldView {
     public Button east;
     public Button west;
     public HBox backgroundImage;
+    public StackPane loadSaveMenu;
+
 
     private GameManager game;
     private GameData gameData;
@@ -36,13 +39,23 @@ public class OverworldView {
         this.gameData = game.getGameData();
         setUpGraphics();
         updateRoom();
-        initializeTravel();
+        initializeTravelButton();
+        initializeSaveLoadButton();
     }
 
-    private void initializeTravel(){
+    private void initializeTravelButton(){
         travelButton.setOnMousePressed(e->openTravel());
-        travelButton.setImage(new Image("/images/system/system_travel.png"));
+        travelButton.setImage(new Image("/images/system/system_sidebar_map.png"));
     }
+    private void initializeSaveLoadButton(){
+        saveLoadButton.setOnMousePressed(e->showSaveMenu());
+        saveLoadButton.setImage(new Image("/images/system/system_sidebar_save.png"));
+    }
+
+    private void showSaveMenu() {
+        loadSaveMenu.setVisible(true);
+    }
+
     private void setUpGraphics() {
         setUpBarGraphic();
         ImageView partyButton = (ImageView)sideBar.getChildren().get(0);
@@ -123,5 +136,9 @@ public class OverworldView {
     public void loadGame(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
         game.loadGame();
         initialize(this.game);
+    }
+
+    public void hideLoadSaveMenu(ActionEvent actionEvent) {
+        loadSaveMenu.setVisible(false);
     }
 }

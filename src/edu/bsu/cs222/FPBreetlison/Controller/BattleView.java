@@ -599,6 +599,7 @@ public class BattleView {
         updateInventoryUI();
         battleLogic.useItem(selectedItem);
         updateSingleHeroBar();
+        animator.backButtonSlideIn();
 
 
     }
@@ -622,6 +623,7 @@ public class BattleView {
 
     public void selectFlee(javafx.scene.input.MouseEvent event) {
         pushMessage("You ran away. Everyone is disappointed.");
+        animator.heroFlee();
         battleLogic.endBattle();
     }
 
@@ -647,7 +649,6 @@ public class BattleView {
 
     private void triggerAttack() {
         battleLogic.tryHeroBasicAttack();
-        handleAnimation("heroLunge");
 
     }
 
@@ -693,7 +694,6 @@ public class BattleView {
 
     private void goBack() {
         selectorMenu.setVvalue(0);
-        System.out.println("This is calling, too");
         if(actionMenu.isVisible()){
             heroSelectorArea.setVisible(true);
             actionMenu.setVisible(false);

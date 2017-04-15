@@ -75,3 +75,7 @@
     -fx-background-image: url("/images/system/system_sidebar.png");
 
 }
+
+.save-box{
+    -fx-background-color:"black";
+}

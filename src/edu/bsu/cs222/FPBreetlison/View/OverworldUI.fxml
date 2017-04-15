@@ -10,9 +10,11 @@
         <Label fx:id="roomDescription" StackPane.alignment="CENTER"  text="" styleClass="description-text" wrapText="true" maxWidth="800" textAlignment="CENTER"/>
     </StackPane>
     <ImageView fx:id="sideBarGraphic" StackPane.alignment="TOP_LEFT" fitWidth="85" fitHeight="400" translateX="-10" translateY="-10"/>
-    <VBox fx:id="sideBar" StackPane.alignment="TOP_LEFT" spacing="10">
+    <VBox fx:id="sideBar" StackPane.alignment="TOP_LEFT" spacing="20">
         <ImageView fx:id="partyButton"   fitHeight="50" fitWidth="50" translateX="6" translateY="4"/>
         <ImageView fx:id="travelButton"  fitHeight="50" fitWidth="50" translateX="6" translateY="0"/>
+        <ImageView fx:id="saveLoadButton"  fitHeight="50" fitWidth="50" translateX="6" translateY="0"/>
+
 
     </VBox>
     <Button fx:id="clickToBattle" StackPane.alignment="CENTER" translateY="50" text="Click to start battle" onAction="#startBattle"/>
@@ -26,7 +28,12 @@
     <HBox fx:id="backgroundImage" StackPane.alignment="TOP_CENTER"/>
     <StackPane fx:id="partyBox" StackPane.alignment="CENTER" visible="false" styleClass="party-box" scaleX=".5" scaleY=".5">
     </StackPane>
-    <Button fx:id="save" text="Save" StackPane.alignment="TOP_RIGHT" onAction="#saveGame"/>
-    <Button fx:id="load" text="Load" StackPane.alignment="TOP_RIGHT" translateY="40" onAction="#loadGame"/>
+
+    <StackPane fx:id="loadSaveMenu" StackPane.alignment="CENTER" visible="false" maxWidth="100" maxHeight="125" translateY="-60" styleClass="save-box">
+        <Button fx:id="save" text="Save" StackPane.alignment="TOP_CENTER" translateY="30" onAction="#saveGame"/>
+        <Button fx:id="load" text="Load" StackPane.alignment="TOP_CENTER" translateY="70" onAction="#loadGame"/>
+        <Button fx:id="exitLoadSaveMenu" text="X" StackPane.alignment="TOP_LEFT"   onAction="#hideLoadSaveMenu"/>
+    </StackPane>
+
 
 </StackPane>

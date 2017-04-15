@@ -139,9 +139,10 @@ public class Fighter implements java.io.Serializable {
     }
 
     void recoverHealth(int heal){
-        hp +=heal;
-        if(hp > maxHP){
-            hp = maxHP;
+        int hp = currStats.get("hp");
+        currStats.replace("hp",currStats.get("hp"),hp+=heal);
+        if(currStats.get("hp") > maxHP){
+            currStats.replace("hp",currStats.get("hp"),maxHP);
         }
     }
 

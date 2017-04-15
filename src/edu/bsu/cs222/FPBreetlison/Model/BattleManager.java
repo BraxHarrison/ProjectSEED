@@ -29,8 +29,9 @@ public class BattleManager {
     private int targetNo;
     private Snapshot fighterSnapshot;
     private ArrayList<Snapshot> targetQueue;
-
     private ArrayList<String> messageQueue;
+
+    boolean heroWon;
 
     public void getGameInfo(GameManager game){
         this.game = game;
@@ -65,6 +66,7 @@ public class BattleManager {
                 endBattle();
                 break;
             case "heroWin":
+                heroWon = true;
                 battleView.blockEnemySelectors();
                 battleView.heroSelectorArea.setVisible(false);
                 battleView.uiLocked = true;
@@ -78,9 +80,13 @@ public class BattleManager {
 
     public void endBattle(){
         revertFighterStats();
+        int dur = 1000;
+        battleView.uiLocked = true;
+        animator.backButtonSlideIn();
+        if(heroWon){dur += 4000; heroWon = false;}
         Timeline counter = new Timeline();
         counter.getKeyFrames().add(new KeyFrame(
-                Duration.millis(6000),
+                Duration.millis(dur),
                 ae -> game.setUpOverworld()));
         counter.play();
     }
@@ -222,6 +228,7 @@ public class BattleManager {
         target = gameData.getEnemyTeam().get(gameData.getSelectedTarget());
         int cost = attacker.getTpCost();
         if(gameData.getCurrentTp() >= cost ){
+            battleView.handleAnimation("heroLunge");
             messageQueue.add(attacker.getName() + " attacks " + target.getName() +"!");
             battleView.queueMessages(messageQueue);
             startHeroBasicAttack(cost);
@@ -239,7 +246,7 @@ public class BattleManager {
         battleView.handleAnimation("heroLunge");
         updateUIForHeroAttack();
         detectEnemyKO();
-        startDamageAnimation();
+        //startDamageAnimation();
         battleView.queueMessages(messageQueue);
 
     }

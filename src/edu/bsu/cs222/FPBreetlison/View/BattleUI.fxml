@@ -22,12 +22,13 @@
         <StackPane fx:id="battleDisplay" visible="false" maxHeight="600" maxWidth="900">
             <StackPane fx:id="backgrounds">
             </StackPane>
+            <HBox fx:id="heroGraphicsArea" StackPane.alignment="CENTER" spacing="2" translateY="50" translateX="-25" maxWidth="500" maxHeight="300"/>
 
             <ScrollPane fx:id="historyScroller" visible="false" maxWidth="300" hbarPolicy="NEVER" >
                 <Label fx:id="historyDisplay" wrapText="true" maxWidth="295"/>
             </ScrollPane>
 
-            <StackPane fx:id="mainSelectorArea" stylesheets="/stylesheets/pane.css">
+            <StackPane fx:id="mainSelectorArea" pickOnBounds="false" stylesheets="/stylesheets/pane.css">
                 <ImageView fx:id="backButton" StackPane.alignment="TOP_LEFT" translateX="-70" fitHeight="37" fitWidth="150"/>
                 <Pane fx:id="selectorBackground" maxWidth="125" maxHeight="600" StackPane.alignment="CENTER_LEFT" stylesheets="/stylesheets/pane.css" styleClass="pane"/>
                 <ScrollPane fx:id="selectorMenu" maxHeight="375" fitToHeight="true" prefViewportHeight="200" vbarPolicy="NEVER" maxWidth="125" stylesheets="/stylesheets/scrollpane.css" styleClass="edge-to-edge" StackPane.alignment="TOP_LEFT">
@@ -63,15 +64,16 @@
                     </content>
                 </ScrollPane>
 
-                <HBox fx:id="enemySelectorArea" spacing="40"  translateX="350" maxWidth="500" maxHeight="300" translateY="-20">
-                    <children>
 
-                    </children>
-
-                </HBox>
-                <HBox fx:id="heroGraphicsArea" StackPane.alignment="CENTER" spacing="2" translateY="50" translateX="-25" maxWidth="500" maxHeight="300"/>
 
             </StackPane>
+            <HBox fx:id="enemySelectorArea" spacing="40"  translateX="350" maxWidth="500" maxHeight="300" translateY="-20">
+                <children>
+
+                </children>
+
+            </HBox>
+
 
             <ScrollPane fx:id="textBox" stylesheets="/stylesheets/textBox.css" styleClass="edge-to-edge" maxHeight="150" maxWidth="650" StackPane.alignment="BOTTOM_LEFT">
                 <Label fx:id="mainDisplay" wrapText="true" scaleX="2" scaleY="2"  translateX="165" translateY="10" maxWidth="300" minWidth="300" maxHeight="40" minHeight="40" />
@@ -104,8 +106,6 @@
             <ProgressBar fx:id="tpBar" StackPane.alignment="TOP_RIGHT" styleClass="tp-bar" translateX="44" translateY="10" rotate="180" maxWidth="325" maxHeight="50" stylesheets="/stylesheets/tpBar.css" />
             <Label fx:id="tpDisplay" text="10/10" StackPane.alignment="TOP_RIGHT" maxWidth="50" minWidth="50" scaleX="2" scaleY="2" translateX="-130" translateY="30" opacity=".50" />
             <HBox fx:id="backgroundImage" GridPane.columnIndex="20" GridPane.rowIndex="20">
-
-
             </HBox>
         </StackPane>
     </StackPane>

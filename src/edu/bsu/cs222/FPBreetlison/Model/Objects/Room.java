@@ -24,8 +24,6 @@ public class Room implements java.io.Serializable {
         this.east = roomInfo.get(4);
         this.west = roomInfo.get(5);
         this.imagePath = roomInfo.get(6);
-        System.out.println(roomInfo.size());
-
     }
 
     private List<String> stringParser(String info) {

@@ -13,6 +13,8 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 
+import java.security.Key;
+
 
 public class Animator implements java.io.Serializable {
 
@@ -165,12 +167,31 @@ public class Animator implements java.io.Serializable {
 
         System.out.println("Attacking " + target.getId());
 
-
         Bounds boundsInScene = target.localToScene(target.getLayoutBounds());
         double locTemp = boundsInScene.getMaxX() - boundsInScene.getMinX();
         double locx = game.getStage().getWidth()- boundsInScene.getWidth();
         damage.setLayoutX(locx);
         damage.setLayoutY(boundsInScene.getMinY());
+    }
+
+    public void heroFlee(){
+        Timeline timeline = new Timeline();
+        for(int i = 0; i<heroGraphicsArea.getChildren().size();i++){
+            ImageView hero = (ImageView)heroGraphicsArea.getChildren().get(i);
+            KeyValue spinV = new KeyValue(hero.scaleXProperty(),-1,Interpolator.EASE_BOTH);
+            KeyValue moveBackV = new KeyValue(hero.translateXProperty(),40,Interpolator.EASE_BOTH);
+            KeyValue stillV = new KeyValue(hero.scaleXProperty(),-1,Interpolator.EASE_BOTH);
+            KeyValue tiltV = new KeyValue(hero.rotateProperty(),15,Interpolator.EASE_BOTH);
+            KeyValue moveFV = new KeyValue(hero.translateXProperty(),-800,Interpolator.EASE_BOTH);
+            KeyFrame spinK = new KeyFrame(Duration.millis(200),spinV,moveBackV);
+            KeyFrame stillK = new KeyFrame(Duration.millis(400),stillV);
+            KeyFrame tiltK = new KeyFrame(Duration.millis(700),tiltV);
+            KeyFrame moveFK = new KeyFrame(Duration.millis(800),moveFV);
+            timeline.getKeyFrames().addAll(spinK,stillK,tiltK,moveFK);
+        }
+        timeline.play();
+
+
     }
 
 }
