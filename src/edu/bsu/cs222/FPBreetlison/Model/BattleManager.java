@@ -36,12 +36,14 @@ public class BattleManager {
     public void getGameInfo(GameManager game){
         this.game = game;
         this.gameData = game.getGameData();
+        gameData.addEnemies();
         this.battleView = game.getBattleControl();
         animator = new Animator(game);
 
     }
 
     public void start(){
+
         messageQueue = new ArrayList<>();
         targetQueue = new ArrayList<>();
         battleView.updateTP();
@@ -272,7 +274,7 @@ public class BattleManager {
         ObservableList<Node> selectors = battleView.enemySelectorArea.getChildren();
         ArrayList<Fighter> fighters = gameData.getEnemyTeam();
         int KOamt = 0;
-        for (int i = 0; i < selectors.size(); i++) {
+        for (int i = 0; i < fighters.size(); i++) {
             fighters.get(i).checkKOLevel();
             if (fighters.get(i).getKOLvl() > 0) {
                 KOamt++;

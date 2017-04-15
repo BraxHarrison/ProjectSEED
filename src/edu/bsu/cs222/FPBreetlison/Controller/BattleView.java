@@ -218,6 +218,9 @@ public class BattleView {
         team = gameData.getTeam();
         enemyTeam = gameData.getEnemyTeam();
         inventory = gameData.getInventory();
+    }
+
+    private void getEnemies(){
 
     }
 
@@ -382,6 +385,7 @@ public class BattleView {
     }
 
     private void createEnemySelectors() {
+        ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i<enemyTeam.size();i++){
             ImageView enemy = new ImageView(new Image(enemyTeam.get(i).getBattlerGraphicPath()));
             enemy.setId(Integer.toString(i));

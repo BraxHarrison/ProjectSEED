@@ -39,7 +39,6 @@ public class GameData implements java.io.Serializable {
         initLists();
         loadData();
         addHeroes();
-        addEnemies();
         initItems();
         maxTP = 10;
         tp = maxTP;
@@ -77,9 +76,7 @@ public class GameData implements java.io.Serializable {
     }
 
     private void loadRooms(OverWorldParser loader) throws IOException, SAXException, ParserConfigurationException {
-
         allRooms = loader.parseRoomInfo();
-
     }
 
     private void loadFighters(BattleXMLParser loader) throws IOException, SAXException, ParserConfigurationException {
@@ -94,9 +91,17 @@ public class GameData implements java.io.Serializable {
         team.add(allHeroes.get("Smitty"));
     }
 
-    private void addEnemies(){
-        enemyTeam.add(allEnemies.get("Jag"));
-        enemyTeam.add(allEnemies.get("Harshmallow"));
+    public void addEnemies(){
+        enemyTeam.clear();
+        if(currentRoom.getName().equals("Colossal Plains")){
+            enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+            enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+        }
+        else if (currentRoom.getName().equals("Luminous Caves")){
+            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
+            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
+            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
+        }
     }
 
     void removeObjectFromInventory(int index){
@@ -106,8 +111,6 @@ public class GameData implements java.io.Serializable {
     private void initItems() {
         inventory.add(allItems.get("Patch"));
         inventory.add(allItems.get("Overclock"));
-
-
     }
 
     void resetHeroTP(){

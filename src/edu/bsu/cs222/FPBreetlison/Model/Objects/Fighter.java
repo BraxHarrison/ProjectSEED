@@ -45,6 +45,26 @@ public class Fighter implements java.io.Serializable {
         loadInfo(characterInfo);
         associateStats();
     }
+    public Fighter(Fighter fighter){
+        expToNextLevel=150;
+        currStats = new HashMap<>();
+        skillList =  new ArrayList<Skill>();
+        ArrayList<Object> attributes = new ArrayList<>();
+        KOLevel = 0;
+        lvl = 1;
+        this.name = fighter.getName();
+        this.maxHP = fighter.getMaxHP();
+        this.hp = fighter.getHp();
+        this.attack = fighter.getAttack();
+        this.defense = fighter.getDefense();
+        this.tpCost = fighter.getTpCost();
+        this.expModifier = 2;
+        this.battlerGraphicPath = fighter.getBattlerGraphicPath();
+        this.miniGraphicPath = fighter.getMiniGraphicPath();
+        this.sizeX = fighter.getSizeX();
+        this.sizeY = fighter.getSizeY();
+        associateStats();
+    }
 
     private void loadInfo(List<String> characterInfo) {
         this.name = characterInfo.get(0);

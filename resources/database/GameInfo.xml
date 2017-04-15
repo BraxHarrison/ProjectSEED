@@ -55,10 +55,10 @@
         <Islands>
             <Sectors>
                 <Rooms>
-                    <room name="Colossal Plains" des="yes" north="Luminous Caves" south="Inverted Forest" east="null" west="null" image="images/Plains_Day.png" battleImage="images/battleGraphics/backgrounds/battle_backgrounds_plainsday.png"/>
-                    <room name="Luminous Caves" des="yes" north="null" south="Colossal Plains" east="null" west="null" image="null" battleImage="null" />
-                    <room name="Inverted Forest" des="yes" north="Colossal Plains" south="null" east="Conchbreak Key" west="null" image="null" battleImage="null"/>
-                    <room name="Conchbreak Key" des="yes" north="null" south="null" east="null" west="Inverted Forest" image="null" battleImage="null"/>
+                    <room name="Colossal Plains" des="null" north="Luminous Caves" south="Inverted Forest" east="null" west="null" image="images/Plains_Day.png" battleImage="images/battleGraphics/backgrounds/battle_backgrounds_plainsday.png"/>
+                    <room name="Luminous Caves" des="null" north="null" south="Colossal Plains" east="null" west="null" image="null" battleImage="null" />
+                    <room name="Inverted Forest" des="null" north="Colossal Plains" south="null" east="Conchbreak Key" west="null" image="null" battleImage="null"/>
+                    <room name="Conchbreak Key" des="null" north="null" south="null" east="null" west="Inverted Forest" image="null" battleImage="null"/>
                 </Rooms>
             </Sectors>
         </Islands>

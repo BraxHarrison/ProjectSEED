@@ -18,7 +18,6 @@ public class Room implements java.io.Serializable {
     public Room(String info){
 
         List<String> roomInfo = stringParser(info);
-        System.out.println(info);
         this.name = roomInfo.get(0);
         this.description = roomInfo.get(1);
         this.north = roomInfo.get(2);
@@ -27,7 +26,6 @@ public class Room implements java.io.Serializable {
         this.west = roomInfo.get(5);
         this.imagePath = roomInfo.get(6);
         this.battleImagePath = roomInfo.get(7);
-        System.out.println(name);
     }
 
     private List<String> stringParser(String info) {
@@ -61,6 +59,9 @@ public class Room implements java.io.Serializable {
         else return battleImagePath;
     }
     public String getDescription(){
+        if(description.equals("null")){
+            return "(description)";
+        }
        return description;
     }
     public String getName(){
