@@ -11,7 +11,7 @@ public class Room implements java.io.Serializable {
     private String south;
     private String east;
     private String west;
-    private String image;
+    private String imagePath;
     //private ArrayList<Item> itemsInRoom;
 
     public Room(String info){
@@ -23,7 +23,7 @@ public class Room implements java.io.Serializable {
         this.south = roomInfo.get(3);
         this.east = roomInfo.get(4);
         this.west = roomInfo.get(5);
-        this.image = roomInfo.get(6);
+        this.imagePath = roomInfo.get(6);
         System.out.println(roomInfo.size());
 
     }
@@ -46,10 +46,10 @@ public class Room implements java.io.Serializable {
         return west;
     }
     public String getImageURL(){
-        if (this.image.equals("null")){
+        if (this.imagePath.equals("null")){
         return "images/system/system_undefined.png";
         }
-        else return image;
+        else return imagePath;
 
     }
 

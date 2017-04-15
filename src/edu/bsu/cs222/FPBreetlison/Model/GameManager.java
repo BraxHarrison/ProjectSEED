@@ -25,7 +25,7 @@ public class GameManager implements java.io.Serializable {
 
     //region Initialization
     public void init(GameData gameData){
-        currentRoom = gameData.getAllRooms().get("FirstSteps");
+        gameData.setCurrentRoom(gameData.getAllRooms().get("FirstSteps"));
         this.gameData = gameData;
         currentStage.setResizable(true);
         setUpOverworld();
@@ -51,7 +51,7 @@ public class GameManager implements java.io.Serializable {
     }
 
     public void updateStageTitle(){
-        currentStage.setTitle("Overworld: "+getCurrentRoom().getName());
+        currentStage.setTitle("Overworld: "+ gameData.getCurrentRoom().getName());
     }
     //endregion
 
@@ -88,35 +88,33 @@ public class GameManager implements java.io.Serializable {
     }
 
     public void travelNorth() {
-        if(Objects.equals(currentRoom.getNorth(),"null")){
+        if(gameData.getCurrentRoom().getNorth().equals("null")) {
             return;
         }
-
-        currentRoom = gameData.getAllRooms().get(currentRoom.getNorth());
+        gameData.setCurrentRoom(gameData.getAllRooms().get(gameData.getCurrentRoom().getNorth()));
 
     }
 
     public void travelSouth() {
-        if(currentRoom.getSouth().equals("null")){
+        if(gameData.getCurrentRoom().getSouth().equals("null")){
             return;
-
         }
-        currentRoom = gameData.getAllRooms().get(currentRoom.getSouth());
+        gameData.setCurrentRoom(gameData.getAllRooms().get(gameData.getCurrentRoom().getSouth()));
     }
 
     public void travelEast() {
-        if(currentRoom.getEast().equals("null")) {
+        if(gameData.getCurrentRoom().getEast().equals("null")) {
             return;
         }
-        currentRoom = gameData.getAllRooms().get(currentRoom.getEast());
+        gameData.setCurrentRoom(gameData.getAllRooms().get(gameData.getCurrentRoom().getEast()));
 
     }
 
     public void travelWest() {
-        if(currentRoom.getWest().equals("null")) {
+        if(gameData.getCurrentRoom().getWest().equals("null")) {
             return;
         }
-        currentRoom = gameData.getAllRooms().get(currentRoom.getWest());
+        gameData.setCurrentRoom(gameData.getAllRooms().get(gameData.getCurrentRoom().getWest()));
     }
 
     public void saveGame() throws IOException {
@@ -124,7 +122,6 @@ public class GameManager implements java.io.Serializable {
         ObjectOutputStream save = new ObjectOutputStream(saveFile);
         save.writeObject(gameData);
         save.close();
-
     }
 
     public void loadGame() throws IOException, ClassNotFoundException {
@@ -161,6 +158,7 @@ public class GameManager implements java.io.Serializable {
 
         HashMap<Integer, Boolean> availableDirections = new HashMap<>();
         ArrayList<String> allDirections = new ArrayList<>();
+        Room currentRoom = gameData.getCurrentRoom();
 
         allDirections.add(currentRoom.getNorth());
         allDirections.add(currentRoom.getSouth());

@@ -24,6 +24,7 @@ public class GameData implements java.io.Serializable {
     private HashMap<String,Item> allItems;
     private ArrayList<Item> inventory;
     private Map<String, Room> allRooms;
+    private Room currentRoom;
     private int tp;
     private int maxTP;
     private int selectedTarget;
@@ -114,6 +115,12 @@ public class GameData implements java.io.Serializable {
     }
 
     public Map<String, Room> getAllRooms(){return allRooms;}
+    public Room getCurrentRoom() {
+        return currentRoom;
+    }
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
+    }
     public ArrayList<Fighter> getTeam() {
         return team;
     }

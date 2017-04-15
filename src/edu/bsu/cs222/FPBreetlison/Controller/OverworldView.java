@@ -1,5 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Controller;
 
+import edu.bsu.cs222.FPBreetlison.Model.GameData;
 import edu.bsu.cs222.FPBreetlison.Model.GameManager;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -19,7 +20,6 @@ public class OverworldView {
     public VBox sideBar;
     public ImageView sideBarGraphic;
     public ImageView travelButton;
-    private GameManager game;
     public Label roomDescription;
     public StackPane travelPane;
     public Button north;
@@ -28,8 +28,12 @@ public class OverworldView {
     public Button west;
     public HBox backgroundImage;
 
+    private GameManager game;
+    private GameData gameData;
+
     public void initialize(GameManager game){
         this.game = game;
+        this.gameData = game.getGameData();
         setUpGraphics();
         updateRoom();
         initializeTravel();
@@ -52,16 +56,16 @@ public class OverworldView {
     }
 
     private void updateRoom() {
-        roomDescription.setText(game.getCurrentRoom().getDescription());
+        roomDescription.setText(gameData.getCurrentRoom().getDescription());
         setDirectionButtonsVisible();
         setBackground();
         game.updateStageTitle();
     }
 
     private void setBackground() {
-        String backgroundImageURL = game.getCurrentRoom().getImageURL();
-        BackgroundImage battleBack = new BackgroundImage(new Image( backgroundImageURL,900,500,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
-        backgroundImage.setBackground(new Background(battleBack));
+        String backgroundImageURL = gameData.getCurrentRoom().getImageURL();
+        BackgroundImage roomBack = new BackgroundImage(new Image( backgroundImageURL,900,500,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+        backgroundImage.setBackground(new Background(roomBack));
         backgroundImage.toBack();
 
     }
@@ -118,5 +122,6 @@ public class OverworldView {
 
     public void loadGame(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
         game.loadGame();
+        initialize(this.game);
     }
 }
