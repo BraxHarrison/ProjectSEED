@@ -57,7 +57,7 @@
 }
 
 .damage-text{
-    -fx-text-fill: white;
+    -fx-text-fill: blue;
     -fx-font-family: "Underwhelmed BRK";
     -fx-font-size: 20pt;
 

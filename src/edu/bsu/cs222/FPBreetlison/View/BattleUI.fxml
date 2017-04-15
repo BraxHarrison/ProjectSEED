@@ -109,6 +109,7 @@
             </HBox>
         </StackPane>
     </StackPane>
+    <Group fx:id="damageDisplayArea"/>
     <Label fx:id="damageDisplay" styleClass="damage-text" visible="false" text="TEST"/>
 
 </Group>

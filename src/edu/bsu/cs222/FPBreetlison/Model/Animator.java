@@ -7,6 +7,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.geometry.Bounds;
+import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -18,6 +19,7 @@ public class Animator {
     BattleView battleView;
     HBox heroGraphicsArea;
     HBox enemySelectorArea;
+    Group damageDisplayArea;
 
     ImageView user;
     ImageView target;
@@ -25,12 +27,16 @@ public class Animator {
     ImageView airPuff;
     Label damage;
 
+    GameData gameData;
+
     public Animator(BattleView battleView){
         this.battleView = battleView;
         damage = battleView.damageDisplay;
         heroGraphicsArea = battleView.heroGraphicsArea;
         enemySelectorArea = battleView.enemySelectorArea;
         backButton = battleView.backButton;
+        damageDisplayArea = battleView.damageDisplayArea;
+        gameData = battleView.getGameData();
         initImages();
     }
 
@@ -134,23 +140,35 @@ public class Animator {
     }
 
     public void animateDamageToEnemy(Snapshot info){
-        ImageView target = (ImageView)enemySelectorArea.getChildren().get(info.getTargetIndex());
-        damage.setVisible(true);
+        Label damage = new Label(""+info.getDamage());
+        ImageView target = (ImageView)enemySelectorArea.getChildren().get(info.getIndex());
 
-        Bounds boundsInScene = target.localToScene(target.getBoundsInLocal());
-        damage.setLayoutX(boundsInScene.getMinX());
-        damage.setLayoutY(boundsInScene.getMinY());
-
+        formatLabel(damage, target);
 
         Timeline timeline = new Timeline();
         KeyValue damageFade = new KeyValue(damage.opacityProperty(),.01,Interpolator.EASE_BOTH);
         KeyValue damageMove = new KeyValue(damage.translateYProperty(),-50,Interpolator.EASE_BOTH);
 
-
         KeyFrame keyFrame = new KeyFrame(Duration.millis(800),damageFade,damageMove);
 
         timeline.getKeyFrames().addAll(keyFrame);
         timeline.play();
+    }
+
+    private void formatLabel(Label damage, ImageView target) {
+
+        damageDisplayArea.getChildren().add(damage);
+        damage.getStyleClass().add("damage-text");
+        damage.setVisible(true);
+
+        System.out.println("Attacking " + target.getId());
+
+
+        Bounds boundsInScene = target.localToScene(target.getLayoutBounds());
+        double locTemp = boundsInScene.getMaxX() - boundsInScene.getMinX();
+        double locx = gameData.getStage().getWidth()- boundsInScene.getWidth();
+        damage.setLayoutX(locx);
+        damage.setLayoutY(boundsInScene.getMinY());
     }
 
 }

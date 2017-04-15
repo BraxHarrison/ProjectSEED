@@ -30,6 +30,7 @@ import java.util.ArrayList;
 public class BattleView {
     public VBox skillSelectorArea;
     public Group skillInfoDisplay;
+    public Group damageDisplayArea;
 
     //region Variables
 
@@ -717,6 +718,10 @@ public class BattleView {
     }
 
     //endregion
+
+    public GameData getGameData(){
+        return gameData;
+    }
 
 
 }
