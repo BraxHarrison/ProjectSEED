@@ -39,6 +39,8 @@
     -fx-color:#ffffff;
 }
 
+
+
 /* Overworld Styles */
 
 
@@ -60,6 +62,14 @@
     -fx-text-fill: blue;
     -fx-font-family: "Underwhelmed BRK";
     -fx-font-size: 20pt;
+
+}
+
+
+.banner-text{
+    -fx-text-fill: white;
+    -fx-font-family: "Underwhelmed BRK";
+    -fx-font-size: 25pt;
 
 }
 

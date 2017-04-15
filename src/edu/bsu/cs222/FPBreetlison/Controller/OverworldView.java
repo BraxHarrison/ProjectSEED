@@ -1,5 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Controller;
 
+import edu.bsu.cs222.FPBreetlison.Model.Animator;
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
 import edu.bsu.cs222.FPBreetlison.Model.GameManager;
 import javafx.event.ActionEvent;
@@ -18,6 +19,7 @@ public class OverworldView {
 
 
     public VBox sideBar;
+    public ImageView partyButton;
     public ImageView sideBarGraphic;
     public ImageView travelButton;
     public ImageView saveLoadButton;
@@ -31,20 +33,48 @@ public class OverworldView {
     public HBox backgroundImage;
     public StackPane loadSaveMenu;
     public StackPane inspectMenu;
+    public StackPane navBanner;
 
     private GameManager game;
     private GameData gameData;
+    private Animator animator;
 
     public void initialize(GameManager game){
         this.game = game;
         this.gameData = game.getGameData();
-        setUpGraphics();
+        this.animator = new Animator(game);
+        setUpBarGraphic();
         updateRoom();
+        initializePartyButton();
         initializeTravelButton();
         initializeSaveLoadButton();
         initializeInspectButton();
+        initNavBanner();
     }
 
+
+
+    private void initializePartyButton() {
+        //partyButton.setOnMousePressed(e->openTravel());
+        partyButton.setOnMouseEntered(e->optionHover(partyButton));
+        partyButton.setOnMouseExited(e->optionUnhover(partyButton));
+        partyButton.setImage(new Image("/images/system/system_undefined.png"));
+    }
+
+    private void initNavBanner() {
+        ImageView bannerImage = (ImageView)navBanner.getChildren().get(0);
+        Label bannerDisplay = (Label)navBanner.getChildren().get(1);
+        bannerImage.setImage(new Image("/images/system/system_banner.png"));
+        bannerDisplay.setText(gameData.getCurrentRoom().getName());
+        animator.showBanner(navBanner);
+
+    }
+
+    private void updateBanner(){
+        Label bannerDisplay = (Label)navBanner.getChildren().get(1);
+        bannerDisplay.setText(gameData.getCurrentRoom().getName());
+        animator.showBanner(navBanner);
+    }
 
 
     private void initializeTravelButton(){
@@ -88,14 +118,6 @@ public class OverworldView {
         button.setScaleY(1);
     }
 
-    private void setUpGraphics() {
-        setUpBarGraphic();
-        ImageView partyButton = (ImageView)sideBar.getChildren().get(0);
-        partyButton.setImage(new Image("/images/system/system_undefined.png"));
-        partyButton.setFitHeight(50);
-        partyButton.setFitWidth(50);
-    }
-
     private void setUpBarGraphic() {
         sideBarGraphic.setImage(new Image("/images/system/system_sidebar.png"));
     }
@@ -104,6 +126,7 @@ public class OverworldView {
         roomDescription.setText(gameData.getCurrentRoom().getDescription());
         setDirectionButtonsVisible();
         setBackground();
+        updateBanner();
         game.updateStageTitle();
     }
 

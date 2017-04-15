@@ -12,11 +12,13 @@ public class Room implements java.io.Serializable {
     private String east;
     private String west;
     private String imagePath;
+    private String battleImagePath;
     //private ArrayList<Item> itemsInRoom;
 
     public Room(String info){
 
         List<String> roomInfo = stringParser(info);
+        System.out.println(info);
         this.name = roomInfo.get(0);
         this.description = roomInfo.get(1);
         this.north = roomInfo.get(2);
@@ -24,10 +26,11 @@ public class Room implements java.io.Serializable {
         this.east = roomInfo.get(4);
         this.west = roomInfo.get(5);
         this.imagePath = roomInfo.get(6);
+        this.battleImagePath = roomInfo.get(7);
+        System.out.println(name);
     }
 
     private List<String> stringParser(String info) {
-
         return Arrays.asList(info.split(","));
     }
 
@@ -43,6 +46,7 @@ public class Room implements java.io.Serializable {
     public String getWest(){
         return west;
     }
+
     public String getImageURL(){
         if (this.imagePath.equals("null")){
         return "images/system/system_undefined.png";
@@ -50,7 +54,12 @@ public class Room implements java.io.Serializable {
         else return imagePath;
 
     }
-
+    public String getBattleImageURL() {
+        if (this.battleImagePath.equals("null")){
+            return "images/system/system_undefined.png";
+        }
+        else return battleImagePath;
+    }
     public String getDescription(){
        return description;
     }

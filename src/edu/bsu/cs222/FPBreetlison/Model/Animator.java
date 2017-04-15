@@ -11,6 +11,7 @@ import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
 import java.security.Key;
@@ -34,6 +35,13 @@ public class Animator implements java.io.Serializable {
 
     public Animator(GameManager game){
         this.game = game;
+        if(game.isBattleUnderway()){
+            initAnimatorForBattle();
+        }
+        initImages();
+    }
+
+    private void initAnimatorForBattle() {
         battleView = this.game.getBattleControl();
         damage = battleView.damageDisplay;
         heroGraphicsArea = battleView.heroGraphicsArea;
@@ -41,7 +49,6 @@ public class Animator implements java.io.Serializable {
         backButton = battleView.backButton;
         damageDisplayArea = battleView.damageDisplayArea;
         gameData = battleView.getGameData();
-        initImages();
     }
 
     private void initImages() {
@@ -194,4 +201,19 @@ public class Animator implements java.io.Serializable {
 
     }
 
+    public void showBanner(StackPane navBanner) {
+        Timeline timeline = new Timeline();
+
+        KeyValue showBannerV = new KeyValue(navBanner.translateXProperty(),500,Interpolator.EASE_BOTH);
+        KeyValue waitV = new KeyValue(navBanner.translateXProperty(),500,Interpolator.EASE_BOTH);
+        KeyValue retractV = new KeyValue(navBanner.translateXProperty(),900,Interpolator.EASE_BOTH);
+
+        KeyFrame showBannerK = new KeyFrame(Duration.millis(800),showBannerV);
+        KeyFrame waitK = new KeyFrame(Duration.millis(3500),waitV);
+        KeyFrame retractK = new KeyFrame(Duration.millis(4500),retractV);
+
+        timeline.getKeyFrames().addAll(showBannerK,waitK,retractK);
+        timeline.play();
+
+    }
 }

@@ -89,6 +89,7 @@ public class BattleManager {
                 Duration.millis(dur),
                 ae -> game.setUpOverworld()));
         counter.play();
+        game.setBattleUnderway(false);
     }
 
     private void revertFighterStats() {

@@ -21,12 +21,13 @@ public class GameManager implements java.io.Serializable {
     private BattleView battleControl;
     private Stage currentStage;
     private Room currentRoom;
+    private boolean battleUnderway;
 
 
     //region Initialization
     public void init(GameData gameData){
-        gameData.setCurrentRoom(gameData.getAllRooms().get("FirstSteps"));
         this.gameData = gameData;
+        this.gameData.setCurrentRoom(gameData.getAllRooms().get("Colossal Plains"));
         currentStage.setResizable(true);
         setUpOverworld();
     }
@@ -83,6 +84,7 @@ public class GameManager implements java.io.Serializable {
 
     private void setBattleAsStage(Parent root){
         currentStage.setTitle("Battle!");
+        battleUnderway = true;
         currentStage.setScene(new Scene(root, 900,600));
 
     }
@@ -134,9 +136,14 @@ public class GameManager implements java.io.Serializable {
             e.printStackTrace();
         }
     }
-
     public void setStage(Stage stage){
         currentStage = stage;
+    }
+    public boolean isBattleUnderway(){
+        return battleUnderway;
+    }
+    public void setBattleUnderway(boolean battle){
+        battleUnderway = battle;
     }
     public Stage getStage(){
         return currentStage;

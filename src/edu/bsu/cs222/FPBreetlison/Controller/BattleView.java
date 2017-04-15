@@ -246,7 +246,8 @@ public class BattleView {
     }
 
     private void setBackground() {
-        BackgroundImage battleBack = new BackgroundImage(new Image("images/Plains_Day.png",900,500,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+        String imageURL = gameData.getCurrentRoom().getBattleImageURL();
+        BackgroundImage battleBack = new BackgroundImage(new Image(imageURL,900,500,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
         backgroundImage.setBackground(new Background(battleBack));
         backgroundImage.toBack();
 

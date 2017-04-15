@@ -57,13 +57,14 @@ class OverWorldParser {
     }
 
     private String createRoomString(Element roomElement) {
-        return (roomElement.getAttribute("name") + ",") +
+        return (roomElement.getAttribute("name") + "," +
                 roomElement.getAttribute("des") + "," +
                 roomElement.getAttribute("north") + "," +
                 roomElement.getAttribute("south") + "," +
                 roomElement.getAttribute("east") + "," +
                 roomElement.getAttribute("west") + "," +
-                roomElement.getAttribute("image") + ",";
+                roomElement.getAttribute("image") + "," +
+                roomElement.getAttribute("battleImage"));
 
     }
 
