@@ -4,9 +4,9 @@
             <!--To be added later
             <chara name="Prota" maxHP="30" attack="7" defense="5" enAttack="2" enDefense="5" agility="7" tpCost="3" battlerGraphicPath="/images/Bulba_Pepe.png"/>
             -->
-            <hero name="Smitty" maxHP="45" attack="12" defense="7" enAttack="1" enDefense="4" agility="5" tpCost="5" expModifier="2.65" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Smitty.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Smitty.png" sizeX="400" sizeY="300"/>
+            <hero name="Smitty" maxHP="45" attack="12" defense="7" enAttack="1" enDefense="4" agility="5" tpCost="5" expModifier="2.65" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Smitty.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Smitty.png" sizeX="390" sizeY="290"/>
             <heroSkill starter="Steel Crusher,Glare"/>
-            <hero name="Roxy" maxHP="20" attack="7" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.40" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Roxy.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Roxy.png" sizeX="200" sizeY="300"/>
+            <hero name="Roxy" maxHP="20" attack="7" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.40" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Roxy.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Roxy.png" sizeX="150" sizeY="210"/>
             <heroSkill starter="Sniffle,Spring-Kick,Sharpen"/>
         </CharacterBattleInfo>
         <CharacterBattleStrings>
@@ -21,9 +21,9 @@
         </CharacterBattleStrings>
 
         <EnemyBattleInfo>
-            <enemy name="Jag" maxHP="20" attack="10" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.50"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png" sizeX="100" sizeY="100"/>
+            <enemy name="Jag" maxHP="20" attack="15" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.50"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png" sizeX="150" sizeY="100"/>
             <enemySkill starter="Sharpen"/>
-            <enemy name="Harshmallow" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="100" sizeY="100"/>
+            <enemy name="Harshmallow" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75"/>
             <enemySkill starter="Sniffle"/>
 
 
@@ -55,10 +55,10 @@
         <Islands>
             <Sectors>
                 <Rooms>
-                    <room name="Colossal Plains" des="null" north="Luminous Caves" south="Inverted Forest" east="null" west="null" image="images/Plains_Day.png" battleImage="images/battleGraphics/backgrounds/battle_backgrounds_plainsday.png"/>
-                    <room name="Luminous Caves" des="null" north="null" south="Colossal Plains" east="null" west="null" image="null" battleImage="null" />
-                    <room name="Inverted Forest" des="null" north="Colossal Plains" south="null" east="Conchbreak Key" west="null" image="null" battleImage="null"/>
-                    <room name="Conchbreak Key" des="null" north="null" south="null" east="null" west="Inverted Forest" image="null" battleImage="null"/>
+                    <room name="Colossal Plains" des="null" north="Luminous Caves" south="Inverted Forest" east="null" west="null" events="battle,item" image="images/Plains_Day.png" battleImage="images/battleGraphics/backgrounds/battle_backgrounds_plainsday.png"/>
+                    <room name="Luminous Caves" des="null" north="null" south="Colossal Plains" east="null" west="null" events="fountain,battle,item" image="null" battleImage="null" />
+                    <room name="Inverted Forest" des="null" north="Colossal Plains" south="null" east="Conchbreak Key" west="null" events="item,shop" image="null" battleImage="null"/>
+                    <room name="Conchbreak Key" des="null" north="null" south="null" east="null" west="Inverted Forest" image="null" events="" battleImage="null"/>
                 </Rooms>
             </Sectors>
         </Islands>

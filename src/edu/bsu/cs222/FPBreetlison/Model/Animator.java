@@ -10,6 +10,8 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
@@ -74,10 +76,10 @@ public class Animator implements java.io.Serializable {
     public void heroLunge(){
         setUpHeroOrientation();
         Timeline timeline = new Timeline();
-        KeyValue userLunge = new KeyValue(user.translateXProperty(),50, Interpolator.EASE_BOTH);
-        KeyValue targetKnockback = new KeyValue(target.translateXProperty(),20,Interpolator.EASE_BOTH);
-        KeyValue userRetreat = new KeyValue(user.translateXProperty(),0,Interpolator.EASE_BOTH);
-        KeyValue targetRetreat = new KeyValue(target.translateXProperty(),0,Interpolator.EASE_BOTH);
+        KeyValue userLunge = new KeyValue(user.translateXProperty(),user.getTranslateX()+50, Interpolator.EASE_BOTH);
+        KeyValue targetKnockback = new KeyValue(target.translateXProperty(),target.getTranslateX()+20,Interpolator.EASE_BOTH);
+        KeyValue userRetreat = new KeyValue(user.translateXProperty(),user.getTranslateX(),Interpolator.EASE_BOTH);
+        KeyValue targetRetreat = new KeyValue(target.translateXProperty(),target.getTranslateX(),Interpolator.EASE_BOTH);
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100),userLunge);
         KeyFrame keyFrame2 = new KeyFrame(Duration.millis(200),userRetreat,targetKnockback);
         KeyFrame keyFrame3 = new KeyFrame(Duration.millis(350),targetRetreat);
@@ -88,11 +90,12 @@ public class Animator implements java.io.Serializable {
 
     public void enemyLunge(){
         setUpEnemyOrientation();
+        System.out.println("Is this what happens?");
         Timeline timeline = new Timeline();
-        KeyValue userLunge = new KeyValue(user.translateXProperty(),-50, Interpolator.EASE_BOTH);
-        KeyValue targetKnockback = new KeyValue(target.translateXProperty(),-20,Interpolator.EASE_BOTH);
-        KeyValue userRetreat = new KeyValue(user.translateXProperty(),0,Interpolator.EASE_BOTH);
-        KeyValue targetRetreat = new KeyValue(target.translateXProperty(),0,Interpolator.EASE_BOTH);
+        KeyValue userLunge = new KeyValue(user.translateXProperty(),user.getTranslateX()-50, Interpolator.EASE_BOTH);
+        KeyValue targetKnockback = new KeyValue(target.translateXProperty(),target.getTranslateX()-20,Interpolator.EASE_BOTH);
+        KeyValue userRetreat = new KeyValue(user.translateXProperty(),user.getTranslateX(),Interpolator.EASE_BOTH);
+        KeyValue targetRetreat = new KeyValue(target.translateXProperty(),target.getTranslateX(),Interpolator.EASE_BOTH);
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100),userLunge);
         KeyFrame keyFrame2 = new KeyFrame(Duration.millis(200),userRetreat,targetKnockback);
         KeyFrame keyFrame3 = new KeyFrame(Duration.millis(350),targetRetreat);

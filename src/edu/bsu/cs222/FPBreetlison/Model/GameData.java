@@ -4,7 +4,6 @@ import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Skill;
-import javafx.stage.Stage;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -89,18 +88,25 @@ public class GameData implements java.io.Serializable {
     private void addHeroes(){
         team.add(allHeroes.get("Roxy"));
         team.add(allHeroes.get("Smitty"));
+        team.add(allHeroes.get("Smitty"));
+        team.add(allHeroes.get("Smitty"));
     }
 
     public void addEnemies(){
         enemyTeam.clear();
         if(currentRoom.getName().equals("Colossal Plains")){
             enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
             enemyTeam.add(new Fighter(allEnemies.get("Jag")));
         }
         else if (currentRoom.getName().equals("Luminous Caves")){
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
+        }
+        else {
+            enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+            enemyTeam.add(new Fighter(allEnemies.get("Jag")));
         }
     }
 
@@ -129,6 +135,9 @@ public class GameData implements java.io.Serializable {
     }
     public ArrayList<Fighter> getEnemyTeam() {
         return enemyTeam;
+    }
+    public HashMap<String, Fighter> getAllEnemies() {
+        return allEnemies;
     }
     public int getMaxTP() {
         return maxTP;

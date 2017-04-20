@@ -46,6 +46,11 @@ public class Fighter implements java.io.Serializable {
         associateStats();
     }
     public Fighter(Fighter fighter){
+        loadInfoForCopy(fighter);
+        associateStats();
+    }
+
+    private void loadInfoForCopy(Fighter fighter) {
         expToNextLevel=150;
         currStats = new HashMap<>();
         skillList =  new ArrayList<Skill>();
@@ -58,12 +63,11 @@ public class Fighter implements java.io.Serializable {
         this.attack = fighter.getAttack();
         this.defense = fighter.getDefense();
         this.tpCost = fighter.getTpCost();
-        this.expModifier = 2;
+        this.expModifier = fighter.getExpModifier();
         this.battlerGraphicPath = fighter.getBattlerGraphicPath();
         this.miniGraphicPath = fighter.getMiniGraphicPath();
         this.sizeX = fighter.getSizeX();
         this.sizeY = fighter.getSizeY();
-        associateStats();
     }
 
     private void loadInfo(List<String> characterInfo) {
@@ -274,6 +278,9 @@ public class Fighter implements java.io.Serializable {
     }
     public int getLastDamage() {
         return lastDamage;
+    }
+    public double getExpModifier() {
+        return expModifier;
     }
     //endregion
 

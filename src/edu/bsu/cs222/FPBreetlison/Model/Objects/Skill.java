@@ -31,7 +31,7 @@ public class Skill implements java.io.Serializable {
             user.recoverHealth(affectAmt);
         }
         else if(type.equals("attack")){
-            double damage = user.getAttack()*affectAmt/target.getDefense();
+            double damage = user.getCurrStats().get("attack")*affectAmt/target.getCurrStats().get("defense");
             int finalDamage = (int)Math.round(damage);
             target.takeDamage(finalDamage);
         }

@@ -12,6 +12,7 @@ import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -257,6 +258,7 @@ public class BattleView {
     }
 
     private void setupBattle(){
+        //Put in code to check if there are more than three fighters, then resize it other
         createHeroButtons();
         createHeroGraphics();
         createEnemySelectors();
@@ -330,9 +332,7 @@ public class BattleView {
             image.setId(Integer.toString(i));
             image.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
-                public void handle(MouseEvent event) {
-                    showHeroInfo(image);
-                }
+                public void handle(MouseEvent event) {showHeroInfo(image);}
             });
             image.setOnMouseExited(new EventHandler<MouseEvent>() {
                 @Override
@@ -341,13 +341,35 @@ public class BattleView {
                 }
             });
             formatHeroGraphic(image,i);
+            checkForScale(image);
             heroGraphicsArea.getChildren().add(image);
+        }
+    }
+
+    private void checkForScale(ImageView image) {
+        if(team.size()<3){
+            image.setTranslateX(-280);
+        }
+        if(team.size()==3){
+            heroGraphicsArea.setSpacing(-100);
+            image.setTranslateX(-200);
+            image.setTranslateY(20);
+            image.setScaleX(.85);
+            image.setScaleY(.85);
+        }
+        if(team.size()==4){
+            heroGraphicsArea.setSpacing(-150);
+            image.setTranslateX(-100);
+            image.setTranslateY(20);
+            image.setScaleX(.65);
+            image.setScaleY(.65);
         }
     }
 
     private void formatHeroGraphic(ImageView image, int index) {
         image.setFitHeight(team.get(index).getSizeY());
         image.setFitWidth(team.get(index).getSizeX());
+        StackPane.setAlignment(image, Pos.BOTTOM_CENTER);
         if(team.get(index).calcHPPercentage() == 0.00){
             image.setOpacity(.30);
         }
@@ -374,7 +396,7 @@ public class BattleView {
         Label hp = (Label)battlerInfoDisplay.getChildren().get(3);
         name.setText(team.get(index).getName());
         lvl.setText("Lvl: "+team.get(index).getLvl());
-        hp.setText("HP: " + team.get(index).getCurrStats().get("hp") + "/" + team.get(index).getMaxHP());
+        hp.setText("HP: " + team.get(index).getCurrStats().get("hp") + "/" + team.get(index).getHp());
     }
     private void showHeroLowerLabels(){
 
@@ -392,6 +414,7 @@ public class BattleView {
             populateEnemyUIElements(enemy);
             enemy.setOnMouseEntered(event -> showEnemyInfo(enemy));
             enemy.setOnMouseExited(event -> hideEnemyInfo());
+            HBox.setHgrow(enemy,Priority.ALWAYS);
             enemySelectorArea.getChildren().add(enemy);
 
         }

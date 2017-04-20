@@ -46,6 +46,7 @@ public class BattleManager {
 
         messageQueue = new ArrayList<>();
         targetQueue = new ArrayList<>();
+        gameData.resetHeroTP();
         battleView.updateTP();
         checkSpeeds();
     }
