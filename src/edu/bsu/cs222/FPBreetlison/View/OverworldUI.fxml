@@ -47,6 +47,7 @@
         <Button text="X" onAction="#hideInspectMenu" StackPane.alignment="TOP_LEFT"/>
 
     </StackPane>
+    <Label fx:id="walletDisplay" StackPane.alignment="CENTER"/>
 
 
 </StackPane>

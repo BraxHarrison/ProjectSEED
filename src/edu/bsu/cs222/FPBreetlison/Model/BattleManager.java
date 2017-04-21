@@ -16,8 +16,6 @@ import java.util.Random;
 
 public class BattleManager {
 
-    //Bugs: Patch doesn't heal because it increases maxhp, not current. Using an item doesn't properly hide the back button
-
     private GameData gameData;
     private GameManager game;
     private BattleView battleView;
@@ -73,6 +71,7 @@ public class BattleManager {
                 battleView.blockEnemySelectors();
                 battleView.heroSelectorArea.setVisible(false);
                 battleView.uiLocked = true;
+                gameData.getWallet().collect(500,"KB");
                 gainExp();
                 endBattle();
                 break;

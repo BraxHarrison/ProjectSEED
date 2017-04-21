@@ -108,7 +108,7 @@ public class Fighter implements java.io.Serializable {
 
     public void doBasicAttack(Fighter target){
         double damage = this.getCurrStats().get("attack")*2/target.getCurrStats().get("defense");
-        int finalDamage = (int)Math.round(damage);
+        int finalDamage = (int)Math.round(damage*1.5);
         lastDamage = finalDamage;
         target.takeDamage(finalDamage);
         chooseActionString();
@@ -160,12 +160,13 @@ public class Fighter implements java.io.Serializable {
             oldHP = currStats.get("hp");
             currStats.replace("hp",oldHP,0);
         }
+
     }
 
     void recoverHealth(int heal){
         int hp = currStats.get("hp");
         currStats.replace("hp",currStats.get("hp"),hp+=heal);
-        if(currStats.get("hp") > maxHP){
+        if(currStats.get("hp") > maxHP || heal == -1){
             currStats.replace("hp",currStats.get("hp"),maxHP);
         }
     }
@@ -209,7 +210,11 @@ public class Fighter implements java.io.Serializable {
 
     }
     public boolean isKO(){
-        return KOState;
+        if(currStats.get("hp") == 0){
+            return true;
+        }
+        return false;
+
     }
 
     //region Setters and Getters
@@ -247,6 +252,9 @@ public class Fighter implements java.io.Serializable {
         return KOLevel;
     }
     public String getBattlerGraphicPath() {
+        if(battlerGraphicPath.equals("null")){
+            battlerGraphicPath = "/images/system/system_undefined.png";
+        }
         return battlerGraphicPath;
     }
     public String getMiniGraphicPath(){return miniGraphicPath;}

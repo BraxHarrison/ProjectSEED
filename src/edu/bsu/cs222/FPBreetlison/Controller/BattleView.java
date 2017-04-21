@@ -636,7 +636,7 @@ public class BattleView {
         StackPane hero = (StackPane)heroSelectorArea.getChildren().get(selectedUser);
         ProgressBar heroBar = (ProgressBar)hero.getChildren().get(1);
         Fighter user = team.get(selectedUser);
-        Double hpPercentage = (double)user.getHp()/(double)user.getMaxHP();
+        Double hpPercentage = (double)user.getCurrStats().get("hp")/(double)user.getMaxHP();
         heroBar.setProgress(hpPercentage);
         updateColor(heroBar,hpPercentage);
     }

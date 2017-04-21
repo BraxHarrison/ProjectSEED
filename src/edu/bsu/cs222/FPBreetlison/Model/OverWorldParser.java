@@ -1,5 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Event;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
 import org.w3c.dom.Document;
@@ -16,7 +17,7 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-class OverWorldParser {
+public class OverWorldParser {
 
     private Document document;
 
@@ -80,6 +81,28 @@ class OverWorldParser {
         return items;
     }
 
+    public HashMap<String,Event> createEventDatabase(){
+        HashMap<String, Event> events = new HashMap<>();
+        NodeList nodeList = document.getElementsByTagName("event");
+        for(int i = 0; i<nodeList.getLength();i++){
+            Node eventInfo = nodeList.item(i);
+            Element sourceEvent = (Element)eventInfo;
+            Event event = new Event(createEventString(sourceEvent));
+            events.put(event.getName(),event);
+        }
+        return events;
+
+    }
+
+    private String createEventString(Element sourceEvent) {
+        return (sourceEvent.getAttribute("name") + "," +
+                sourceEvent.getAttribute("type") + "," +
+                sourceEvent.getAttribute("stock") + "," +
+                sourceEvent.getAttribute("sell") + "," +
+                sourceEvent.getAttribute("cluster")
+        );
+    }
+
     private String createItemString(Element sourceItem) {
         return (sourceItem.getAttribute("name") + ",") +
                 sourceItem.getAttribute("description") + "," +
@@ -89,7 +112,5 @@ class OverWorldParser {
                 sourceItem.getAttribute("type2") + "," +
                 sourceItem.getAttribute("imagePath") + ",";
     }
-
-
 
 }

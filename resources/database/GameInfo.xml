@@ -4,10 +4,11 @@
             <!--To be added later
             <chara name="Prota" maxHP="30" attack="7" defense="5" enAttack="2" enDefense="5" agility="7" tpCost="3" battlerGraphicPath="/images/Bulba_Pepe.png"/>
             -->
-            <hero name="Smitty" maxHP="45" attack="12" defense="7" enAttack="1" enDefense="4" agility="5" tpCost="5" expModifier="2.65" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Smitty.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Smitty.png" sizeX="390" sizeY="290"/>
-            <heroSkill starter="Steel Crusher,Glare"/>
             <hero name="Roxy" maxHP="20" attack="7" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.40" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Roxy.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Roxy.png" sizeX="150" sizeY="210"/>
             <heroSkill starter="Sniffle,Spring-Kick,Sharpen"/>
+            <hero name="Smitty" maxHP="45" attack="12" defense="7" enAttack="1" enDefense="4" agility="5" tpCost="5" expModifier="2.65" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Smitty.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Smitty.png" sizeX="390" sizeY="290"/>
+            <heroSkill starter="Steel Crusher,Glare"/>
+
         </CharacterBattleInfo>
         <CharacterBattleStrings>
             <ProtaBattleString string="You fire a quick shot at the enemy. It grazes them."/>
@@ -21,26 +22,39 @@
         </CharacterBattleStrings>
 
         <EnemyBattleInfo>
-            <enemy name="Jag" maxHP="20" attack="15" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.50"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png" sizeX="150" sizeY="100"/>
+            <enemy name="Jag Inf." maxHP="20" attack="15" defense="8" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.50"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png" sizeX="150" sizeY="100"/>
             <enemySkill starter="Sharpen"/>
             <enemy name="Harshmallow" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75"/>
             <enemySkill starter="Sniffle"/>
+            <enemy name="Eaflay" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75"/>
+            <enemySkill starter="Sniffle"/>
+            <enemy name="Oculith" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75"/>
+            <enemySkill starter="Sniffle"/>
+            <enemy name="Jag Adol." maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75"/>
+            <enemySkill starter="Sniffle"/>
+            <enemy name="Blisterbulb" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="null" miniGraphicPath="images/system/system_undefined.png" sizeX="75" sizeY="75"/>
+            <enemySkill starter="Acid Bath,Ensnare"/>
+            <enemy name="Apparacean" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="null" miniGraphicPath="images/system/system_undefined.png" sizeX="75" sizeY="75"/>
+            <enemySkill starter="Acid Bath,Ensnare"/>
+
 
 
 
         </EnemyBattleInfo>
-
         <Skills>
             <Skill name="Sniffle" affectAmt="1" tpCost= "4" type="debuff" type2="attack" quickInfo="Enemy Attack Down" extraMessage="The enemy's attack was lowered!" animType="heroQuickStretch"/>
             <Skill name="Sharpen" affectAmt="2" tpCost= "3" type="buff" type2="none" quickInfo="User Attack Up" extraMessage="The user's attack increased!" animType="heroQuickStretch"/>
             <Skill name="Steel Crusher" affectAmt="6" tpCost= "8" type="attack" type2="null" quickInfo="Heavy Steel Damage" extraMessage="null" animType="heroLunge"/>
-            <Skill name="Spring-Kick" affectAmt="5" tpCost= "3" type="attack" type2="null" quickInfo="Medium Impact Damage" extraMessage="null" animType="heroLunge"/>
+            <Skill name="Spring-Kick" affectAmt="5" tpCost= "4" type="attack" type2="null" quickInfo="Medium Impact Damage" extraMessage="null" animType="heroLunge"/>
             <Skill name="ElectroPulse" affectAmt="1" tpCost= "3" type="buff" type2="debuff" quickInfo="Light Volt Damage" extraMessage="null" animType="heroLunge"/>
             <Skill name="Sweep-Kick" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroLunge"/>
-            <Skill name="Rock Shower" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroLunge"/>\
+            <Skill name="Rock Shower" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroLunge"/>
             <Skill name="Analyze" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroQuickStretch"/>
             <Skill name="Glare" affectAmt="3" tpCost= "4" type="debuff" type2="attack" quickInfo="Enemy Attack Down" extraMessage="null" animType="heroQuickStretch"/>
-
+            <Skill name="Acid Bath" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroLunge"/>
+            <Skill name="Frond Spear" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroQuickStretch"/>
+            <Skill name="Ensnare" affectAmt="3" tpCost= "4" type="attack" type2="attack" quickInfo="Enemy Attack Down" extraMessage="null" animType="heroQuickStretch"/>
+            <Skill name="Stealth Charge" affectAmt="3" tpCost= "4" type="attack" type2="attack" quickInfo="Light specter damage. Chance to lower defense" extraMessage="null" animType="heroQuickStretch"/>
 
 
         </Skills>
@@ -48,8 +62,17 @@
 
     </BattleInfo>
     <ItemInfo>
-        <item name="Patch" description="Integrates with the user's body to recover health." quickSummary="Recover 15 HP" affectAmt="15" type="heal" type2="null" imagePath="/images/battleGraphics/itemGraphics/item_patch.png"/>
-        <item name="Overclock" description="A bizarre pocketwatch that creates a bubble of sped-up time around the user. Allows user to attack more quickly." quickSummary="-1 TP Cost" affectAmt="1" type="selfDebuff" type2="tpCost" imagePath="/images/battleGraphics/itemGraphics/item_overclock.png"/>
+        <item name="Patch" description="Integrates with the user's body to recover health." quickSummary="Recover 15 HP" buyPrice="20" affectAmt="15" type="heal" type2="null" imagePath="/images/battleGraphics/itemGraphics/item_patch.png"/>
+        <item name="Overclock" description="A bizarre pocketwatch that creates a bubble of sped-up time around the user. Allows user to attack more quickly." quickSummary="-1 TP Cost" buyPrice="20" affectAmt="1" type="selfDebuff" type2="tpCost" imagePath="/images/battleGraphics/itemGraphics/item_overclock.png"/>
+        <item name="Candy Bar" description="CHAWKLATE. Recovers health." quickSummary="Recover 10 HP" buyPrice="20" affectAmt="10" type="heal" type2="null" imagePath="null"/>
+        <item name="Chorps" description="Greasy slices of fried tuberous root" quickSummary="Recover 6 HP" buyPrice="20" affectAmt="6" type="heal" type2="null" imagePath="null"/>
+        <item name="Sunpop" description="A sugary beverage. Chance to incease TP" quickSummary="Recover 10 HP" buyPrice="20" affectAmt="10" type="heal" type2="null" imagePath="null"/>
+        <item name="BluRasp Sapphire" description="Naturally occurring crystallized sugar." quickSummary="Recover 20 HP" buyPrice="20" affectAmt="20" type="heal" type2="null" imagePath="null"/>
+        <item name="Red Shroom" description="Usually eating a mushroom you found on the ground is a bad idea. " quickSummary="noodle" buyPrice="20" affectAmt="50" type="heal" type2="null" imagePath="null"/>
+
+
+
+
     </ItemInfo>
     <OverWorldInfo>
         <Islands>
@@ -64,5 +87,10 @@
         </Islands>
 
     </OverWorldInfo>
+    <Events>
+        <event name="Buried Vending Machine" type="shop" stock="Chorps,Candy Bar,Sunpop" sell="false" cluster=""/>
+        <event name="Plains Battle 1" type="battle" stock="Patch" sell="false" cluster=""/>
+
+    </Events>
 </GameInfo>
 

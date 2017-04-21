@@ -1,6 +1,7 @@
 package Model.Tests;
 
 
+import edu.bsu.cs222.FPBreetlison.Model.BattleManager;
 import edu.bsu.cs222.FPBreetlison.Model.BattleXMLParser;
 import edu.bsu.cs222.FPBreetlison.Model.DamageCalculator;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
@@ -18,135 +19,58 @@ import java.util.HashMap;
 
 public class BattleTests {
 
-    private DamageCalculator damageCalc;
     private BattleXMLParser parser;
     private Document characterInfo;
 
     HashMap<String,Fighter> allHeroes;
+    HashMap<String,Fighter> allEnemies;
+    BattleManager battleManager;
     private Fighter attacker;
     private Fighter defender;
+
+    private ArrayList<Fighter> enemyTeam;
+    private ArrayList<Fighter> heroTeam;
 
 
     //region Test Initialization
     @Before
     public void setUp() throws ParserConfigurationException, IOException, SAXException {
+        battleManager = new BattleManager();
+        heroTeam = new ArrayList<>();
+        enemyTeam = new ArrayList<>();
         initFighters();
-        setUpCharacterInfo();
+        initTeams();
 
     }
 
     private void initFighters() throws IOException, SAXException, ParserConfigurationException {
-        attacker = new Fighter("Attacker,2,2,2,2,2,2,2");
-        defender = new Fighter("Attacker,2,2,2,2,2,2,2");
-        damageCalc = new DamageCalculator(attacker);
+        attacker = new Fighter("Elmira,10,2,2,2,2,2,2,1.65,/images/system/system_undefined.png,/images/system/system_undefined.png,200,200");
+        defender = new Fighter("Thompson,10,2,2,2,2,2,2,1.65,/images/system/system_undefined.png,/images/system/system_undefined.png,200,200");
         parser = new BattleXMLParser();
         parser.parseBattleData();
         allHeroes = parser.getHeroes();
+        allEnemies = parser.getEnemies();
     }
 
-    private void setUpCharacterInfo() throws ParserConfigurationException, IOException, SAXException {
+    private void initTeams() {
+        heroTeam.add(new Fighter(allHeroes.get("Smitty")));
+        heroTeam.add(new Fighter(allHeroes.get("Roxy")));
+        enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
+        enemyTeam.add(new Fighter(allEnemies.get("Blisterbulb")));
 
     }
-
-    //endregion
-    //region XML Parser Tests
-
-    //These need to be redone when we're finished adding information to characters
-
-    @Test
-    public void TestCharacterStringParser(){
-        Fighter fighter = new Fighter("Elmira,10,2,2,2,2,2,2");
-        Assert.assertEquals("Elmira",fighter.getName());
-        Assert.assertEquals(2,fighter.getAttack());
-    }
-
-    @Test
-    public void TestFighterXMLParse() throws IOException, SAXException, ParserConfigurationException {
-        Fighter fighter = allHeroes.get(0);
-        Assert.assertEquals("Prota",fighter.getName());
-
-    }
-
-    @Test
-    public void TestMoveDescriptionXMLParse() throws IOException, SAXException, ParserConfigurationException {
-        ArrayList<String> battleDesc = allHeroes.get(0).getBattleStrings();
-        Assert.assertEquals("You fire a quick shot at the enemy. It grazes them.",battleDesc.get(0));
-    }
-
-    @Test
-    public void TestItemXMLParse(){
-
-    }
-
-    @Test
-    public void TestRoomXMLParse(){
-
-    }
-
-    @Test
-    public void TestEntityXMLParse(){
-
-    }
-
-    @Test
-    public void TestEventXMLParse(){
-
-    }
-
-    //endregion
-    //region Overworld Tests
-    @Test
-    public void TestBasicRoomTraversal(){
-
-    }
-
-    //endregion
-    //region Battle System Tests
 
     @Test
     public void TestKODetection(){
-
-    }
-
-    @Test
-    public void TestEnemyTargetFinder(){
-
-    }
-
-    @Test
-    public void TestStateMachineEndEnemyTurn(){
-
-    }
-
-    @Test
-    public void TestStateMachineEnemyWin(){
-
-    }
-    @Test
-    public void TestStateMachineHeroWin(){
-
+        defender.takeDamage(9999999);
+        Assert.assertEquals(true,defender.isKO());
     }
 
     @Test
     public void TestDamageCalcGeneral(){
-
-        Assert.assertEquals(attacker.getAttack(),damageCalc.calculateDamage());
-    }
-
-    @Test
-    public void TestAffinityGeneral(){
-        Assert.assertEquals(attacker.getAttack(), damageCalc.calculateDamage());
-    }
-
-
-    @Test
-    public void TestHealingItem(){
-
-    }
-
-    @Test
-    public void TestBuffItem(){
-
+        attacker.doBasicAttack(defender);
+        System.out.println(attacker.getLastDamage());
+        Assert.assertEquals(3,attacker.getLastDamage());
     }
 
     @Test

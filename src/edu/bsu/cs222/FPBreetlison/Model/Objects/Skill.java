@@ -32,7 +32,7 @@ public class Skill implements java.io.Serializable {
         }
         else if(type.equals("attack")){
             double damage = user.getCurrStats().get("attack")*affectAmt/target.getCurrStats().get("defense");
-            int finalDamage = (int)Math.round(damage);
+            int finalDamage = (int)Math.round(damage*1.5);
             target.takeDamage(finalDamage);
         }
         else if(type.equals("debuff")){

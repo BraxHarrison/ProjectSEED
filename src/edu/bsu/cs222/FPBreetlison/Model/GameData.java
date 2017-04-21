@@ -1,9 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
-import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
-import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
-import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
-import edu.bsu.cs222.FPBreetlison.Model.Objects.Skill;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,11 +13,14 @@ import java.util.Map;
 public class GameData implements java.io.Serializable {
 
     private ArrayList<Fighter> team;
+    private ArrayList<Fighter> enemyTeam;
+    private Wallet wallet;
+
     private HashMap<String,Fighter> allHeroes;
     private HashMap<String,Fighter> allEnemies;
-    private ArrayList<Fighter> enemyTeam;
     private HashMap<String,Skill> allSkills;
     private HashMap<String,Item> allItems;
+    private HashMap<String,Event> allEvents;
     private ArrayList<Item> inventory;
     private Map<String, Room> allRooms;
     private Room currentRoom;
@@ -41,6 +41,9 @@ public class GameData implements java.io.Serializable {
         initItems();
         maxTP = 10;
         tp = maxTP;
+        wallet = new Wallet();
+        wallet.collect(200,"KB");
+
 
     }
 
@@ -51,6 +54,7 @@ public class GameData implements java.io.Serializable {
         loadFighters(battleLoader);
         loadRooms(overworldLoader);
         loadItems(overworldLoader);
+        loadEvents(overworldLoader);
     }
 
     public void subtractTP(int amount){
@@ -58,8 +62,11 @@ public class GameData implements java.io.Serializable {
     }
 
     private void loadItems(OverWorldParser loader) {
-
         allItems = loader.createItemDatabase();
+    }
+
+    private void loadEvents(OverWorldParser loader){
+        allEvents = loader.createEventDatabase();
     }
 
     private void loadSkills(BattleXMLParser loader) {
@@ -70,6 +77,7 @@ public class GameData implements java.io.Serializable {
         team = new ArrayList<>();
         allSkills = new HashMap<>();
         allItems = new HashMap<>();
+        allEvents = new HashMap<>();
         inventory = new ArrayList<>();
         enemyTeam = new ArrayList<>();
     }
@@ -88,16 +96,15 @@ public class GameData implements java.io.Serializable {
     private void addHeroes(){
         team.add(allHeroes.get("Roxy"));
         team.add(allHeroes.get("Smitty"));
-        team.add(allHeroes.get("Smitty"));
-        team.add(allHeroes.get("Smitty"));
+
     }
 
     public void addEnemies(){
         enemyTeam.clear();
         if(currentRoom.getName().equals("Colossal Plains")){
-            enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+            enemyTeam.add(new Fighter(allEnemies.get("Blisterbulb")));
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
-            enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+            enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
         }
         else if (currentRoom.getName().equals("Luminous Caves")){
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
@@ -105,8 +112,8 @@ public class GameData implements java.io.Serializable {
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
         }
         else {
-            enemyTeam.add(new Fighter(allEnemies.get("Jag")));
-            enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+            enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
+            enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
         }
     }
 
@@ -116,6 +123,8 @@ public class GameData implements java.io.Serializable {
 
     private void initItems() {
         inventory.add(allItems.get("Patch"));
+        inventory.add(allItems.get("Chorps"));
+        inventory.add(allItems.get("BluRasp Sapphire"));
         inventory.add(allItems.get("Overclock"));
     }
 
@@ -139,6 +148,9 @@ public class GameData implements java.io.Serializable {
     public HashMap<String, Fighter> getAllEnemies() {
         return allEnemies;
     }
+    public HashMap<String, Fighter> getAllHeroes() {
+        return allHeroes;
+    }
     public int getMaxTP() {
         return maxTP;
     }
@@ -157,7 +169,13 @@ public class GameData implements java.io.Serializable {
             tp = 0;
         }
     }
+    public HashMap<String, Item> getAllItems() {
+        return allItems;
+    }
     public ArrayList<Item> getInventory() {
         return inventory;
+    }
+    public Wallet getWallet(){
+        return wallet;
     }
 }

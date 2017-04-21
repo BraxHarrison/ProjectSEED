@@ -60,6 +60,9 @@ public class Item implements java.io.Serializable {
         return name;
     }
     public String getImagePath() {
+        if(imagePath.equals("null")){
+            return "/images/system/system_undefined.png";
+        }
         return imagePath;
     }
     public String getDescription() {

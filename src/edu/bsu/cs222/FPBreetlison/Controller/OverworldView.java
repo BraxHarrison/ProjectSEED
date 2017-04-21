@@ -34,6 +34,7 @@ public class OverworldView {
     public StackPane loadSaveMenu;
     public StackPane inspectMenu;
     public StackPane navBanner;
+    public Label walletDisplay;
 
     private GameManager game;
     private GameData gameData;
@@ -127,7 +128,13 @@ public class OverworldView {
         setDirectionButtonsVisible();
         setBackground();
         updateBanner();
+        updateWallet();
         game.updateStageTitle();
+    }
+
+    private void updateWallet() {
+        System.out.println("Updating wallet..");
+        walletDisplay.setText(gameData.getWallet().getDisplayAmount());
     }
 
     private void setBackground() {
