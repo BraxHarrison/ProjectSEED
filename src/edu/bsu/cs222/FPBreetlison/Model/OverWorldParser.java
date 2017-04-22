@@ -20,8 +20,9 @@ import java.util.Map;
 public class OverWorldParser {
 
     private Document document;
+    private GameData gameData;
 
-    public OverWorldParser(){
+    public OverWorldParser(GameData gameData){
         try {
             createDoc();
         } catch (ParserConfigurationException e) {
@@ -40,18 +41,19 @@ public class OverWorldParser {
         this.document = builder.parse(inputStream);
     }
 
-    Map<String, Room> parseRoomInfo() throws ParserConfigurationException, IOException, SAXException {
+    Map<String, Room> parseRoomInfo(GameData gameData) throws ParserConfigurationException, IOException, SAXException {
         createDoc();
-        return createRoomMap();
+        return createRoomMap(gameData);
     }
 
-    private Map<String, Room> createRoomMap(){
+    private Map<String, Room> createRoomMap(GameData gameData){
         Map<String, Room> rooms = new HashMap<>();
         NodeList nodeList = this.document.getElementsByTagName("room");
         for(int i = 0; i< nodeList.getLength(); i++){
             Node roomInfo = nodeList.item(i);
             Element roomEle = (Element)roomInfo;
             Room room = new Room(createRoomString(roomEle));
+            room.loadEvents(gameData);
             rooms.put(room.getName(),room);
         }
         return rooms;
@@ -60,6 +62,7 @@ public class OverWorldParser {
     private String createRoomString(Element roomElement) {
         return (roomElement.getAttribute("name") + "," +
                 roomElement.getAttribute("des") + "," +
+                roomElement.getAttribute("events") + ","+
                 roomElement.getAttribute("north") + "," +
                 roomElement.getAttribute("south") + "," +
                 roomElement.getAttribute("east") + "," +
@@ -81,13 +84,14 @@ public class OverWorldParser {
         return items;
     }
 
-    public HashMap<String,Event> createEventDatabase(){
+    public HashMap<String,Event> createEventDatabase(GameData gameData){
         HashMap<String, Event> events = new HashMap<>();
         NodeList nodeList = document.getElementsByTagName("event");
         for(int i = 0; i<nodeList.getLength();i++){
             Node eventInfo = nodeList.item(i);
+            System.out.println(eventInfo.getAttributes().getNamedItem("type"));
             Element sourceEvent = (Element)eventInfo;
-            Event event = new Event(createEventString(sourceEvent));
+            Event event = new Event(createEventString(sourceEvent),gameData);
             events.put(event.getName(),event);
         }
         return events;
@@ -95,6 +99,7 @@ public class OverWorldParser {
     }
 
     private String createEventString(Element sourceEvent) {
+        System.out.println(sourceEvent.getAttribute("name"));
         return (sourceEvent.getAttribute("name") + "," +
                 sourceEvent.getAttribute("type") + "," +
                 sourceEvent.getAttribute("stock") + "," +
@@ -108,6 +113,7 @@ public class OverWorldParser {
                 sourceItem.getAttribute("description") + "," +
                 sourceItem.getAttribute("quickSummary") + "," +
                 sourceItem.getAttribute("affectAmt") + "," +
+                sourceItem.getAttribute("buyPrice") + "," +
                 sourceItem.getAttribute("type") + "," +
                 sourceItem.getAttribute("type2") + "," +
                 sourceItem.getAttribute("imagePath") + ",";

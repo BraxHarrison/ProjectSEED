@@ -63,10 +63,10 @@
     </BattleInfo>
     <ItemInfo>
         <item name="Patch" description="Integrates with the user's body to recover health." quickSummary="Recover 15 HP" buyPrice="20" affectAmt="15" type="heal" type2="null" imagePath="/images/battleGraphics/itemGraphics/item_patch.png"/>
-        <item name="Overclock" description="A bizarre pocketwatch that creates a bubble of sped-up time around the user. Allows user to attack more quickly." quickSummary="-1 TP Cost" buyPrice="20" affectAmt="1" type="selfDebuff" type2="tpCost" imagePath="/images/battleGraphics/itemGraphics/item_overclock.png"/>
+        <item name="Overclock" description="A bizarre pocketwatch that creates a bubble of sped-up time around the user. Allows user to attack more quickly." quickSummary="-1 TP Cost" buyPrice="20" affectAmt="1" type="tpBuff" type2="" imagePath="/images/battleGraphics/itemGraphics/item_overclock.png"/>
         <item name="Candy Bar" description="CHAWKLATE. Recovers health." quickSummary="Recover 10 HP" buyPrice="20" affectAmt="10" type="heal" type2="null" imagePath="null"/>
         <item name="Chorps" description="Greasy slices of fried tuberous root" quickSummary="Recover 6 HP" buyPrice="20" affectAmt="6" type="heal" type2="null" imagePath="null"/>
-        <item name="Sunpop" description="A sugary beverage. Chance to incease TP" quickSummary="Recover 10 HP" buyPrice="20" affectAmt="10" type="heal" type2="null" imagePath="null"/>
+        <item name="SunPop" description="A sugary beverage. Chance to incease TP" quickSummary="Recover 10 HP" buyPrice="20" affectAmt="10" type="heal" type2="null" imagePath="null"/>
         <item name="BluRasp Sapphire" description="Naturally occurring crystallized sugar." quickSummary="Recover 20 HP" buyPrice="20" affectAmt="20" type="heal" type2="null" imagePath="null"/>
         <item name="Red Shroom" description="Usually eating a mushroom you found on the ground is a bad idea. " quickSummary="noodle" buyPrice="20" affectAmt="50" type="heal" type2="null" imagePath="null"/>
 
@@ -78,17 +78,17 @@
         <Islands>
             <Sectors>
                 <Rooms>
-                    <room name="Colossal Plains" des="null" north="Luminous Caves" south="Inverted Forest" east="null" west="null" events="battle,item" image="images/Plains_Day.png" battleImage="images/battleGraphics/backgrounds/battle_backgrounds_plainsday.png"/>
-                    <room name="Luminous Caves" des="null" north="null" south="Colossal Plains" east="null" west="null" events="fountain,battle,item" image="null" battleImage="null" />
-                    <room name="Inverted Forest" des="null" north="Colossal Plains" south="null" east="Conchbreak Key" west="null" events="item,shop" image="null" battleImage="null"/>
-                    <room name="Conchbreak Key" des="null" north="null" south="null" east="null" west="Inverted Forest" image="null" events="" battleImage="null"/>
+                    <room name="Colossal Plains" des="null" events="Buried Vending Machine" north="Luminous Caves" south="Inverted Forest" east="null" west="null" image="images/Plains_Day.png" battleImage="images/battleGraphics/backgrounds/battle_backgrounds_plainsday.png"/>
+                    <room name="Luminous Caves" des="null" events="Buried Vending Machine" north="null" south="Colossal Plains" east="null" west="null"  image="null" battleImage="null" />
+                    <room name="Inverted Forest" des="null" events="Buried Vending Machine" north="Colossal Plains" south="null" east="Conchbreak Key" west="null" image="null" battleImage="null"/>
+                    <room name="Conchbreak Key" des="null" events="Buried Vending Machine" north="null" south="null" east="null" west="Inverted Forest" image="null" battleImage="null"/>
                 </Rooms>
             </Sectors>
         </Islands>
 
     </OverWorldInfo>
     <Events>
-        <event name="Buried Vending Machine" type="shop" stock="Chorps,Candy Bar,Sunpop" sell="false" cluster=""/>
+        <event name="Buried Vending Machine" type="shop" stock="Chorps/Candy Bar/SunPop/Patch" sell="false" cluster=""/>
         <event name="Plains Battle 1" type="battle" stock="Patch" sell="false" cluster=""/>
 
     </Events>

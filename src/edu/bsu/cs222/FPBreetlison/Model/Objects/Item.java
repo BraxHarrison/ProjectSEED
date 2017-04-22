@@ -9,6 +9,7 @@ public class Item implements java.io.Serializable {
     private String description;
     private String quickSummary;
     private int affectAmt;
+    private int buyPrice;
     private String type;
     private String type2;
     private String imagePath;
@@ -20,9 +21,10 @@ public class Item implements java.io.Serializable {
         this.description = itemInfo.get(1);
         this.quickSummary = itemInfo.get(2);
         this.affectAmt = Integer.parseInt(itemInfo.get(3));
-        this.type = itemInfo.get(4);
-        this.type2 = itemInfo.get(5);
-        this.imagePath = itemInfo.get(6);
+        this.buyPrice = Integer.parseInt(itemInfo.get(4));
+        this.type = itemInfo.get(5);
+        this.type2 = itemInfo.get(6);
+        this.imagePath = itemInfo.get(7);
     }
 
 
@@ -70,5 +72,14 @@ public class Item implements java.io.Serializable {
     }
     public String getQuickSummary() {
         return quickSummary;
+    }
+    public String getType() {
+        return type;
+    }
+    public int getAffectAmt() {
+        return affectAmt;
+    }
+    public int getBuyPrice() {
+        return buyPrice;
     }
 }

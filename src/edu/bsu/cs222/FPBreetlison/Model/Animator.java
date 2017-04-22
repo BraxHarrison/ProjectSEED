@@ -188,10 +188,10 @@ public class Animator implements java.io.Serializable {
         for(int i = 0; i<heroGraphicsArea.getChildren().size();i++){
             ImageView hero = (ImageView)heroGraphicsArea.getChildren().get(i);
             KeyValue spinV = new KeyValue(hero.scaleXProperty(),-1,Interpolator.EASE_BOTH);
-            KeyValue moveBackV = new KeyValue(hero.translateXProperty(),40,Interpolator.EASE_BOTH);
+            KeyValue moveBackV = new KeyValue(hero.translateXProperty(),hero.getTranslateX()+40,Interpolator.EASE_BOTH);
             KeyValue stillV = new KeyValue(hero.scaleXProperty(),-1,Interpolator.EASE_BOTH);
-            KeyValue tiltV = new KeyValue(hero.rotateProperty(),15,Interpolator.EASE_BOTH);
-            KeyValue moveFV = new KeyValue(hero.translateXProperty(),-800,Interpolator.EASE_BOTH);
+            KeyValue tiltV = new KeyValue(hero.rotateProperty(),hero.getRotate()+15,Interpolator.EASE_BOTH);
+            KeyValue moveFV = new KeyValue(hero.translateXProperty(),hero.getTranslateX()-800,Interpolator.EASE_BOTH);
             KeyFrame spinK = new KeyFrame(Duration.millis(200),spinV,moveBackV);
             KeyFrame stillK = new KeyFrame(Duration.millis(400),stillV);
             KeyFrame tiltK = new KeyFrame(Duration.millis(700),tiltV);

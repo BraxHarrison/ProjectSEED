@@ -1,5 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
+import edu.bsu.cs222.FPBreetlison.Controller.OverworldView;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.*;
 import org.xml.sax.SAXException;
 
@@ -25,13 +26,13 @@ public class GameData implements java.io.Serializable {
     private Map<String, Room> allRooms;
     private Room currentRoom;
     private int tp;
+    private int tempMaxTP;
     private int maxTP;
     private int selectedTarget;
 
 
     public GameData() throws IOException, SAXException, ParserConfigurationException {
         init();
-
     }
 
     private void init() throws ParserConfigurationException, SAXException, IOException {
@@ -43,22 +44,36 @@ public class GameData implements java.io.Serializable {
         tp = maxTP;
         wallet = new Wallet();
         wallet.collect(200,"KB");
+        System.out.println(allEvents.get("Buried Vending Machine").getType());
 
 
     }
 
     private void loadData() throws ParserConfigurationException, SAXException, IOException {
-        OverWorldParser overworldLoader = new OverWorldParser();
+        OverWorldParser overworldLoader = new OverWorldParser(this);
         BattleXMLParser battleLoader = new BattleXMLParser();
+        loadItems(overworldLoader);
         loadSkills(battleLoader);
         loadFighters(battleLoader);
-        loadRooms(overworldLoader);
-        loadItems(overworldLoader);
         loadEvents(overworldLoader);
+        loadRooms(overworldLoader);
+
     }
 
     public void subtractTP(int amount){
         tp -= amount;
+    }
+
+    public void increaseMaxTP(int amount){
+        maxTP+=amount;
+    }
+
+    public void tempIncreaseMaxTP(int amount){
+        tempMaxTP+=amount;
+    }
+
+    public void revertMaxTP(){
+        tempMaxTP=maxTP;
     }
 
     private void loadItems(OverWorldParser loader) {
@@ -66,7 +81,7 @@ public class GameData implements java.io.Serializable {
     }
 
     private void loadEvents(OverWorldParser loader){
-        allEvents = loader.createEventDatabase();
+        allEvents = loader.createEventDatabase(this);
     }
 
     private void loadSkills(BattleXMLParser loader) {
@@ -83,7 +98,7 @@ public class GameData implements java.io.Serializable {
     }
 
     private void loadRooms(OverWorldParser loader) throws IOException, SAXException, ParserConfigurationException {
-        allRooms = loader.parseRoomInfo();
+        allRooms = loader.parseRoomInfo(this);
     }
 
     private void loadFighters(BattleXMLParser loader) throws IOException, SAXException, ParserConfigurationException {
@@ -154,6 +169,9 @@ public class GameData implements java.io.Serializable {
     public int getMaxTP() {
         return maxTP;
     }
+    public int getTempMaxTP() {
+        return tempMaxTP;
+    }
     public int getCurrentTp() {
         return tp;
     }
@@ -174,6 +192,9 @@ public class GameData implements java.io.Serializable {
     }
     public ArrayList<Item> getInventory() {
         return inventory;
+    }
+    public HashMap<String, Event> getAllEvents() {
+        return allEvents;
     }
     public Wallet getWallet(){
         return wallet;

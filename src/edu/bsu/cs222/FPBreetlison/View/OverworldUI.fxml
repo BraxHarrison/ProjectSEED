@@ -41,11 +41,28 @@
         <Button fx:id="exitLoadSaveMenu" text="X" StackPane.alignment="TOP_LEFT"   onAction="#hideLoadSaveMenu"/>
     </StackPane>
     <StackPane fx:id="inspectMenu" StackPane.alignment="TOP_CENTER" visible="false" translateY="50" maxHeight="100" maxWidth="500" styleClass="save-box">
-        <ScrollPane fx:id="eventScroller">
+        <ScrollPane fx:id="eventScroller" vbarPolicy="never" hbarPolicy="never">
+            <HBox fx:id="events">
 
+            </HBox>
         </ScrollPane>
         <Button text="X" onAction="#hideInspectMenu" StackPane.alignment="TOP_LEFT"/>
 
+    </StackPane>
+    <StackPane fx:id="shopMenu" maxHeight="400" maxWidth="400" visible="false" StackPane.alignment="CENTER" styleClass="menu-box">
+        <Button fx:id="hideShop" text="X" onAction="#hideShop" StackPane.alignment="TOP_RIGHT"/>
+        <ScrollPane fx:id="itemAreaScroller" StackPane.alignment="CENTER_LEFT" styleClass="edge-to-edge" maxWidth="100">
+            <VBox fx:id="shopItemsArea" spacing="20"/>
+        </ScrollPane>
+        <ImageView fx:id="itemDisplay" visible="false" StackPane.alignment="CENTER" translateX="50" fitHeight="200" fitWidth="200"/>
+        <Label fx:id="buy" visible="false" text="Buy" StackPane.alignment="BOTTOM_CENTER" translateY="-40" translateX="50" styleClass="banner-text"/>
+
+
+    </StackPane>
+    <StackPane fx:id="BagMenu" maxHeight="400" maxWidth="400" visible="false" StackPane.alignment="CENTER" styleClass="menu-box">
+        <ScrollPane fx:id="invItemScroller" StackPane.alignment="CENTER_LEFT" styleClass="edge-to-edge" maxWidth="100">
+            <VBox fx:id="invItemsArea" spacing="20"/>
+        </ScrollPane>
     </StackPane>
     <Label fx:id="walletDisplay" StackPane.alignment="TOP_CENTER"/>
 

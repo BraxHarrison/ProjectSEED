@@ -96,3 +96,11 @@
 .save-box{
     -fx-background-color:"black";
 }
+
+.item-area{
+    -fx-background-color:"grey";
+}
+
+.menu-box{
+    -fx-background-color:#424447;
+}

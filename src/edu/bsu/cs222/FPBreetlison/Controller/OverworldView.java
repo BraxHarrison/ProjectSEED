@@ -3,6 +3,7 @@ package edu.bsu.cs222.FPBreetlison.Controller;
 import edu.bsu.cs222.FPBreetlison.Model.Animator;
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
 import edu.bsu.cs222.FPBreetlison.Model.GameManager;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Event;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class OverworldView {
+public class OverworldView implements java.io.Serializable {
 
 
     public VBox sideBar;
@@ -24,6 +25,12 @@ public class OverworldView {
     public ImageView travelButton;
     public ImageView saveLoadButton;
     public ImageView inspectButton;
+
+    public StackPane BagMenu;
+    public VBox invItemsArea;
+    public StackPane shopMenu;
+    public VBox shopItemsArea;
+
     public Label roomDescription;
     public StackPane travelPane;
     public Button north;
@@ -35,10 +42,12 @@ public class OverworldView {
     public StackPane inspectMenu;
     public StackPane navBanner;
     public Label walletDisplay;
+    public HBox events;
 
     private GameManager game;
     private GameData gameData;
     private Animator animator;
+    private Event loadedEvent;
 
     public void initialize(GameManager game){
         this.game = game;
@@ -126,10 +135,77 @@ public class OverworldView {
     private void updateRoom() {
         roomDescription.setText(gameData.getCurrentRoom().getDescription());
         setDirectionButtonsVisible();
+        updateEvents();
         setBackground();
         updateBanner();
         updateWallet();
         game.updateStageTitle();
+    }
+
+    private void updateEvents() {
+        events.getChildren().clear();
+        for(int i = 0; i<gameData.getCurrentRoom().getEvents().size();i++){
+            int index = i;
+            ImageView event = new ImageView();
+            formatEvent(event);
+            event.setOnMousePressed(e->startEvent(index));
+            events.getChildren().add(event);
+        }
+    }
+
+    private void formatEvent(ImageView event) {
+        event.setImage(new Image("/images/system/system_undefined.png"));
+        event.setFitWidth(100);
+        event.setFitHeight(100);
+    }
+
+    private void startEvent(int index) {
+        loadedEvent = gameData.getCurrentRoom().getEvents().get(index);
+        if(loadedEvent.getType().equals("shop")){
+            loadShop(loadedEvent);
+            shopMenu.setVisible(true);
+        }
+    }
+
+    private void loadShop(Event shop) {
+        shopItemsArea.getChildren().clear();
+        for(int i=0;i<shop.getStock().size();i++){
+            int index = i;
+            System.out.println(shop.getStock().get(i).getName());
+            HBox itemButton = new HBox();
+            populateItemButton(itemButton,i);
+            itemButton.setOnMousePressed(e->selectItemFromShop(index));
+            shopItemsArea.getChildren().add(itemButton);
+        }
+
+    }
+
+    private void populateItemButton(HBox button, int index) {
+        ImageView buttonGraphic = new ImageView(new Image("/images/system/system_undefined.png"));
+        buttonGraphic.setFitHeight(20);
+        buttonGraphic.setFitWidth(20);
+        Label itemName = new Label(loadedEvent.getStock().get(index).getName());
+        Label price = new Label("" + loadedEvent.getStock().get(index).getBuyPrice());
+        button.getChildren().addAll(buttonGraphic,itemName,price);
+        button.setSpacing(3);
+    }
+
+    private void selectItemFromShop(int index) {
+        ImageView itemDisplay = (ImageView)shopMenu.getChildren().get(2);
+        Label buyButton = (Label)shopMenu.getChildren().get(3);
+        itemDisplay.setVisible(true);
+        buyButton.setVisible(true);
+        itemDisplay.setImage(new Image(loadedEvent.getStock().get(index).getImagePath()));
+        buyButton.setOnMousePressed(e->buyItem(index));
+
+    }
+
+    private void buyItem(int index) {
+        gameData.getInventory().add(loadedEvent.getStock().get(index));
+        //Will need to change this slightly to allow for different price units
+        gameData.getWallet().spend(loadedEvent.getStock().get(index).getBuyPrice(),"KB");
+        updateWallet();
+
     }
 
     private void updateWallet() {
@@ -205,5 +281,9 @@ public class OverworldView {
 
     public void hideInspectMenu(ActionEvent actionEvent) {
         inspectMenu.setVisible(false);
+    }
+
+    public void hideShop(ActionEvent actionEvent) {
+        shopMenu.setVisible(false);
     }
 }

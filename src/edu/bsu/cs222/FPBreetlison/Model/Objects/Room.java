@@ -1,35 +1,51 @@
 package edu.bsu.cs222.FPBreetlison.Model.Objects;
 
+import edu.bsu.cs222.FPBreetlison.Model.GameData;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Room implements java.io.Serializable {
 
-    private String description;
     private String name;
+    private String description;
+    private List<String> eventList;
     private String north;
     private String south;
     private String east;
     private String west;
     private String imagePath;
     private String battleImagePath;
+    private ArrayList<Event> events;
     //private ArrayList<Item> itemsInRoom;
 
     public Room(String info){
 
         List<String> roomInfo = stringParser(info);
+        events = new ArrayList<>();
         this.name = roomInfo.get(0);
         this.description = roomInfo.get(1);
-        this.north = roomInfo.get(2);
-        this.south = roomInfo.get(3);
-        this.east = roomInfo.get(4);
-        this.west = roomInfo.get(5);
-        this.imagePath = roomInfo.get(6);
-        this.battleImagePath = roomInfo.get(7);
+        eventList = eventParser(roomInfo.get(2));
+        this.north = roomInfo.get(3);
+        this.south = roomInfo.get(4);
+        this.east = roomInfo.get(5);
+        this.west = roomInfo.get(6);
+        this.imagePath = roomInfo.get(7);
+        this.battleImagePath = roomInfo.get(8);
     }
 
+    public void loadEvents(GameData gameData) {
+        for(int i = 0; i<eventList.size();i++){
+            Event event = gameData.getAllEvents().get(eventList.get(i));
+            events.add(event);
+        }
+    }
     private List<String> stringParser(String info) {
         return Arrays.asList(info.split(","));
+    }
+    private List<String> eventParser(String info){
+        return Arrays.asList(info.split("/"));
     }
 
     public String getNorth(){
@@ -67,5 +83,7 @@ public class Room implements java.io.Serializable {
     public String getName(){
         return name;
     }
-
+    public ArrayList<Event> getEvents() {
+        return events;
+    }
 }

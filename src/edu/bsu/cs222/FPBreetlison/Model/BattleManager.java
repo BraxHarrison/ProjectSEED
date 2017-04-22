@@ -1,6 +1,7 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
 import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Skill;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
@@ -321,7 +322,14 @@ public class BattleManager {
     }
 
     public void useItem(int itemNo) {
-        gameData.getInventory().get(itemNo).activate(gameData.getTeam().get(battleView.selectedUser));
+        Item item = gameData.getInventory().get(itemNo);
+        if(item.getType().equals("tpBuff")){
+            gameData.tempIncreaseMaxTP(item.getAffectAmt());
+        }
+        else{
+            item.activate(gameData.getTeam().get(battleView.selectedUser));
+        }
+
         gameData.removeObjectFromInventory(itemNo);
     }
 
