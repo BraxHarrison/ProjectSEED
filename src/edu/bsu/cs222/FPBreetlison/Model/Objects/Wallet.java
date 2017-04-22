@@ -28,7 +28,6 @@ public class Wallet implements java.io.Serializable {
         }
         else if(type.equals("GB")){
             this.amount+=amount*1000000;
-            System.out.println(this.amount);
         }
         else{
             this.amount+=amount;
@@ -38,7 +37,7 @@ public class Wallet implements java.io.Serializable {
 
     public String getDisplayAmount(){
         convertForDisplay();
-       // round();
+        round();
         return displayAmount + type;
     }
 
@@ -56,15 +55,10 @@ public class Wallet implements java.io.Serializable {
     }
 
     private void round() {
-        if(displayAmount % 1 == 0){
-            displayAmount = Math.round(displayAmount*1);
-            displayAmount = displayAmount/1;
+        if(displayAmount % 1 != 0){
+            displayAmount = Math.round(displayAmount*100);
+            displayAmount = displayAmount/100;
         }
-        else{
-            displayAmount = Math.round(displayAmount*10);
-            displayAmount = displayAmount/10;
-        }
-        System.out.println(amount);
     }
 
 }

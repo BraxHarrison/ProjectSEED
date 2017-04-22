@@ -133,7 +133,6 @@ public class OverworldView {
     }
 
     private void updateWallet() {
-        System.out.println("Updating wallet..");
         walletDisplay.setText(gameData.getWallet().getDisplayAmount());
     }
 
@@ -191,11 +190,11 @@ public class OverworldView {
         updateRoom();
     }
 
-    public void saveGame(ActionEvent actionEvent) throws IOException {
+    public void saveGame() throws IOException {
         game.saveGame();
     }
 
-    public void loadGame(ActionEvent actionEvent) throws IOException, ClassNotFoundException {
+    public void loadGame() throws IOException, ClassNotFoundException {
         game.loadGame();
         initialize(this.game);
     }

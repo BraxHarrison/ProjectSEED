@@ -9,7 +9,7 @@ import static java.awt.SystemColor.info;
 /**
  * Created by cacto on 4/16/2017.
  */
-public class Event {
+public class Event implements java.io.Serializable {
 
     private String name;
     private String type;

@@ -73,6 +73,13 @@
 
 }
 
+.menu-text{
+    -fx-text-fill: white;
+    -fx-font-family: "Underwhelmed BRK";
+    -fx-font-size: 25pt;
+
+}
+
 .map{
 
     -fx-background-image: url("/images/system/system_map.png");

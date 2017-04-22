@@ -25,6 +25,7 @@ public class BattleManager {
     private Fighter target;
 
     private int targetNo;
+    private boolean enemyLock;
     private Snapshot fighterSnapshot;
     private ArrayList<Snapshot> targetQueue;
     private ArrayList<String> messageQueue;
@@ -53,9 +54,11 @@ public class BattleManager {
 
         switch (phase) {
             case "hero":
+                System.out.println("It's hero time!");
                 enableCharacterMenu();
                 break;
             case "enemy":
+                System.out.println("Triggering enemy turn!");
                 disableCharacterMenu();
                 tryEnemyAttack();
                 resetTP();
@@ -106,7 +109,6 @@ public class BattleManager {
     }
 
     private void tryEnemyAttack() {
-
         for (int i = 0; i< gameData.getEnemyTeam().size();i++) {
             if(!gameData.getEnemyTeam().get(i).isKO()){
                 findLivingHero(i);
@@ -115,6 +117,7 @@ public class BattleManager {
     }
 
     private void findLivingHero(int i) {
+        System.out.println("Attacking Enemy: " + gameData.getEnemyTeam().get(i).getName());
         fighterSnapshot = new Snapshot();
         fighterSnapshot.setAttackerIndex(i);
         fighterSnapshot.setAnimType("enemyLunge");
@@ -124,6 +127,7 @@ public class BattleManager {
             target = findNextTarget();
         }
         if (target != null) {
+            System.out.println("Target: " + gameData.getTeam().get(targetNo).getName()+"\n");
             fighterSnapshot.setIndex(targetNo);
             doEnemyAttack(gameData.getEnemyTeam().get(i), target);
         }
@@ -152,7 +156,6 @@ public class BattleManager {
         fighterSnapshot.calcHPPercent(target);
         detectHeroKO();
         fighterSnapshot.setKOState(target.isKO());
-       // System.out.println("MaxHP: " + target.getHp() + "/CurrHP: " + target.getCurrStats().get("hp"));
         messageQueue.add(user.getName() + " strikes " + target.getName() + " !");
         targetQueue.add(fighterSnapshot);
 
@@ -172,16 +175,17 @@ public class BattleManager {
 
     private void endEnemyTurn() {
         battleView.heroSelectorArea.setVisible(true);
+        System.out.println("Is the enemy turn ending?" + "\n");
         if(detectHeroKO()){
             updateTurn("enemyWin");
             messageQueue.add("Everyone's trashed! You lose!");
-
         }
         else{
             messageQueue.add("It's your turn!");
             updateTurn("hero");
 
         }
+        System.out.println("This is being updated!");
         battleView.queueMessages(messageQueue);
         battleView.queueBarUpdates(targetQueue);
         battleView.uiLocked = true;
@@ -221,9 +225,21 @@ public class BattleManager {
     }
 
     public void checkPlayerTP(){
-//        if(gameData.getCurrentTp() <= 0){
-//            updateTurn("enemy");
-//        }
+        System.out.println("TP: " + gameData.getCurrentTp() + "\n");
+        if(gameData.getCurrentTp() <= 0){
+            System.out.println("NO TP DETECTED");
+            battleView.skillSelectorArea.setVisible(false);
+            prepareEndPlayerTurn();
+
+        }
+    }
+
+    private void enemyTurnDelay(){
+        Timeline counter = new Timeline();
+        counter.getKeyFrames().add(new KeyFrame(
+                Duration.millis(500),null));
+        counter.setOnFinished(ae->endPlayerTurn());
+        counter.play();
     }
 
     public void tryHeroBasicAttack(){
@@ -234,6 +250,7 @@ public class BattleManager {
             battleView.handleAnimation("heroLunge");
             messageQueue.add(attacker.getName() + " attacks " + target.getName() +"!");
             battleView.queueMessages(messageQueue);
+            detectEnemyKO();
             startHeroBasicAttack(cost);
         }
         else{
@@ -251,6 +268,8 @@ public class BattleManager {
         detectEnemyKO();
         //startDamageAnimation();
         battleView.queueMessages(messageQueue);
+        //This isn't calling
+        checkPlayerTP();
 
     }
 
@@ -291,12 +310,14 @@ public class BattleManager {
         }
     }
 
-    public void endPlayerTurn() {
+    public void prepareEndPlayerTurn(){
         battleView.blockEnemySelectors();
-        updateTurn("enemy");
         battleView.queueMessages(messageQueue);
         battleView.uiLocked = true;
-
+        enemyTurnDelay();
+    }
+    public void endPlayerTurn() {
+        updateTurn("enemy");
     }
 
     public void useItem(int itemNo) {
@@ -318,6 +339,8 @@ public class BattleManager {
             detectEnemyKO();
             battleView.handleAnimation(skill.getAnimType());
             battleView.queueMessages(messageQueue);
+            //The skill is not trying to activate
+            checkPlayerTP();
         }
         else{
             battleView.pushMessage("There's not enough time to use that skill!");

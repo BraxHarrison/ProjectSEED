@@ -90,7 +90,6 @@ public class Animator implements java.io.Serializable {
 
     public void enemyLunge(){
         setUpEnemyOrientation();
-        System.out.println("Is this what happens?");
         Timeline timeline = new Timeline();
         KeyValue userLunge = new KeyValue(user.translateXProperty(),user.getTranslateX()-50, Interpolator.EASE_BOTH);
         KeyValue targetKnockback = new KeyValue(target.translateXProperty(),target.getTranslateX()-20,Interpolator.EASE_BOTH);

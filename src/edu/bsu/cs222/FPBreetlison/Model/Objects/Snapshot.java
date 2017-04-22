@@ -24,7 +24,6 @@ public class Snapshot implements java.io.Serializable {
         else{
             hpPercent = (double)hp/(double)maxHP;
             hpString = "HP: " + hp + "/" + maxHP;
-            System.out.println(hpPercent);
         }
 
     }

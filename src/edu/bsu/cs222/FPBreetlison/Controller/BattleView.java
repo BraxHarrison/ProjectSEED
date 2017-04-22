@@ -92,21 +92,24 @@ public class BattleView {
 
     public void queueBarUpdates(ArrayList<Snapshot> targets){
         this.targets = targets;
-        Timeline timeline = new Timeline();
-        timeline.setOnFinished(e -> clearBarInfo(targets));
-        int dur = 80;
-        for (int i = 0; i<targets.size();i++) {
-            int index = i;
-            //Only sets the enemy and user for the last event because it doesn't use a snapshot
-            timeline.getKeyFrames().add(new KeyFrame(
-                    Duration.millis(dur),
-                    ae -> convertSnapshot(index)));
-            timeline.getKeyFrames().add(new KeyFrame(
-                    Duration.millis(dur),
-                    ae -> updateHeroBars(targets.get(index))));
-            dur += 1000;
+        if(this.targets.size() != 0){
+            Timeline timeline = new Timeline();
+            timeline.setOnFinished(e -> clearBarInfo(targets));
+            int dur = 80;
+            for (int i = 0; i<targets.size();i++) {
+                int index = i;
+                System.out.println("Target no: " + targets.get(index).getIndex() + "/ Attacker: " + targets.get(index).getAttackerIndex());
+                timeline.getKeyFrames().add(new KeyFrame(
+                        Duration.millis(dur),
+                        ae -> convertSnapshot(index)));
+                timeline.getKeyFrames().add(new KeyFrame(
+                        Duration.millis(dur),
+                        ae -> updateHeroBars(targets.get(index))));
+                dur += 1000;
+            }
+            timeline.play();
         }
-        timeline.play();
+
     }
 
     private void convertSnapshot(int index){
@@ -534,7 +537,7 @@ public class BattleView {
 
     public void selectEndTurn() {
         if(!uiLocked){
-            battleLogic.endPlayerTurn();
+            battleLogic.prepareEndPlayerTurn();
             animator.backButtonSlideIn();
         }
 
@@ -688,7 +691,6 @@ public class BattleView {
         double percentage = (double)gameData.getCurrentTp()/(double)gameData.getMaxTP();
         tpBar.setProgress(percentage);
         tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getMaxTP());
-        battleLogic.checkPlayerTP();
     }
 
     public void blockEnemySelectors(){
