@@ -42,7 +42,7 @@ public class OverworldView implements java.io.Serializable {
     public StackPane inspectMenu;
     public StackPane navBanner;
     public Label walletDisplay;
-    public HBox events;
+    public VBox events;
 
     private GameManager game;
     private GameData gameData;
@@ -181,30 +181,40 @@ public class OverworldView implements java.io.Serializable {
     }
 
     private void populateItemButton(HBox button, int index) {
-        ImageView buttonGraphic = new ImageView(new Image("/images/system/system_undefined.png"));
+        ImageView buttonGraphic = new ImageView(new Image(loadedEvent.getStock().get(index).getImagePath()));
         buttonGraphic.setFitHeight(20);
         buttonGraphic.setFitWidth(20);
         Label itemName = new Label(loadedEvent.getStock().get(index).getName());
-        Label price = new Label("" + loadedEvent.getStock().get(index).getBuyPrice());
+        Label price = new Label("" + loadedEvent.getStock().get(index).getDisplayCost());
         button.getChildren().addAll(buttonGraphic,itemName,price);
         button.setSpacing(3);
     }
 
     private void selectItemFromShop(int index) {
+        setAllItemInfoVisible();
         ImageView itemDisplay = (ImageView)shopMenu.getChildren().get(2);
-        Label buyButton = (Label)shopMenu.getChildren().get(3);
-        itemDisplay.setVisible(true);
-        buyButton.setVisible(true);
+        Label nameDisplay = (Label)shopMenu.getChildren().get(3);
+        Label cost = (Label)shopMenu.getChildren().get(4);
+        Label buyButton = (Label)shopMenu.getChildren().get(5);
+        nameDisplay.setText(loadedEvent.getStock().get(index).getName());
+        cost.setText(loadedEvent.getStock().get(index).getDisplayCost());
         itemDisplay.setImage(new Image(loadedEvent.getStock().get(index).getImagePath()));
         buyButton.setOnMousePressed(e->buyItem(index));
 
     }
 
+    private void setAllItemInfoVisible() {
+        for(int i = 0; i<shopMenu.getChildren().size();i++){
+            shopMenu.getChildren().get(i).setVisible(true);
+        }
+    }
+
     private void buyItem(int index) {
-        gameData.getInventory().add(loadedEvent.getStock().get(index));
-        //Will need to change this slightly to allow for different price units
-        gameData.getWallet().spend(loadedEvent.getStock().get(index).getBuyPrice(),"KB");
-        updateWallet();
+        if(gameData.getWallet().getRawAmount()>loadedEvent.getStock().get(index).getBuyPrice()){
+            gameData.getInventory().add(loadedEvent.getStock().get(index));
+            gameData.getWallet().spend(loadedEvent.getStock().get(index).getBuyPrice(),"B");
+            updateWallet();
+        }
 
     }
 

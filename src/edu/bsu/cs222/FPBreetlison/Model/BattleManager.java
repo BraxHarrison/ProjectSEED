@@ -26,6 +26,7 @@ public class BattleManager {
     private Fighter target;
 
     private int targetNo;
+    private int finalQueue;
     private boolean enemyLock;
     private Snapshot fighterSnapshot;
     private ArrayList<Snapshot> targetQueue;
@@ -75,26 +76,39 @@ public class BattleManager {
                 battleView.blockEnemySelectors();
                 battleView.heroSelectorArea.setVisible(false);
                 battleView.uiLocked = true;
-                gameData.getWallet().collect(500,"KB");
                 gainExp();
+                calculateRewards();
                 endBattle();
                 break;
         }
         animator.backButtonSlideIn();
     }
 
+    private void calculateRewards() {
+        int rewardAmt = 0;
+        for(int i = 0; i < gameData.getEnemyTeam().size();i++){
+            rewardAmt+=gameData.getEnemyTeam().get(i).getRewardAmt();
+        }
+        gameData.getWallet().collect(rewardAmt,"B");
+        messageQueue.add("You collected " + rewardAmt + " bytes!");
+    }
+
 
     public void endBattle(){
         revertFighterStats();
-        int dur = 1000;
+        gameData.revertMaxTP();
+        finalQueue = messageQueue.size();
+        battleView.queueMessages(messageQueue);
+        int dur = 80;
         battleView.uiLocked = true;
         animator.backButtonSlideIn();
-        if(heroWon){dur += 4000; heroWon = false;}
+        dur += finalQueue*1000;
         Timeline counter = new Timeline();
         counter.getKeyFrames().add(new KeyFrame(
                 Duration.millis(dur),
                 ae -> game.setUpOverworld()));
         counter.play();
+        finalQueue = 0;
         game.setBattleUnderway(false);
     }
 
@@ -226,9 +240,7 @@ public class BattleManager {
     }
 
     public void checkPlayerTP(){
-        System.out.println("TP: " + gameData.getCurrentTp() + "\n");
         if(gameData.getCurrentTp() <= 0){
-            System.out.println("NO TP DETECTED");
             battleView.skillSelectorArea.setVisible(false);
             prepareEndPlayerTurn();
 
@@ -267,9 +279,7 @@ public class BattleManager {
         battleView.handleAnimation("heroLunge");
         updateUIForHeroAttack();
         detectEnemyKO();
-        //startDamageAnimation();
         battleView.queueMessages(messageQueue);
-        //This isn't calling
         checkPlayerTP();
 
     }
@@ -306,7 +316,6 @@ public class BattleManager {
         }
         if (KOamt == fighters.size()) {
             messageQueue.add("The enemy team is down! You won!");
-            battleView.queueMessages(messageQueue);
             updateTurn("heroWin");
         }
     }
@@ -325,6 +334,7 @@ public class BattleManager {
         Item item = gameData.getInventory().get(itemNo);
         if(item.getType().equals("tpBuff")){
             gameData.tempIncreaseMaxTP(item.getAffectAmt());
+            battleView.updateTP();
         }
         else{
             item.activate(gameData.getTeam().get(battleView.selectedUser));

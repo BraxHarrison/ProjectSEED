@@ -7,27 +7,33 @@ public class Wallet implements java.io.Serializable {
     private String type;
 
     public Wallet(){
-        amount = 300;
-        type = "KB";
+        amount = 800;
+        type = "B";
     }
 
-    public void spend(int amount, String type){
-        if(type.equals("MB")){
+    public void spend(double amount, String type){
+        if(type.equals("KB")){
             this.amount-=amount*1000;
         }
-        else if(type.equals("GB")){
+        if(type.equals("MB")){
             this.amount-=amount*1000000;
+        }
+        else if(type.equals("GB")){
+            this.amount-=amount*1000000000;
         }
         else{
             this.amount-=amount;
         }
     }
     public void collect(int amount, String type){
-        if(type.equals("MB")){
+        if(type.equals("KB")){
             this.amount+=amount*1000;
         }
-        else if(type.equals("GB")){
+        if(type.equals("MB")){
             this.amount+=amount*1000000;
+        }
+        else if(type.equals("GB")){
+            this.amount+=amount*1000000000;
         }
         else{
             this.amount+=amount;
@@ -35,6 +41,9 @@ public class Wallet implements java.io.Serializable {
 
     }
 
+    public double getRawAmount(){
+        return amount;
+    }
     public String getDisplayAmount(){
         convertForDisplay();
         round();
@@ -43,7 +52,11 @@ public class Wallet implements java.io.Serializable {
 
     private void convertForDisplay(){
         displayAmount = amount;
-        type = "KB";
+        type = "B";
+        if(type.equals("B") && displayAmount>=1000){
+            type = "KB";
+            displayAmount = displayAmount/1000;
+        }
         if(type.equals("KB") && displayAmount>=1000){
             type = "MB";
             displayAmount = displayAmount/1000;

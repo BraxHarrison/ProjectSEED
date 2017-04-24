@@ -29,6 +29,7 @@ public class Fighter implements java.io.Serializable {
     private Skill queuedSkill;
     private int sizeX;
     private int sizeY;
+    private double rewardAmt;
     private boolean KOState;
     private int KOLevel;
     private int lastDamage;
@@ -68,6 +69,7 @@ public class Fighter implements java.io.Serializable {
         this.miniGraphicPath = fighter.getMiniGraphicPath();
         this.sizeX = fighter.getSizeX();
         this.sizeY = fighter.getSizeY();
+        this.rewardAmt = fighter.getRewardAmt();
     }
 
     private void loadInfo(List<String> characterInfo) {
@@ -76,15 +78,13 @@ public class Fighter implements java.io.Serializable {
         this.hp = maxHP;
         this.attack = Integer.parseInt(characterInfo.get(2));
         this.defense = Integer.parseInt(characterInfo.get(3));
-        //this.enAttack = Integer.parseInt(characterInfo.get(4));
-        //this.enDefense = Integer.parseInt(characterInfo.get(5));
-        //this.agility = Integer.parseInt(characterInfo.get(6));
         this.tpCost = Integer.parseInt(characterInfo.get(7));
         this.expModifier = Double.parseDouble(characterInfo.get(8));
         this.battlerGraphicPath = characterInfo.get(9);
         this.miniGraphicPath = characterInfo.get(10);
         this.sizeX = Integer.parseInt(characterInfo.get(11));
         this.sizeY = Integer.parseInt(characterInfo.get(12));
+        this.rewardAmt = Double.parseDouble(characterInfo.get(13));
     }
 
     public double calcHPPercentage(){
@@ -101,7 +101,6 @@ public class Fighter implements java.io.Serializable {
     public void revertStats(){
         currStats.replace("attack",currStats.get("attack"),attack);
         currStats.replace("defense",currStats.get("defense"),defense);
-        currStats.replace("tpCost",currStats.get("tpCost"),tpCost);
     }
 
     //region In-Battle Functionality
@@ -126,7 +125,6 @@ public class Fighter implements java.io.Serializable {
     public void getExp(int amount){
         experience += amount;
     }
-
 
     public void checkLevel(){
         if(experience >= expToNextLevel){
@@ -289,6 +287,9 @@ public class Fighter implements java.io.Serializable {
     }
     public double getExpModifier() {
         return expModifier;
+    }
+    public double getRewardAmt() {
+        return rewardAmt;
     }
     //endregion
 

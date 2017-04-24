@@ -40,21 +40,23 @@
         <Label fx:id="load" text="Load" StackPane.alignment="TOP_CENTER" translateY="100" onMousePressed="#loadGame" styleClass="menu-text"/>
         <Button fx:id="exitLoadSaveMenu" text="X" StackPane.alignment="TOP_LEFT"   onAction="#hideLoadSaveMenu"/>
     </StackPane>
-    <StackPane fx:id="inspectMenu" StackPane.alignment="TOP_CENTER" visible="false" translateY="50" maxHeight="100" maxWidth="500" styleClass="save-box">
+    <StackPane fx:id="inspectMenu" StackPane.alignment="TOP_CENTER" visible="false" translateY="50" translateX="-200" maxHeight="300" maxWidth="100" styleClass="save-box">
         <ScrollPane fx:id="eventScroller" vbarPolicy="never" hbarPolicy="never">
-            <HBox fx:id="events">
+            <VBox fx:id="events">
 
-            </HBox>
+            </VBox>
         </ScrollPane>
         <Button text="X" onAction="#hideInspectMenu" StackPane.alignment="TOP_LEFT"/>
 
     </StackPane>
     <StackPane fx:id="shopMenu" maxHeight="400" maxWidth="400" visible="false" StackPane.alignment="CENTER" styleClass="menu-box">
         <Button fx:id="hideShop" text="X" onAction="#hideShop" StackPane.alignment="TOP_RIGHT"/>
-        <ScrollPane fx:id="itemAreaScroller" StackPane.alignment="CENTER_LEFT" styleClass="edge-to-edge" maxWidth="100">
+        <ScrollPane fx:id="itemAreaScroller" StackPane.alignment="CENTER_LEFT" styleClass="edge-to-edge" maxWidth="130">
             <VBox fx:id="shopItemsArea" spacing="20"/>
         </ScrollPane>
         <ImageView fx:id="itemDisplay" visible="false" StackPane.alignment="CENTER" translateX="50" fitHeight="200" fitWidth="200"/>
+        <Label fx:id="nameDisplay" visible="false" StackPane.alignment="CENTER" translateX="50" translateY="-150" styleClass="description-text"/>
+        <Label fx:id="costDisplay" visible="false" StackPane.alignment="CENTER" translateX="50" translateY="-110" styleClass="description-text"/>
         <Label fx:id="buy" visible="false" text="Buy" StackPane.alignment="BOTTOM_CENTER" translateY="-40" translateX="50" styleClass="banner-text"/>
 
 

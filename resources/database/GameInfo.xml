@@ -4,9 +4,9 @@
             <!--To be added later
             <chara name="Prota" maxHP="30" attack="7" defense="5" enAttack="2" enDefense="5" agility="7" tpCost="3" battlerGraphicPath="/images/Bulba_Pepe.png"/>
             -->
-            <hero name="Roxy" maxHP="20" attack="7" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.40" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Roxy.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Roxy.png" sizeX="150" sizeY="210"/>
+            <hero name="Roxy" maxHP="20" attack="7" defense="7" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.40" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Roxy.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Roxy.png" sizeX="150" sizeY="210" rewardAmt="30000"/>
             <heroSkill starter="Sniffle,Spring-Kick,Sharpen"/>
-            <hero name="Smitty" maxHP="45" attack="12" defense="7" enAttack="1" enDefense="4" agility="5" tpCost="5" expModifier="2.65" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Smitty.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Smitty.png" sizeX="390" sizeY="290"/>
+            <hero name="Smitty" maxHP="45" attack="12" defense="7" enAttack="1" enDefense="4" agility="5" tpCost="5" expModifier="2.65" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Smitty.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Smitty.png" sizeX="390" sizeY="290" rewardAmt="45000"/>
             <heroSkill starter="Steel Crusher,Glare"/>
 
         </CharacterBattleInfo>
@@ -22,19 +22,19 @@
         </CharacterBattleStrings>
 
         <EnemyBattleInfo>
-            <enemy name="Jag Inf." maxHP="20" attack="15" defense="8" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.50"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png" sizeX="150" sizeY="100"/>
+            <enemy name="Jag Inf." maxHP="20" attack="15" defense="8" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.50"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Jag.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Jag.png" sizeX="150" sizeY="100" rewardAmt="300"/>
             <enemySkill starter="Sharpen"/>
-            <enemy name="Harshmallow" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75"/>
+            <enemy name="Harshmallow" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75" rewardAmt="200"/>
             <enemySkill starter="Sniffle"/>
-            <enemy name="Eaflay" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75"/>
+            <enemy name="Eaflay" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Eaflay.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Eaflay.png" sizeX="125" sizeY="125" rewardAmt="250"/>
             <enemySkill starter="Sniffle"/>
-            <enemy name="Oculith" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75"/>
+            <enemy name="Oculith" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75" rewardAmt="350"/>
             <enemySkill starter="Sniffle"/>
-            <enemy name="Jag Adol." maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75"/>
+            <enemy name="Jag Adol." maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Harshmallow.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Harshmallow.png" sizeX="75" sizeY="75" rewardAmt="1000"/>
             <enemySkill starter="Sniffle"/>
-            <enemy name="Blisterbulb" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="null" miniGraphicPath="images/system/system_undefined.png" sizeX="75" sizeY="75"/>
+            <enemy name="Blisterbulb" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="null" miniGraphicPath="images/system/system_undefined.png" sizeX="75" sizeY="75" rewardAmt="300"/>
             <enemySkill starter="Acid Bath,Ensnare"/>
-            <enemy name="Apparacean" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="null" miniGraphicPath="images/system/system_undefined.png" sizeX="75" sizeY="75"/>
+            <enemy name="Apparacean" maxHP="20" attack="5" defense="4" enAttack="6" enDefense="9" agility="12" tpCost="2" expModifier="2.20"  battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Apparacean.png" miniGraphicPath="/images/battleGraphics/miniBattlerGraphics/Battle_Mini_Apparacean.png" sizeX="125" sizeY="125" rewardAmt="400"/>
             <enemySkill starter="Acid Bath,Ensnare"/>
 
 
@@ -62,13 +62,13 @@
 
     </BattleInfo>
     <ItemInfo>
-        <item name="Patch" description="Integrates with the user's body to recover health." quickSummary="Recover 15 HP" buyPrice="20" affectAmt="15" type="heal" type2="null" imagePath="/images/battleGraphics/itemGraphics/item_patch.png"/>
-        <item name="Overclock" description="A bizarre pocketwatch that creates a bubble of sped-up time around the user. Allows user to attack more quickly." quickSummary="-1 TP Cost" buyPrice="20" affectAmt="1" type="tpBuff" type2="" imagePath="/images/battleGraphics/itemGraphics/item_overclock.png"/>
-        <item name="Candy Bar" description="CHAWKLATE. Recovers health." quickSummary="Recover 10 HP" buyPrice="20" affectAmt="10" type="heal" type2="null" imagePath="null"/>
-        <item name="Chorps" description="Greasy slices of fried tuberous root" quickSummary="Recover 6 HP" buyPrice="20" affectAmt="6" type="heal" type2="null" imagePath="null"/>
-        <item name="SunPop" description="A sugary beverage. Chance to incease TP" quickSummary="Recover 10 HP" buyPrice="20" affectAmt="10" type="heal" type2="null" imagePath="null"/>
-        <item name="BluRasp Sapphire" description="Naturally occurring crystallized sugar." quickSummary="Recover 20 HP" buyPrice="20" affectAmt="20" type="heal" type2="null" imagePath="null"/>
-        <item name="Red Shroom" description="Usually eating a mushroom you found on the ground is a bad idea. " quickSummary="noodle" buyPrice="20" affectAmt="50" type="heal" type2="null" imagePath="null"/>
+        <item name="Patch" description="Integrates with the user's body to recover health." quickSummary="Recover 15 HP" buyPrice="5000" affectAmt="15" type="heal" type2="null" imagePath="/images/battleGraphics/itemGraphics/item_patch.png"/>
+        <item name="Overclock" description="A bizarre pocketwatch that creates a bubble of sped-up time around the user. Allows user to attack more quickly." quickSummary="+ 5 to max TP" buyPrice="10000" affectAmt="5" type="tpBuff" type2="" imagePath="/images/battleGraphics/itemGraphics/item_overclock.png"/>
+        <item name="Candy Bar" description="CHAWKLATE. Recovers health." quickSummary="Recover 10 HP" buyPrice="1000" affectAmt="10" type="heal" type2="null" imagePath="null"/>
+        <item name="Chorps" description="Greasy slices of fried tuberous root" quickSummary="Recover 6 HP" buyPrice="1200" affectAmt="6" type="heal" type2="null" imagePath="null"/>
+        <item name="PearPop" description="It's pear flavored AND pear shaped." quickSummary="Recover 10 HP" buyPrice="1250" affectAmt="10" type="heal" type2="null" imagePath="/images/battleGraphics/itemGraphics/item_pearpop.png"/>
+        <item name="BluRasp Sapphire" description="Naturally occurring crystallized sugar." quickSummary="Recover 20 HP" buyPrice="30000" affectAmt="20" type="heal" type2="null" imagePath="/images/battleGraphics/itemGraphics/item_bluraspsapphire.png"/>
+        <item name="Red Shroom" description="Usually eating a mushroom you found on the ground is a bad idea. " quickSummary="noodle" buyPrice="25000" affectAmt="50" type="heal" type2="null" imagePath="null"/>
 
 
 
@@ -79,16 +79,17 @@
             <Sectors>
                 <Rooms>
                     <room name="Colossal Plains" des="null" events="Buried Vending Machine" north="Luminous Caves" south="Inverted Forest" east="null" west="null" image="images/Plains_Day.png" battleImage="images/battleGraphics/backgrounds/battle_backgrounds_plainsday.png"/>
-                    <room name="Luminous Caves" des="null" events="Buried Vending Machine" north="null" south="Colossal Plains" east="null" west="null"  image="null" battleImage="null" />
+                    <room name="Luminous Caves" des="null" events="Shadowy Merch Dealer" north="null" south="Colossal Plains" east="null" west="null"  image="null" battleImage="null" />
                     <room name="Inverted Forest" des="null" events="Buried Vending Machine" north="Colossal Plains" south="null" east="Conchbreak Key" west="null" image="null" battleImage="null"/>
-                    <room name="Conchbreak Key" des="null" events="Buried Vending Machine" north="null" south="null" east="null" west="Inverted Forest" image="null" battleImage="null"/>
+                    <room name="Conchbreak Key" des="null" events="Buried Vending Machine" north="null" south="null" east="null" west="Inverted Forest" image="/images/Overworld_Beach_Day.png" battleImage="images/battleGraphics/backgrounds/battle_background_beachday.png"/>
                 </Rooms>
             </Sectors>
         </Islands>
 
     </OverWorldInfo>
     <Events>
-        <event name="Buried Vending Machine" type="shop" stock="Chorps/Candy Bar/SunPop/Patch" sell="false" cluster=""/>
+        <event name="Buried Vending Machine" type="shop" stock="Chorps/Candy Bar/PearPop" sell="false" cluster=""/>
+        <event name="Shadowy Merch Dealer" type="shop" stock="Overclock/Patch/BluRasp Sapphire" sell="false" cluster=""/>
         <event name="Plains Battle 1" type="battle" stock="Patch" sell="false" cluster=""/>
 
     </Events>

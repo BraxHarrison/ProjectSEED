@@ -42,8 +42,9 @@ public class GameData implements java.io.Serializable {
         initItems();
         maxTP = 10;
         tp = maxTP;
+        tempMaxTP = maxTP;
         wallet = new Wallet();
-        wallet.collect(200,"KB");
+        wallet.collect(20,"B");
         System.out.println(allEvents.get("Buried Vending Machine").getType());
 
 
@@ -126,8 +127,15 @@ public class GameData implements java.io.Serializable {
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
         }
-        else {
+        else if(currentRoom.getName().equals("Inverted Forest")) {
             enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
+            enemyTeam.add(new Fighter(allEnemies.get("Eaflay")));
+        }
+        else if(currentRoom.getName().equals("Conchbreak Key")){
+            enemyTeam.add(new Fighter(allEnemies.get("Apparacean")));
+            enemyTeam.add(new Fighter(allEnemies.get("Apparacean")));
+        }
+        else{
             enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
         }
     }
@@ -144,7 +152,7 @@ public class GameData implements java.io.Serializable {
     }
 
     void resetHeroTP(){
-        tp = maxTP;
+        tp = tempMaxTP;
     }
 
     public Map<String, Room> getAllRooms(){return allRooms;}

@@ -137,8 +137,8 @@ public class BattleXMLParser {
                 battler.getAttribute("battlerGraphicPath") + "," +
                 battler.getAttribute("miniGraphicPath") + "," +
                 battler.getAttribute("sizeX") + "," +
-                battler.getAttribute("sizeY");
-
+                battler.getAttribute("sizeY") + "," +
+                battler.getAttribute("rewardAmt");
 
 
     }

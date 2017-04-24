@@ -320,7 +320,23 @@ public class BattleView {
         hBar.getStyleClass().add("healthBar");
         hBar.getStyleClass().add("green-bar");
         hBar.setProgress(team.get(index).calcHPPercentage());
+        reloadBarColor(team.get(index).calcHPPercentage(),hBar);
 
+    }
+
+    private void reloadBarColor(Double hpPercent, ProgressBar hbar) {
+        if(hpPercent < .60 && hpPercent >= .30){
+            hbar.getStyleClass().remove(2);
+            hbar.getStyleClass().add("yellow-bar");
+        }
+        else if(hpPercent < .30){
+            hbar.getStyleClass().remove(2);
+            hbar.getStyleClass().add("red-bar");
+        }
+        else{
+            hbar.getStyleClass().remove(2);
+            hbar.getStyleClass().add("green-bar");
+        }
     }
 
     private void roundHPPercent(ProgressBar hbar, Snapshot heroSnapshot) {
@@ -344,7 +360,6 @@ public class BattleView {
                 }
             });
             formatHeroGraphic(image,i);
-            checkForScale(image);
             heroGraphicsArea.getChildren().add(image);
         }
     }
@@ -653,7 +668,7 @@ public class BattleView {
     }
 
     public void selectFlee(javafx.scene.input.MouseEvent event) {
-        pushMessage("You ran away. Everyone is disappointed.");
+        battleLogic.getMessageQueue().add("You ran away. Everyone is disappointed");
         animator.heroFlee();
         battleLogic.endBattle();
     }
@@ -688,9 +703,9 @@ public class BattleView {
     }
 
     public void updateTP(){
-        double percentage = (double)gameData.getCurrentTp()/(double)gameData.getMaxTP();
+        double percentage = (double)gameData.getCurrentTp()/(double)gameData.getTempMaxTP();
         tpBar.setProgress(percentage);
-        tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getMaxTP());
+        tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getTempMaxTP());
     }
 
     public void blockEnemySelectors(){

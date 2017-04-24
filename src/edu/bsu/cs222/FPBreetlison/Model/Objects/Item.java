@@ -9,7 +9,9 @@ public class Item implements java.io.Serializable {
     private String description;
     private String quickSummary;
     private int affectAmt;
-    private int buyPrice;
+    private double buyPrice;
+    private double convertedBuyPrice;
+    private String buyPriceType;
     private String type;
     private String type2;
     private String imagePath;
@@ -58,6 +60,24 @@ public class Item implements java.io.Serializable {
         return Arrays.asList(info.split(","));
     }
 
+    public String getDisplayCost() {
+        buyPriceType="B";
+        convertedBuyPrice = buyPrice;
+        if(convertedBuyPrice>=1000){
+            System.out.println("Converting currency to KB...");
+            convertedBuyPrice = convertedBuyPrice/1000;
+            buyPriceType="KB";
+        }
+        if(convertedBuyPrice>=1000){
+            convertedBuyPrice = convertedBuyPrice/1000;
+            buyPriceType="MB";
+        }
+        if(convertedBuyPrice>=1000){
+            convertedBuyPrice = convertedBuyPrice/1000;
+            buyPriceType="GB";
+        }
+        return convertedBuyPrice + " " + buyPriceType;
+    }
     public String getName() {
         return name;
     }
@@ -79,7 +99,9 @@ public class Item implements java.io.Serializable {
     public int getAffectAmt() {
         return affectAmt;
     }
-    public int getBuyPrice() {
+    public Double getBuyPrice() {
         return buyPrice;
     }
+
+
 }
