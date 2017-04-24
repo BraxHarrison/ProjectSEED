@@ -8,6 +8,8 @@
             <heroSkill starter="Sniffle,Spring-Kick,Sharpen"/>
             <hero name="Smitty" maxHP="45" attack="12" defense="7" enAttack="1" enDefense="4" agility="5" tpCost="5" expModifier="2.65" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Smitty.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Smitty.png" sizeX="390" sizeY="290" rewardAmt="45000"/>
             <heroSkill starter="Steel Crusher,Glare"/>
+            <hero name="Blake" maxHP="35" attack="10" defense="7" enAttack="1" enDefense="4" agility="5" tpCost="4" expModifier="2.65" battlerGraphicPath="/images/battleGraphics/fullBattlerGraphics/Battle_Full_Blake.png" miniGraphicPath="images/battleGraphics/miniBattlerGraphics/Battle_Mini_Blake.png" sizeX="200" sizeY="330" rewardAmt="45000"/>
+            <heroSkill starter="Volt Jab,Icy Hook,Fiery Uppercut"/>
 
         </CharacterBattleInfo>
         <CharacterBattleStrings>
@@ -54,8 +56,9 @@
             <Skill name="Acid Bath" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroLunge"/>
             <Skill name="Frond Spear" affectAmt="8" tpCost= "4" type="attack" type2="null" quickInfo="Light Impact Damage" extraMessage="null" animType="heroQuickStretch"/>
             <Skill name="Ensnare" affectAmt="3" tpCost= "4" type="attack" type2="attack" quickInfo="Enemy Attack Down" extraMessage="null" animType="heroQuickStretch"/>
-            <Skill name="Stealth Charge" affectAmt="3" tpCost= "4" type="attack" type2="attack" quickInfo="Light specter damage. Chance to lower defense" extraMessage="null" animType="heroQuickStretch"/>
-
+            <Skill name="Volt Jab" affectAmt="4" tpCost= "4" type="attack" type2="attack" quickInfo="Medium Shock Damage" extraMessage="null" animType="heroQuickStretch"/>
+            <Skill name="Icy Hook" affectAmt="4" tpCost= "4" type="attack" type2="attack" quickInfo="Medium Frost Damage" extraMessage="null" animType="heroQuickStretch"/>
+            <Skill name="Fiery Uppercut" affectAmt="4" tpCost= "4" type="attack" type2="attack" quickInfo="Medium Flame Damage" extraMessage="null" animType="heroQuickStretch"/>
 
         </Skills>
 

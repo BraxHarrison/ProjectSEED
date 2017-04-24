@@ -88,7 +88,7 @@ public class Fighter implements java.io.Serializable {
     }
 
     public double calcHPPercentage(){
-        return (double)currStats.get(("hp"))/(double)hp;
+        return (double)currStats.get(("hp"))/(double)maxHP;
     }
 
     private void associateStats(){
@@ -135,7 +135,7 @@ public class Fighter implements java.io.Serializable {
 
     private void levelUp(){
         lvl +=1;
-        hp+=5;
+        maxHP+=5;
         attack+=2;
         defense+=2;
         int levelDifference = experience-expToNextLevel;
@@ -163,7 +163,7 @@ public class Fighter implements java.io.Serializable {
 
     void recoverHealth(int heal){
         int hp = currStats.get("hp");
-        currStats.replace("hp",currStats.get("hp"),hp+=heal);
+        currStats.replace("hp",currStats.get("hp"),hp+heal);
         if(currStats.get("hp") > maxHP || heal == -1){
             currStats.replace("hp",currStats.get("hp"),maxHP);
         }

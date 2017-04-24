@@ -24,7 +24,7 @@
             <StackPane fx:id="backgrounds">
             </StackPane>
             <StackPane fx:id="viewWindow" maxWidth="800" StackPane.alignment="CENTER_RIGHT">
-                <HBox fx:id="heroGraphicsArea" StackPane.alignment="BOTTOM_LEFT" spacing="-20" scaleX=".75" scaleY=".75" alignment="BOTTOM_LEFT" translateY="-115" maxWidth="400" minWidth="400" maxHeight="300"/>
+                <HBox fx:id="heroGraphicsArea" StackPane.alignment="BOTTOM_LEFT" spacing="-20" scaleX=".75" scaleY=".75" alignment="BOTTOM_LEFT" translateY="-105" maxWidth="400" minWidth="400" maxHeight="300"/>
 
             </StackPane>
 

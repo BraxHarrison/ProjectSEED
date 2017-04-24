@@ -414,7 +414,7 @@ public class BattleView {
         Label hp = (Label)battlerInfoDisplay.getChildren().get(3);
         name.setText(team.get(index).getName());
         lvl.setText("Lvl: "+team.get(index).getLvl());
-        hp.setText("HP: " + team.get(index).getCurrStats().get("hp") + "/" + team.get(index).getHp());
+        hp.setText("HP: " + team.get(index).getCurrStats().get("hp") + "/" + team.get(index).getMaxHP());
     }
     private void showHeroLowerLabels(){
 
@@ -654,7 +654,7 @@ public class BattleView {
         StackPane hero = (StackPane)heroSelectorArea.getChildren().get(selectedUser);
         ProgressBar heroBar = (ProgressBar)hero.getChildren().get(1);
         Fighter user = team.get(selectedUser);
-        Double hpPercentage = (double)user.getCurrStats().get("hp")/(double)user.getMaxHP();
+        Double hpPercentage = user.calcHPPercentage();
         heroBar.setProgress(hpPercentage);
         updateColor(heroBar,hpPercentage);
     }

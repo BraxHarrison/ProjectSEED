@@ -111,6 +111,7 @@ public class GameData implements java.io.Serializable {
     private void addHeroes(){
         team.add(allHeroes.get("Roxy"));
         team.add(allHeroes.get("Smitty"));
+        standby.add(allHeroes.get("Blake"));
     }
 
     public void addEnemies(){
