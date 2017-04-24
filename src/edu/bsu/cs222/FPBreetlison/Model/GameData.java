@@ -14,6 +14,7 @@ import java.util.Map;
 public class GameData implements java.io.Serializable {
 
     private ArrayList<Fighter> team;
+    private ArrayList<Fighter> standby;
     private ArrayList<Fighter> enemyTeam;
     private Wallet wallet;
 
@@ -47,7 +48,6 @@ public class GameData implements java.io.Serializable {
         wallet.collect(20,"B");
         System.out.println(allEvents.get("Buried Vending Machine").getType());
 
-
     }
 
     private void loadData() throws ParserConfigurationException, SAXException, IOException {
@@ -58,7 +58,6 @@ public class GameData implements java.io.Serializable {
         loadFighters(battleLoader);
         loadEvents(overworldLoader);
         loadRooms(overworldLoader);
-
     }
 
     public void subtractTP(int amount){
@@ -91,6 +90,7 @@ public class GameData implements java.io.Serializable {
 
     private void initLists() {
         team = new ArrayList<>();
+        standby = new ArrayList<>();
         allSkills = new HashMap<>();
         allItems = new HashMap<>();
         allEvents = new HashMap<>();
@@ -106,13 +106,11 @@ public class GameData implements java.io.Serializable {
         loader.parseBattleData();
         allHeroes = loader.getHeroes();
         allEnemies = loader.getEnemies();
-
     }
 
     private void addHeroes(){
         team.add(allHeroes.get("Roxy"));
         team.add(allHeroes.get("Smitty"));
-
     }
 
     public void addEnemies(){
@@ -164,6 +162,9 @@ public class GameData implements java.io.Serializable {
     }
     public ArrayList<Fighter> getTeam() {
         return team;
+    }
+    public ArrayList<Fighter> getStandby() {
+        return standby;
     }
     public ArrayList<Fighter> getEnemyTeam() {
         return enemyTeam;

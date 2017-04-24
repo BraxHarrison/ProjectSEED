@@ -48,6 +48,10 @@
     -fx-background-color:"black";
 }
 
+.white-box{
+    -fx-background-color:"white";
+}
+
 .description-box{
     -fx-background-color:"black";
 }

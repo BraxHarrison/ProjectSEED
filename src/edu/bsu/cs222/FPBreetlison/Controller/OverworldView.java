@@ -9,6 +9,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
 import java.io.IOException;
@@ -44,12 +45,21 @@ public class OverworldView implements java.io.Serializable {
     public Label walletDisplay;
     public VBox events;
 
+    public StackPane teamMenu;
+    public VBox teamArea;
+    public VBox standbyArea;
+    private boolean movingFromStandby;
+    private boolean movingFromTeam;
+    private boolean usingItem;
+    private int indexToTransfer;
+
     private GameManager game;
     private GameData gameData;
     private Animator animator;
     private Event loadedEvent;
 
     public void initialize(GameManager game){
+        indexToTransfer = 0;
         this.game = game;
         this.gameData = game.getGameData();
         this.animator = new Animator(game);
@@ -68,7 +78,70 @@ public class OverworldView implements java.io.Serializable {
         //partyButton.setOnMousePressed(e->openTravel());
         partyButton.setOnMouseEntered(e->optionHover(partyButton));
         partyButton.setOnMouseExited(e->optionUnhover(partyButton));
+        partyButton.setOnMouseClicked(e->openTeamMenu());
         partyButton.setImage(new Image("/images/system/system_undefined.png"));
+    }
+
+    private void openTeamMenu() {
+        teamMenu.setVisible(true);
+        populateTeamArea();
+        populateStandbyArea();
+    }
+
+    private void populateStandbyArea() {
+        standbyArea.getChildren().clear();
+        for(int i = 0; i<gameData.getStandby().size();i++){
+            int index = i;
+            HBox standbyCharacterSelector = new HBox();
+            ImageView image = new ImageView(new Image(gameData.getStandby().get(i).getMiniGraphicPath()));
+            image.setFitWidth(30);
+            image.setFitHeight(30);
+            Label name = new Label(gameData.getStandby().get(i).getName());
+            standbyCharacterSelector.setOnMousePressed(e->selectStandbyToTransfer(index));
+            standbyCharacterSelector.getChildren().addAll(image,name);
+            standbyArea.getChildren().add(standbyCharacterSelector);
+        }
+    }
+
+    private void selectStandbyToTransfer(int index) {
+        indexToTransfer = index;
+        movingFromStandby = true;
+    }
+
+    private void populateTeamArea() {
+        teamArea.getChildren().clear();
+        for(int i = 0; i<gameData.getTeam().size();i++){
+            int index = i;
+            HBox teamCharacterSelector = new HBox();
+            ImageView image = new ImageView(new Image(gameData.getTeam().get(i).getMiniGraphicPath()));
+            image.setFitWidth(30);
+            image.setFitHeight(30);
+            Label name = new Label(gameData.getTeam().get(i).getName());
+            teamCharacterSelector.setOnMousePressed(e-> selectTeamMember(index));
+            teamCharacterSelector.getChildren().addAll(image,name);
+            teamArea.getChildren().add(teamCharacterSelector);
+        }
+    }
+
+    private void selectTeamMember(int index) {
+        indexToTransfer = index;
+        movingFromTeam = true;
+
+    }
+
+    public void handleTransfer() {
+        if(movingFromStandby && gameData.getTeam().size()<4){
+            gameData.getTeam().add(gameData.getStandby().get(indexToTransfer));
+            gameData.getStandby().remove(indexToTransfer);
+            movingFromStandby = false;
+        }
+        if(movingFromTeam && gameData.getTeam().size() > 1){
+            gameData.getStandby().add(gameData.getTeam().get(indexToTransfer));
+            gameData.getTeam().remove(indexToTransfer);
+            movingFromTeam = false;
+        }
+        populateTeamArea();
+        populateStandbyArea();
     }
 
     private void initNavBanner() {
@@ -295,5 +368,12 @@ public class OverworldView implements java.io.Serializable {
 
     public void hideShop(ActionEvent actionEvent) {
         shopMenu.setVisible(false);
+    }
+
+    public void hideTeamMenu(ActionEvent actionEvent) {
+        movingFromTeam = false;
+        usingItem = false;
+        movingFromStandby = false;
+        teamMenu.setVisible(false);
     }
 }

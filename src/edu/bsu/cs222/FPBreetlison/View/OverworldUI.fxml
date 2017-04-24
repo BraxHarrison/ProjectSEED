@@ -61,10 +61,13 @@
 
 
     </StackPane>
-    <StackPane fx:id="BagMenu" maxHeight="400" maxWidth="400" visible="false" StackPane.alignment="CENTER" styleClass="menu-box">
-        <ScrollPane fx:id="invItemScroller" StackPane.alignment="CENTER_LEFT" styleClass="edge-to-edge" maxWidth="100">
-            <VBox fx:id="invItemsArea" spacing="20"/>
+    <StackPane fx:id="teamMenu" maxHeight="400" maxWidth="700" visible="false" StackPane.alignment="CENTER" styleClass="menu-box">
+      <VBox fx:id="teamArea" StackPane.alignment="CENTER_LEFT" maxWidth="200" maxHeight="300" translateX="40" styleClass="white-box"/>
+        <ScrollPane fx:id="standbyScroller" StackPane.alignment="CENTER_RIGHT" maxWidth="200" maxHeight="300" translateX="-40">
+            <VBox fx:id="standbyArea"/>
         </ScrollPane>
+        <Label fx:id="transferButton" text="transfer" StackPane.alignment="CENTER" styleClass="banner-text" scaleX=".8" scaleY=".8" onMousePressed="#handleTransfer"/>
+        <Button fx:id="exitButton" text="X" StackPane.alignment="TOP_LEFT" onAction="#hideTeamMenu"/>
     </StackPane>
     <Label fx:id="walletDisplay" StackPane.alignment="TOP_CENTER"/>
 
