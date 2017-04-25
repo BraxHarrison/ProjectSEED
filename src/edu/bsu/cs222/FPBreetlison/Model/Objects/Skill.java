@@ -3,7 +3,7 @@ package edu.bsu.cs222.FPBreetlison.Model.Objects;
 import java.util.Arrays;
 import java.util.List;
 
-public class Skill {
+public class Skill implements java.io.Serializable {
     String name;
     int affectAmt;
     int tpCost;
@@ -11,6 +11,7 @@ public class Skill {
     String type2;
     String quickInfo;
     String extraMessage;
+    String animType;
 
 
     public Skill(String info){
@@ -22,6 +23,7 @@ public class Skill {
         this.type2 = skillInfo.get(4);
         this.quickInfo = skillInfo.get(5);
         this.extraMessage =  skillInfo.get(6);
+        this.animType = skillInfo.get(7);
     }
 
     public void use(Fighter user, Fighter target){
@@ -29,8 +31,8 @@ public class Skill {
             user.recoverHealth(affectAmt);
         }
         else if(type.equals("attack")){
-            double damage = user.getAttack()*affectAmt/target.getDefense();
-            int finalDamage = (int)Math.round(damage);
+            double damage = user.getCurrStats().get("attack")*affectAmt/target.getCurrStats().get("defense");
+            int finalDamage = (int)Math.round(damage*1.5);
             target.takeDamage(finalDamage);
         }
         else if(type.equals("debuff")){
@@ -62,5 +64,8 @@ public class Skill {
     }
     public int getTpCost() {
         return tpCost;
+    }
+    public String getAnimType() {
+        return animType;
     }
 }

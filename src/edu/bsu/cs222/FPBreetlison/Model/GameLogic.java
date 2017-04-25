@@ -9,25 +9,25 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 
-public class GameManager {
+public class GameManager implements java.io.Serializable {
 
     private GameData gameData;
     private BattleManager battleLogic;
     private BattleView battleControl;
     private Stage currentStage;
     private Room currentRoom;
+    private boolean battleUnderway;
 
 
     //region Initialization
     public void init(GameData gameData){
-        currentRoom = gameData.getAllRooms().get("FirstSteps");
         this.gameData = gameData;
-        currentStage = gameData.getStage();
+        this.gameData.setCurrentRoom(gameData.getAllRooms().get("Colossal Plains"));
         currentStage.setResizable(true);
         setUpOverworld();
     }
@@ -52,7 +52,7 @@ public class GameManager {
     }
 
     public void updateStageTitle(){
-        currentStage.setTitle("Overworld: "+getCurrentRoom().getName());
+        currentStage.setTitle("Overworld: "+ gameData.getCurrentRoom().getName());
     }
     //endregion
 
@@ -84,26 +84,88 @@ public class GameManager {
 
     private void setBattleAsStage(Parent root){
         currentStage.setTitle("Battle!");
+        battleUnderway = true;
         currentStage.setScene(new Scene(root, 900,600));
 
+    }
+
+    public void travelNorth() {
+        if(gameData.getCurrentRoom().getNorth().equals("null")) {
+            return;
+        }
+        gameData.setCurrentRoom(gameData.getAllRooms().get(gameData.getCurrentRoom().getNorth()));
+
+    }
+
+    public void travelSouth() {
+        if(gameData.getCurrentRoom().getSouth().equals("null")){
+            return;
+        }
+        gameData.setCurrentRoom(gameData.getAllRooms().get(gameData.getCurrentRoom().getSouth()));
+    }
+
+    public void travelEast() {
+        if(gameData.getCurrentRoom().getEast().equals("null")) {
+            return;
+        }
+        gameData.setCurrentRoom(gameData.getAllRooms().get(gameData.getCurrentRoom().getEast()));
+
+    }
+
+    public void travelWest() {
+        if(gameData.getCurrentRoom().getWest().equals("null")) {
+            return;
+        }
+        gameData.setCurrentRoom(gameData.getAllRooms().get(gameData.getCurrentRoom().getWest()));
+    }
+
+    public void saveGame() throws IOException {
+        FileOutputStream saveFile = new FileOutputStream("saveFile.sav");
+        ObjectOutputStream save = new ObjectOutputStream(saveFile);
+        save.writeObject(gameData);
+        save.close();
+    }
+
+    public void loadGame() throws IOException, ClassNotFoundException {
+        try {
+            FileInputStream saveFile = new FileInputStream("saveFile.sav");
+            ObjectInputStream restore = new ObjectInputStream(saveFile);
+            gameData = (GameData)restore.readObject();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+    public void setStage(Stage stage){
+        currentStage = stage;
+    }
+    public boolean isBattleUnderway(){
+        return battleUnderway;
+    }
+    public void setBattleUnderway(boolean battle){
+        battleUnderway = battle;
+    }
+    public Stage getStage(){
+        return currentStage;
     }
     public Room getCurrentRoom() {return currentRoom;}
     public GameData getGameData(){
         return gameData;
     }
-
     BattleView getBattleControl() {
         return battleControl;
+    }
+    public void setBattleControl(BattleView battleView){
+        this.battleControl = battleView;
     }
     public BattleManager getBattleLogic() {
         return battleLogic;
     }
-
-
     public HashMap<Integer, Boolean> checkAvailableDirections() {
 
         HashMap<Integer, Boolean> availableDirections = new HashMap<>();
         ArrayList<String> allDirections = new ArrayList<>();
+        Room currentRoom = gameData.getCurrentRoom();
 
         allDirections.add(currentRoom.getNorth());
         allDirections.add(currentRoom.getSouth());
@@ -124,35 +186,4 @@ public class GameManager {
 
     }
 
-    public void travelNorth() {
-        if(Objects.equals(currentRoom.getNorth(),"null")){
-            return;
-        }
-
-        currentRoom = gameData.getAllRooms().get(currentRoom.getNorth());
-
-    }
-
-    public void travelSouth() {
-        if(currentRoom.getSouth().equals("null")){
-            return;
-
-        }
-        currentRoom = gameData.getAllRooms().get(currentRoom.getSouth());
-    }
-
-    public void travelEast() {
-        if(currentRoom.getEast().equals("null")) {
-            return;
-        }
-        currentRoom = gameData.getAllRooms().get(currentRoom.getEast());
-
-    }
-
-    public void travelWest() {
-        if(currentRoom.getWest().equals("null")) {
-            return;
-        }
-        currentRoom = gameData.getAllRooms().get(currentRoom.getWest());
-    }
 }

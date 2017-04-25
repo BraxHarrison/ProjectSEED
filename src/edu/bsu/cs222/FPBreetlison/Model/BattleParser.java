@@ -137,8 +137,8 @@ public class BattleXMLParser {
                 battler.getAttribute("battlerGraphicPath") + "," +
                 battler.getAttribute("miniGraphicPath") + "," +
                 battler.getAttribute("sizeX") + "," +
-                battler.getAttribute("sizeY");
-
+                battler.getAttribute("sizeY") + "," +
+                battler.getAttribute("rewardAmt");
 
 
     }
@@ -151,7 +151,8 @@ public class BattleXMLParser {
                 skill.getAttribute("type") + "," +
                 skill.getAttribute("type2") + "," +
                 skill.getAttribute("quickInfo") + "," +
-                skill.getAttribute("extraMessage");
+                skill.getAttribute("extraMessage") + "," +
+                skill.getAttribute("animType");
     }
 
     public HashMap<String,Fighter> getHeroes() {

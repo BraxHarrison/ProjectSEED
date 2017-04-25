@@ -1,3 +1,12 @@
+@font-face {
+    src: url("/fonts/Exo-Light.otf");
+}
+
+@font-face{
+    src: url("/fonts/underwhe.ttf");
+}
+
+/* Battle Styles */
 .infoBox{
     -fx-background-color: #4286f4;
 }
@@ -30,7 +39,72 @@
     -fx-color:#ffffff;
 }
 
-.party-Box{
+
+
+/* Overworld Styles */
+
+
+.party-box{
     -fx-background-color:"black";
 }
 
+.white-box{
+    -fx-background-color:"white";
+}
+
+.description-box{
+    -fx-background-color:"black";
+}
+
+.description-text{
+    -fx-text-fill: white;
+    -fx-font-family: "Exo";
+    -fx-font-size: 14pt;
+}
+
+.damage-text{
+    -fx-text-fill: blue;
+    -fx-font-family: "Underwhelmed BRK";
+    -fx-font-size: 20pt;
+
+}
+
+
+.banner-text{
+    -fx-text-fill: white;
+    -fx-font-family: "Underwhelmed BRK";
+    -fx-font-size: 25pt;
+
+}
+
+.menu-text{
+    -fx-text-fill: white;
+    -fx-font-family: "Underwhelmed BRK";
+    -fx-font-size: 25pt;
+
+}
+
+.map{
+
+    -fx-background-image: url("/images/system/system_map.png");
+
+
+}
+
+.side-bar{
+
+    -fx-background-image: url("/images/system/system_sidebar.png");
+
+}
+
+.save-box{
+    -fx-background-color:"black";
+}
+
+.item-area{
+    -fx-background-color:"grey";
+}
+
+.menu-box{
+    -fx-background-color:#424447;
+}

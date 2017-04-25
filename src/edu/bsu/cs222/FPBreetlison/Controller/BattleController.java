@@ -12,8 +12,8 @@ import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
@@ -31,12 +31,14 @@ import java.util.ArrayList;
 public class BattleView {
     public VBox skillSelectorArea;
     public Group skillInfoDisplay;
+    public Group damageDisplayArea;
 
     //region Variables
 
     private ArrayList<Fighter> team;
     private ArrayList<Fighter> enemyTeam;
     private ArrayList<Item> inventory;
+    private ArrayList<Snapshot> targets;
 
     public VBox heroSelectorArea;
     public HBox heroGraphicsArea;
@@ -45,23 +47,25 @@ public class BattleView {
     public VBox itemSelectorArea;
     public Label mainDisplay;
     public Label historyDisplay;
+    public Label damageDisplay;
     public ProgressBar tpBar;
     public Label tpDisplay;
     public HBox backgroundImage;
     public ScrollPane selectorMenu;
     public Pane loaderScreen;
     public StackPane battleDisplay;
-    public Button backButton;
+    public ImageView backButton;
     public Group itemInfoDisplay;
     public Group battlerInfoDisplay;
 
     public int selectedUser;
-    public int selectedEnemy;
+    public int selectedTarget;
     private int selectedItem;
     public boolean uiLocked;
     private boolean finishedLoading;
 
     private GameData gameData;
+    private GameManager game;
     private BattleManager battleLogic;
     Animator animator;
 
@@ -75,7 +79,7 @@ public class BattleView {
     public void queueMessages(ArrayList<String> messages){
         Timeline timeline = new Timeline();
         timeline.setOnFinished(e -> clearMessages(messages));
-        int dur = 40;
+        int dur = 80;
         for (String message : messages) {
             timeline.getKeyFrames().add(new KeyFrame(
                     Duration.millis(dur),
@@ -87,21 +91,33 @@ public class BattleView {
     }
 
     public void queueBarUpdates(ArrayList<Snapshot> targets){
-        Timeline timeline = new Timeline();
-        timeline.setOnFinished(e -> clearBarInfo(targets));
-        int dur = 40;
-        for (Snapshot heroSnapshot : targets) {
-            selectedUser = heroSnapshot.getUserIndex();
-            selectedEnemy = heroSnapshot.getIndex();
-            timeline.getKeyFrames().add(new KeyFrame(
-                    Duration.millis(dur),
-                    ae -> handleAnimation(heroSnapshot.getAnimType())));
-            timeline.getKeyFrames().add(new KeyFrame(
-                    Duration.millis(dur),
-                    ae -> updateHeroBars(heroSnapshot)));
-            dur += 1000;
+        this.targets = targets;
+        if(this.targets.size() != 0){
+            Timeline timeline = new Timeline();
+            timeline.setOnFinished(e -> clearBarInfo(targets));
+            int dur = 80;
+            for (int i = 0; i<targets.size();i++) {
+                int index = i;
+                System.out.println("Target no: " + targets.get(index).getIndex() + "/ Attacker: " + targets.get(index).getAttackerIndex());
+                timeline.getKeyFrames().add(new KeyFrame(
+                        Duration.millis(dur),
+                        ae -> convertSnapshot(index)));
+                timeline.getKeyFrames().add(new KeyFrame(
+                        Duration.millis(dur),
+                        ae -> updateHeroBars(targets.get(index))));
+                dur += 1000;
+            }
+            timeline.play();
         }
-        timeline.play();
+
+    }
+
+    private void convertSnapshot(int index){
+        selectedUser =  targets.get(index).getIndex();
+        selectedTarget = targets.get(index).getAttackerIndex();
+
+        String anim = targets.get(index).getAnimType();
+        handleAnimation(anim);
     }
 
     private void clearMessages(ArrayList<String> messages){
@@ -177,7 +193,9 @@ public class BattleView {
 
     public void initialize(GameManager game){
         transferBattleData(game);
+        this.game = game;
         readBattleData();
+        initBackButton();
         startLoader();
         loadFonts();
         setBackground();
@@ -185,10 +203,17 @@ public class BattleView {
         setupBattle();
     }
 
+    private void initBackButton() {
+        backButton.setImage(new Image("/images/system/system_backButton.png"));
+        backButton.setOnMouseClicked(e->goBack());
+    }
+
     private void transferBattleData(GameManager game) {
+        this.game = game;
+        this.game.setBattleControl(this);
         this.gameData = game.getGameData();
         this.battleLogic = game.getBattleLogic();
-        animator = new Animator(this);
+        animator = new Animator(this.game);
         battleLogic.getGameInfo(game);
 
     }
@@ -197,6 +222,9 @@ public class BattleView {
         team = gameData.getTeam();
         enemyTeam = gameData.getEnemyTeam();
         inventory = gameData.getInventory();
+    }
+
+    private void getEnemies(){
 
     }
 
@@ -225,13 +253,15 @@ public class BattleView {
     }
 
     private void setBackground() {
-        BackgroundImage battleBack = new BackgroundImage(new Image("images/Plains_Day.png",900,500,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
+        String imageURL = gameData.getCurrentRoom().getBattleImageURL();
+        BackgroundImage battleBack = new BackgroundImage(new Image(imageURL,900,500,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
         backgroundImage.setBackground(new Background(battleBack));
         backgroundImage.toBack();
 
     }
 
     private void setupBattle(){
+        //Put in code to check if there are more than three fighters, then resize it other
         createHeroButtons();
         createHeroGraphics();
         createEnemySelectors();
@@ -290,7 +320,23 @@ public class BattleView {
         hBar.getStyleClass().add("healthBar");
         hBar.getStyleClass().add("green-bar");
         hBar.setProgress(team.get(index).calcHPPercentage());
+        reloadBarColor(team.get(index).calcHPPercentage(),hBar);
 
+    }
+
+    private void reloadBarColor(Double hpPercent, ProgressBar hbar) {
+        if(hpPercent < .60 && hpPercent >= .30){
+            hbar.getStyleClass().remove(2);
+            hbar.getStyleClass().add("yellow-bar");
+        }
+        else if(hpPercent < .30){
+            hbar.getStyleClass().remove(2);
+            hbar.getStyleClass().add("red-bar");
+        }
+        else{
+            hbar.getStyleClass().remove(2);
+            hbar.getStyleClass().add("green-bar");
+        }
     }
 
     private void roundHPPercent(ProgressBar hbar, Snapshot heroSnapshot) {
@@ -305,9 +351,7 @@ public class BattleView {
             image.setId(Integer.toString(i));
             image.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
-                public void handle(MouseEvent event) {
-                    showHeroInfo(image);
-                }
+                public void handle(MouseEvent event) {showHeroInfo(image);}
             });
             image.setOnMouseExited(new EventHandler<MouseEvent>() {
                 @Override
@@ -320,9 +364,30 @@ public class BattleView {
         }
     }
 
+    private void checkForScale(ImageView image) {
+        if(team.size()<3){
+            image.setTranslateX(-280);
+        }
+        if(team.size()==3){
+            heroGraphicsArea.setSpacing(-100);
+            image.setTranslateX(-200);
+            image.setTranslateY(20);
+            image.setScaleX(.85);
+            image.setScaleY(.85);
+        }
+        if(team.size()==4){
+            heroGraphicsArea.setSpacing(-150);
+            image.setTranslateX(-100);
+            image.setTranslateY(20);
+            image.setScaleX(.65);
+            image.setScaleY(.65);
+        }
+    }
+
     private void formatHeroGraphic(ImageView image, int index) {
         image.setFitHeight(team.get(index).getSizeY());
         image.setFitWidth(team.get(index).getSizeX());
+        StackPane.setAlignment(image, Pos.BOTTOM_CENTER);
         if(team.get(index).calcHPPercentage() == 0.00){
             image.setOpacity(.30);
         }
@@ -360,12 +425,14 @@ public class BattleView {
     }
 
     private void createEnemySelectors() {
+        ArrayList<Fighter> enemyTeam = gameData.getEnemyTeam();
         for(int i = 0; i<enemyTeam.size();i++){
             ImageView enemy = new ImageView(new Image(enemyTeam.get(i).getBattlerGraphicPath()));
             enemy.setId(Integer.toString(i));
             populateEnemyUIElements(enemy);
             enemy.setOnMouseEntered(event -> showEnemyInfo(enemy));
             enemy.setOnMouseExited(event -> hideEnemyInfo());
+            HBox.setHgrow(enemy,Priority.ALWAYS);
             enemySelectorArea.getChildren().add(enemy);
 
         }
@@ -380,7 +447,7 @@ public class BattleView {
 
     private void selectEnemy(ImageView enemy) {
         int index = enemySelectorArea.getChildren().indexOf(enemy);
-        selectedEnemy = index;
+        selectedTarget = index;
         gameData.setSelectedTarget(index);
         if(usingSkill){
             triggerSkill(index);
@@ -388,7 +455,6 @@ public class BattleView {
         else{
             triggerAttack();
         }
-        backButton.setVisible(false);
 
     }
 
@@ -486,7 +552,8 @@ public class BattleView {
 
     public void selectEndTurn() {
         if(!uiLocked){
-            battleLogic.endPlayerTurn();
+            battleLogic.prepareEndPlayerTurn();
+            animator.backButtonSlideIn();
         }
 
     }
@@ -578,6 +645,7 @@ public class BattleView {
         updateInventoryUI();
         battleLogic.useItem(selectedItem);
         updateSingleHeroBar();
+        animator.backButtonSlideIn();
 
 
     }
@@ -586,7 +654,7 @@ public class BattleView {
         StackPane hero = (StackPane)heroSelectorArea.getChildren().get(selectedUser);
         ProgressBar heroBar = (ProgressBar)hero.getChildren().get(1);
         Fighter user = team.get(selectedUser);
-        Double hpPercentage = (double)user.getHp()/(double)user.getMaxHP();
+        Double hpPercentage = user.calcHPPercentage();
         heroBar.setProgress(hpPercentage);
         updateColor(heroBar,hpPercentage);
     }
@@ -600,7 +668,8 @@ public class BattleView {
     }
 
     public void selectFlee(javafx.scene.input.MouseEvent event) {
-        pushMessage("You ran away. Everyone is disappointed.");
+        battleLogic.getMessageQueue().add("You ran away. Everyone is disappointed");
+        animator.heroFlee();
         battleLogic.endBattle();
     }
 
@@ -619,16 +688,13 @@ public class BattleView {
         Fighter user = team.get(selectedUser);
         Fighter target = enemyTeam.get(index);
         battleLogic.tryActivateSkill(user,target);
-        skillSelectorArea.setVisible(false);
-        skillInfoDisplay.setVisible(false);
-        heroSelectorArea.setVisible(true);
+//        skillSelectorArea.setVisible(false);
+//        skillInfoDisplay.setVisible(false);
+//        heroSelectorArea.setVisible(true);
     }
 
     private void triggerAttack() {
         battleLogic.tryHeroBasicAttack();
-        handleAnimation("heroLunge");
-        actionMenu.setVisible(false);
-        heroSelectorArea.setVisible(true);
 
     }
 
@@ -637,10 +703,9 @@ public class BattleView {
     }
 
     public void updateTP(){
-        double percentage = (double)gameData.getCurrentTp()/(double)gameData.getMaxTP();
+        double percentage = (double)gameData.getCurrentTp()/(double)gameData.getTempMaxTP();
         tpBar.setProgress(percentage);
-        tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getMaxTP());
-        battleLogic.checkPlayerTP();
+        tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getTempMaxTP());
     }
 
     public void blockEnemySelectors(){
@@ -659,7 +724,7 @@ public class BattleView {
 
     private void showActionMenu() {
         actionMenu.setVisible(true);
-        backButton.setVisible(true);
+        animator.backButtonSlideOut();
         pushMessage("What will " + team.get(selectedUser).getName() + " do?" );
     }
 
@@ -672,13 +737,13 @@ public class BattleView {
         battleLogic.getMessageQueue().add(team.get(index).getName() + " is down!");
     }
 
-    public void goBack() {
+    private void goBack() {
         selectorMenu.setVvalue(0);
         if(actionMenu.isVisible()){
             heroSelectorArea.setVisible(true);
             actionMenu.setVisible(false);
             blockEnemySelectors();
-            backButton.setVisible(false);
+            animator.backButtonSlideIn();
 
         }
         else if(itemSelectorArea.isVisible()){
@@ -702,6 +767,10 @@ public class BattleView {
     }
 
     //endregion
+
+    public GameData getGameData(){
+        return gameData;
+    }
 
 
 }
