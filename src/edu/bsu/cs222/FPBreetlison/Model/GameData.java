@@ -102,6 +102,10 @@ public class GameData implements java.io.Serializable {
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
         }
+        else{
+            enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+            enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+        }
     }
 
     void removeObjectFromInventory(int index){
