@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-public class BattleXMLParser {
+public class BattleParser {
 
     private Document document;
     private String keyword;
@@ -134,6 +134,7 @@ public class BattleXMLParser {
                 battler.getAttribute("agility") + "," +
                 battler.getAttribute("tpCost") + "," +
                 battler.getAttribute("expModifier") + "," +
+                battler.getAttribute("weakness") + "," +
                 battler.getAttribute("battlerGraphicPath") + "," +
                 battler.getAttribute("miniGraphicPath") + "," +
                 battler.getAttribute("sizeX") + "," +
@@ -148,6 +149,7 @@ public class BattleXMLParser {
         return (skill.getAttribute("name") + ",") +
                 skill.getAttribute("affectAmt") + "," +
                 skill.getAttribute("tpCost") + "," +
+                skill.getAttribute("element") + "," +
                 skill.getAttribute("type") + "," +
                 skill.getAttribute("type2") + "," +
                 skill.getAttribute("quickInfo") + "," +

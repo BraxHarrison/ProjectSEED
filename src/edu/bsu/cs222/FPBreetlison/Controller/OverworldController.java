@@ -2,8 +2,9 @@ package edu.bsu.cs222.FPBreetlison.Controller;
 
 import edu.bsu.cs222.FPBreetlison.Model.Animator;
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
-import edu.bsu.cs222.FPBreetlison.Model.GameManager;
+import edu.bsu.cs222.FPBreetlison.Model.GameLogic;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Event;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class OverworldView implements java.io.Serializable {
+public class OverworldController implements java.io.Serializable {
 
 
     public VBox sideBar;
@@ -52,12 +53,12 @@ public class OverworldView implements java.io.Serializable {
     private boolean usingItem;
     private int indexToTransfer;
 
-    private GameManager game;
+    private GameLogic game;
     private GameData gameData;
     private Animator animator;
     private Event loadedEvent;
 
-    public void initialize(GameManager game){
+    public void initialize(GameLogic game){
         indexToTransfer = 0;
         this.game = game;
         this.gameData = game.getGameData();
@@ -93,8 +94,8 @@ public class OverworldView implements java.io.Serializable {
             int index = i;
             HBox standbyCharacterSelector = new HBox();
             ImageView image = new ImageView(new Image(gameData.getStandby().get(i).getMiniGraphicPath()));
-            image.setFitWidth(30);
-            image.setFitHeight(30);
+            image.setFitWidth(60);
+            image.setFitHeight(60);
             Label name = new Label(gameData.getStandby().get(i).getName());
             standbyCharacterSelector.setOnMousePressed(e->selectStandbyToTransfer(index));
             standbyCharacterSelector.getChildren().addAll(image,name);
@@ -105,6 +106,36 @@ public class OverworldView implements java.io.Serializable {
     private void selectStandbyToTransfer(int index) {
         indexToTransfer = index;
         movingFromStandby = true;
+        movingFromTeam = false;
+        populateCharacterStats();
+    }
+
+    private void populateCharacterStats(){
+        Fighter selectedFighter = getFromProperList();
+        Label nameLabel = (Label)teamMenu.getChildren().get(2);
+        Label hpLabel = (Label)teamMenu.getChildren().get(3);
+        Label atkLabel = (Label)teamMenu.getChildren().get(4);
+        Label defLabel = (Label)teamMenu.getChildren().get(5);
+        Label agilityLabel = (Label)teamMenu.getChildren().get(6);
+        nameLabel.setText(selectedFighter.getName());
+        hpLabel.setText("HP: "+ selectedFighter.getCurrStats().get("hp")+"/"+selectedFighter.getMaxHP());
+        atkLabel.setText("Attack: " + selectedFighter.getAttack());
+        defLabel.setText("Def: " + selectedFighter.getDefense());
+        agilityLabel.setText("Agility: " + selectedFighter.getAgility());
+
+    }
+
+    private Fighter getFromProperList() {
+        Fighter fighter;
+        if(movingFromTeam){
+            fighter = gameData.getTeam().get(indexToTransfer);
+            return fighter;
+        }
+        else{
+            fighter = gameData.getStandby().get(indexToTransfer);
+            return fighter;
+        }
+
     }
 
     private void populateTeamArea() {
@@ -113,8 +144,8 @@ public class OverworldView implements java.io.Serializable {
             int index = i;
             HBox teamCharacterSelector = new HBox();
             ImageView image = new ImageView(new Image(gameData.getTeam().get(i).getMiniGraphicPath()));
-            image.setFitWidth(30);
-            image.setFitHeight(30);
+            image.setFitWidth(60);
+            image.setFitHeight(60);
             Label name = new Label(gameData.getTeam().get(i).getName());
             teamCharacterSelector.setOnMousePressed(e-> selectTeamMember(index));
             teamCharacterSelector.getChildren().addAll(image,name);
@@ -125,6 +156,8 @@ public class OverworldView implements java.io.Serializable {
     private void selectTeamMember(int index) {
         indexToTransfer = index;
         movingFromTeam = true;
+        movingFromStandby = false;
+        populateCharacterStats();
 
     }
 
@@ -376,4 +409,6 @@ public class OverworldView implements java.io.Serializable {
         movingFromStandby = false;
         teamMenu.setVisible(false);
     }
+
+
 }

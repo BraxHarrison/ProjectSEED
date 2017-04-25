@@ -5,7 +5,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.ScrollPane?>
-<StackPane fx:controller="edu.bsu.cs222.FPBreetlison.Controller.OverworldView" xmlns:fx="http://javafx.com/fxml" stylesheets="/stylesheets/customClasses.css" alignment="center">
+<StackPane fx:controller="edu.bsu.cs222.FPBreetlison.Controller.OverworldController" xmlns:fx="http://javafx.com/fxml" stylesheets="/stylesheets/customClasses.css" alignment="center">
 
     <StackPane fx:id="descriptionBox" StackPane.alignment="BOTTOM_CENTER" maxHeight="150" maxWidth="900"  styleClass="description-box">
         <Label fx:id="roomDescription" StackPane.alignment="CENTER"  text="" styleClass="description-text" wrapText="true" maxWidth="800" textAlignment="CENTER"/>
@@ -66,7 +66,12 @@
         <ScrollPane fx:id="standbyScroller" StackPane.alignment="CENTER_RIGHT" maxWidth="200" maxHeight="300" translateX="-40">
             <VBox fx:id="standbyArea"/>
         </ScrollPane>
-        <Label fx:id="transferButton" text="transfer" StackPane.alignment="CENTER" styleClass="banner-text" scaleX=".8" scaleY=".8" onMousePressed="#handleTransfer"/>
+        <Label fx:id="characterName" StackPane.alignment="TOP_CENTER" translateY="20" styleClass="description-text"/>
+        <Label fx:id="characterHP" StackPane.alignment="TOP_CENTER" translateY="40" styleClass="description-text"/>
+        <Label fx:id="characterAtk" StackPane.alignment="TOP_CENTER" translateY="60" styleClass="description-text"/>
+        <Label fx:id="characterDef" StackPane.alignment="TOP_CENTER" translateY="80" styleClass="description-text"/>
+        <Label fx:id="characterAgility" StackPane.alignment="TOP_CENTER" translateY="100" styleClass="description-text"/>
+        <Label fx:id="transferButton" text="transfer" StackPane.alignment="CENTER" translateY="150" styleClass="banner-text" scaleX=".8" scaleY=".8" onMousePressed="#handleTransfer"/>
         <Button fx:id="exitButton" text="X" StackPane.alignment="TOP_LEFT" onAction="#hideTeamMenu"/>
     </StackPane>
     <Label fx:id="walletDisplay" StackPane.alignment="TOP_CENTER"/>

@@ -1,6 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
-import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
+import edu.bsu.cs222.FPBreetlison.Controller.BattleController;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
@@ -10,18 +10,14 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
-import java.security.Key;
-
 
 public class Animator implements java.io.Serializable {
 
-    BattleView battleView;
+    BattleController battleController;
     HBox heroGraphicsArea;
     HBox enemySelectorArea;
     Group damageDisplayArea;
@@ -33,9 +29,9 @@ public class Animator implements java.io.Serializable {
     Label damage;
 
     GameData gameData;
-    GameManager game;
+    GameLogic game;
 
-    public Animator(GameManager game){
+    public Animator(GameLogic game){
         this.game = game;
         if(game.isBattleUnderway()){
             initAnimatorForBattle();
@@ -44,13 +40,13 @@ public class Animator implements java.io.Serializable {
     }
 
     private void initAnimatorForBattle() {
-        battleView = this.game.getBattleControl();
-        damage = battleView.damageDisplay;
-        heroGraphicsArea = battleView.heroGraphicsArea;
-        enemySelectorArea = battleView.enemySelectorArea;
-        backButton = battleView.backButton;
-        damageDisplayArea = battleView.damageDisplayArea;
-        gameData = battleView.getGameData();
+        battleController = this.game.getBattleControl();
+        damage = battleController.damageDisplay;
+        heroGraphicsArea = battleController.heroGraphicsArea;
+        enemySelectorArea = battleController.enemySelectorArea;
+        backButton = battleController.backButton;
+        damageDisplayArea = battleController.damageDisplayArea;
+        gameData = battleController.getGameData();
     }
 
     private void initImages() {
@@ -64,12 +60,12 @@ public class Animator implements java.io.Serializable {
     }
 
     private void setUpHeroOrientation(){
-        user = (ImageView)heroGraphicsArea.getChildren().get(battleView.selectedUser);
-        target = (ImageView)enemySelectorArea.getChildren().get(battleView.selectedTarget);
+        user = (ImageView)heroGraphicsArea.getChildren().get(battleController.selectedUser);
+        target = (ImageView)enemySelectorArea.getChildren().get(battleController.selectedTarget);
     }
     private void setUpEnemyOrientation(){
-        user = (ImageView)enemySelectorArea.getChildren().get(battleView.selectedTarget);
-        target = (ImageView)heroGraphicsArea.getChildren().get(battleView.selectedUser);
+        user = (ImageView)enemySelectorArea.getChildren().get(battleController.selectedTarget);
+        target = (ImageView)heroGraphicsArea.getChildren().get(battleController.selectedUser);
     }
 
 

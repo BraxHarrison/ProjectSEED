@@ -1,9 +1,8 @@
 package Model.Tests;
 
 
-import edu.bsu.cs222.FPBreetlison.Model.BattleManager;
-import edu.bsu.cs222.FPBreetlison.Model.BattleXMLParser;
-import edu.bsu.cs222.FPBreetlison.Model.DamageCalculator;
+import edu.bsu.cs222.FPBreetlison.Model.BattleLogic;
+import edu.bsu.cs222.FPBreetlison.Model.BattleParser;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,12 +18,12 @@ import java.util.HashMap;
 
 public class BattleTests {
 
-    private BattleXMLParser parser;
+    private BattleParser parser;
     private Document characterInfo;
 
     HashMap<String,Fighter> allHeroes;
     HashMap<String,Fighter> allEnemies;
-    BattleManager battleManager;
+    BattleLogic battleLogic;
     private Fighter attacker;
     private Fighter defender;
 
@@ -35,7 +34,7 @@ public class BattleTests {
     //region Test Initialization
     @Before
     public void setUp() throws ParserConfigurationException, IOException, SAXException {
-        battleManager = new BattleManager();
+        battleLogic = new BattleLogic();
         heroTeam = new ArrayList<>();
         enemyTeam = new ArrayList<>();
         initFighters();
@@ -46,7 +45,7 @@ public class BattleTests {
     private void initFighters() throws IOException, SAXException, ParserConfigurationException {
         attacker = new Fighter("Elmira,10,2,2,2,2,2,2,1.65,/images/system/system_undefined.png,/images/system/system_undefined.png,200,200");
         defender = new Fighter("Thompson,10,2,2,2,2,2,2,1.65,/images/system/system_undefined.png,/images/system/system_undefined.png,200,200");
-        parser = new BattleXMLParser();
+        parser = new BattleParser();
         parser.parseBattleData();
         allHeroes = parser.getHeroes();
         allEnemies = parser.getEnemies();

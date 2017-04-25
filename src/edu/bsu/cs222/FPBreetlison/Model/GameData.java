@@ -1,6 +1,5 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
-import edu.bsu.cs222.FPBreetlison.Controller.OverworldView;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.*;
 import org.xml.sax.SAXException;
 
@@ -41,9 +40,7 @@ public class GameData implements java.io.Serializable {
         loadData();
         addHeroes();
         initItems();
-        maxTP = 10;
-        tp = maxTP;
-        tempMaxTP = maxTP;
+        calcTP();
         wallet = new Wallet();
         wallet.collect(20,"B");
         System.out.println(allEvents.get("Buried Vending Machine").getType());
@@ -52,12 +49,21 @@ public class GameData implements java.io.Serializable {
 
     private void loadData() throws ParserConfigurationException, SAXException, IOException {
         OverWorldParser overworldLoader = new OverWorldParser(this);
-        BattleXMLParser battleLoader = new BattleXMLParser();
+        BattleParser battleLoader = new BattleParser();
         loadItems(overworldLoader);
         loadSkills(battleLoader);
         loadFighters(battleLoader);
         loadEvents(overworldLoader);
         loadRooms(overworldLoader);
+    }
+
+    public void calcTP(){
+        maxTP = 0;
+        for(int i = 0; i<team.size();i++){
+            maxTP += team.get(i).getAgility();
+        }
+        tp = maxTP;
+        tempMaxTP = maxTP;
     }
 
     public void subtractTP(int amount){
@@ -84,7 +90,7 @@ public class GameData implements java.io.Serializable {
         allEvents = loader.createEventDatabase(this);
     }
 
-    private void loadSkills(BattleXMLParser loader) {
+    private void loadSkills(BattleParser loader) {
         allSkills = loader.getSkills();
     }
 
@@ -102,7 +108,7 @@ public class GameData implements java.io.Serializable {
         allRooms = loader.parseRoomInfo(this);
     }
 
-    private void loadFighters(BattleXMLParser loader) throws IOException, SAXException, ParserConfigurationException {
+    private void loadFighters(BattleParser loader) throws IOException, SAXException, ParserConfigurationException {
         loader.parseBattleData();
         allHeroes = loader.getHeroes();
         allEnemies = loader.getEnemies();

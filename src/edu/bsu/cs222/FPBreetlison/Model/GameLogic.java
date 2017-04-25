@@ -1,7 +1,7 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
-import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
-import edu.bsu.cs222.FPBreetlison.Controller.OverworldView;
+import edu.bsu.cs222.FPBreetlison.Controller.BattleController;
+import edu.bsu.cs222.FPBreetlison.Controller.OverworldController;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -12,13 +12,12 @@ import javafx.stage.Stage;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Objects;
 
-public class GameManager implements java.io.Serializable {
+public class GameLogic implements java.io.Serializable {
 
     private GameData gameData;
-    private BattleManager battleLogic;
-    private BattleView battleControl;
+    private BattleLogic battleLogic;
+    private BattleController battleControl;
     private Stage currentStage;
     private Room currentRoom;
     private boolean battleUnderway;
@@ -41,7 +40,7 @@ public class GameManager implements java.io.Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        OverworldView overworld = fxmlLoader.getController();
+        OverworldController overworld = fxmlLoader.getController();
         overworld.initialize(this);
     }
     private void setOverworldAsStage(Parent root){
@@ -67,7 +66,7 @@ public class GameManager implements java.io.Serializable {
     }
 
     private void createBattleLogic(){
-        battleLogic = new BattleManager();
+        battleLogic = new BattleLogic();
     }
 
     private void createBattleController(){
@@ -152,13 +151,13 @@ public class GameManager implements java.io.Serializable {
     public GameData getGameData(){
         return gameData;
     }
-    BattleView getBattleControl() {
+    BattleController getBattleControl() {
         return battleControl;
     }
-    public void setBattleControl(BattleView battleView){
-        this.battleControl = battleView;
+    public void setBattleControl(BattleController battleController){
+        this.battleControl = battleController;
     }
-    public BattleManager getBattleLogic() {
+    public BattleLogic getBattleLogic() {
         return battleLogic;
     }
     public HashMap<Integer, Boolean> checkAvailableDirections() {

@@ -1,6 +1,6 @@
 package edu.bsu.cs222.FPBreetlison;
 
-import edu.bsu.cs222.FPBreetlison.Model.GameManager;
+import edu.bsu.cs222.FPBreetlison.Model.GameLogic;
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Main extends Application {
 
 private GameData gameData = new GameData();
-private GameManager game = new GameManager();
+private GameLogic game = new GameLogic();
 
     public Main() throws ParserConfigurationException, SAXException, IOException {
     }

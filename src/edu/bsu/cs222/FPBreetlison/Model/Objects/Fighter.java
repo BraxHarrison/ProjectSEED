@@ -33,6 +33,8 @@ public class Fighter implements java.io.Serializable {
     private boolean KOState;
     private int KOLevel;
     private int lastDamage;
+    private String weakness;
+    private int agility;
 
     public Fighter(String info){
 
@@ -46,6 +48,8 @@ public class Fighter implements java.io.Serializable {
         loadInfo(characterInfo);
         associateStats();
     }
+
+    //For use when copying fighters(mainly used for enemies of the same species)
     public Fighter(Fighter fighter){
         loadInfoForCopy(fighter);
         associateStats();
@@ -63,8 +67,10 @@ public class Fighter implements java.io.Serializable {
         this.hp = fighter.getHp();
         this.attack = fighter.getAttack();
         this.defense = fighter.getDefense();
+        this.agility = fighter.getAgility();
         this.tpCost = fighter.getTpCost();
         this.expModifier = fighter.getExpModifier();
+        this.weakness = fighter.getWeakness();
         this.battlerGraphicPath = fighter.getBattlerGraphicPath();
         this.miniGraphicPath = fighter.getMiniGraphicPath();
         this.sizeX = fighter.getSizeX();
@@ -78,13 +84,15 @@ public class Fighter implements java.io.Serializable {
         this.hp = maxHP;
         this.attack = Integer.parseInt(characterInfo.get(2));
         this.defense = Integer.parseInt(characterInfo.get(3));
+        this.agility = Integer.parseInt(characterInfo.get(6));
         this.tpCost = Integer.parseInt(characterInfo.get(7));
         this.expModifier = Double.parseDouble(characterInfo.get(8));
-        this.battlerGraphicPath = characterInfo.get(9);
-        this.miniGraphicPath = characterInfo.get(10);
-        this.sizeX = Integer.parseInt(characterInfo.get(11));
-        this.sizeY = Integer.parseInt(characterInfo.get(12));
-        this.rewardAmt = Double.parseDouble(characterInfo.get(13));
+        this.weakness = characterInfo.get(9);
+        this.battlerGraphicPath = characterInfo.get(10);
+        this.miniGraphicPath = characterInfo.get(11);
+        this.sizeX = Integer.parseInt(characterInfo.get(12));
+        this.sizeY = Integer.parseInt(characterInfo.get(13));
+        this.rewardAmt = Double.parseDouble(characterInfo.get(14));
     }
 
     public double calcHPPercentage(){
@@ -110,12 +118,6 @@ public class Fighter implements java.io.Serializable {
         int finalDamage = (int)Math.round(damage*1.5);
         lastDamage = finalDamage;
         target.takeDamage(finalDamage);
-        chooseActionString();
-    }
-
-    public void useSkill(int index){
-        Skill usedSkill = skillList.get(index);
-        usedSkill.use(this,this );
     }
 
     public void addSkill(Skill skill){
@@ -184,10 +186,6 @@ public class Fighter implements java.io.Serializable {
     //endregion
 
     //region Text-Related Functionality
-
-    private void chooseActionString(){
-
-    }
 
     private List<String> stringParser(String info){
         return Arrays.asList(info.split(","));
@@ -290,6 +288,12 @@ public class Fighter implements java.io.Serializable {
     }
     public double getRewardAmt() {
         return rewardAmt;
+    }
+    public String getWeakness() {
+        return weakness;
+    }
+    public int getAgility() {
+        return agility;
     }
     //endregion
 

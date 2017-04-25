@@ -14,7 +14,7 @@
 
 
 <?import javafx.scene.layout.AnchorPane?>
-<Group fx:controller="edu.bsu.cs222.FPBreetlison.Controller.BattleView" xmlns:fx="http://javafx.com/fxml" stylesheets="/stylesheets/customClasses.css">
+<Group fx:controller="edu.bsu.cs222.FPBreetlison.Controller.BattleController" xmlns:fx="http://javafx.com/fxml" stylesheets="/stylesheets/customClasses.css">
     <StackPane minWidth="900" minHeight="600">
         <Pane fx:id="loaderScreen" maxWidth="900" maxHeight="600">
             <ProgressIndicator fx:id="loader" layoutX="420" layoutY="275"/>

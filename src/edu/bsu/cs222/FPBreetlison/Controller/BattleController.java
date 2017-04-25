@@ -1,9 +1,9 @@
 package edu.bsu.cs222.FPBreetlison.Controller;
 
 import edu.bsu.cs222.FPBreetlison.Model.Animator;
-import edu.bsu.cs222.FPBreetlison.Model.BattleManager;
+import edu.bsu.cs222.FPBreetlison.Model.BattleLogic;
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
-import edu.bsu.cs222.FPBreetlison.Model.GameManager;
+import edu.bsu.cs222.FPBreetlison.Model.GameLogic;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 
@@ -28,7 +28,7 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 
-public class BattleView {
+public class BattleController {
     public VBox skillSelectorArea;
     public Group skillInfoDisplay;
     public Group damageDisplayArea;
@@ -65,8 +65,8 @@ public class BattleView {
     private boolean finishedLoading;
 
     private GameData gameData;
-    private GameManager game;
-    private BattleManager battleLogic;
+    private GameLogic game;
+    private BattleLogic battleLogic;
     Animator animator;
 
     private Font darwinFont;
@@ -191,7 +191,7 @@ public class BattleView {
     //endregion
     //region Initialization Functions
 
-    public void initialize(GameManager game){
+    public void initialize(GameLogic game){
         transferBattleData(game);
         this.game = game;
         readBattleData();
@@ -208,7 +208,7 @@ public class BattleView {
         backButton.setOnMouseClicked(e->goBack());
     }
 
-    private void transferBattleData(GameManager game) {
+    private void transferBattleData(GameLogic game) {
         this.game = game;
         this.game.setBattleControl(this);
         this.gameData = game.getGameData();

@@ -12,6 +12,7 @@ public class Skill implements java.io.Serializable {
     String quickInfo;
     String extraMessage;
     String animType;
+    String element;
 
 
     public Skill(String info){
@@ -19,11 +20,12 @@ public class Skill implements java.io.Serializable {
         this.name = skillInfo.get(0);
         this.affectAmt = Integer.parseInt(skillInfo.get(1));
         this.tpCost = Integer.parseInt(skillInfo.get(2));
-        this.type = skillInfo.get(3);
-        this.type2 = skillInfo.get(4);
-        this.quickInfo = skillInfo.get(5);
-        this.extraMessage =  skillInfo.get(6);
-        this.animType = skillInfo.get(7);
+        this.element = skillInfo.get(3);
+        this.type = skillInfo.get(4);
+        this.type2 = skillInfo.get(5);
+        this.quickInfo = skillInfo.get(6);
+        this.extraMessage =  skillInfo.get(7);
+        this.animType = skillInfo.get(8);
     }
 
     public void use(Fighter user, Fighter target){
@@ -32,7 +34,7 @@ public class Skill implements java.io.Serializable {
         }
         else if(type.equals("attack")){
             double damage = user.getCurrStats().get("attack")*affectAmt/target.getCurrStats().get("defense");
-            int finalDamage = (int)Math.round(damage*1.5);
+            int finalDamage = (int)Math.round(damage*1.5*elementModifier(target));
             target.takeDamage(finalDamage);
         }
         else if(type.equals("debuff")){
@@ -44,6 +46,13 @@ public class Skill implements java.io.Serializable {
         else if(type.equals("selfDebuff")){
 
         }
+    }
+
+    private double elementModifier(Fighter target) {
+        if(element.equals(target.getWeakness())){
+            return 1.5;
+        }
+        return 1;
     }
 
     private List<String> stringParser(String info){
@@ -67,5 +76,8 @@ public class Skill implements java.io.Serializable {
     }
     public String getAnimType() {
         return animType;
+    }
+    public String getElement() {
+        return element;
     }
 }
