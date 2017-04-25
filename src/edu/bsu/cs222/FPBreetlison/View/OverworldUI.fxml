@@ -35,18 +35,41 @@
     <HBox fx:id="backgroundImage" StackPane.alignment="TOP_CENTER"/>
     <StackPane fx:id="partyMenu" StackPane.alignment="CENTER" visible="false" styleClass="party-box" scaleX=".5" scaleY=".5">
     </StackPane>
-    <StackPane fx:id="loadSaveMenu" StackPane.alignment="CENTER" visible="false" maxWidth="100" maxHeight="125" translateY="-60" styleClass="save-box">
-        <Button fx:id="save" text="Save" StackPane.alignment="TOP_CENTER" translateY="30" onAction="#saveGame"/>
-        <Button fx:id="load" text="Load" StackPane.alignment="TOP_CENTER" translateY="70" onAction="#loadGame"/>
+    <StackPane fx:id="loadSaveMenu" StackPane.alignment="CENTER" visible="false" maxWidth="150" maxHeight="175" translateY="-60" styleClass="save-box">
+        <Label fx:id="save" text="Save" StackPane.alignment="TOP_CENTER" translateY="30" onMousePressed="#saveGame" styleClass="menu-text"/>
+        <Label fx:id="load" text="Load" StackPane.alignment="TOP_CENTER" translateY="100" onMousePressed="#loadGame" styleClass="menu-text"/>
         <Button fx:id="exitLoadSaveMenu" text="X" StackPane.alignment="TOP_LEFT"   onAction="#hideLoadSaveMenu"/>
     </StackPane>
-    <StackPane fx:id="inspectMenu" StackPane.alignment="TOP_CENTER" visible="false" translateY="50" maxHeight="100" maxWidth="500" styleClass="save-box">
-        <ScrollPane fx:id="eventScroller">
+    <StackPane fx:id="inspectMenu" StackPane.alignment="TOP_CENTER" visible="false" translateY="50" translateX="-200" maxHeight="300" maxWidth="100" styleClass="save-box">
+        <ScrollPane fx:id="eventScroller" vbarPolicy="never" hbarPolicy="never">
+            <VBox fx:id="events">
 
+            </VBox>
         </ScrollPane>
         <Button text="X" onAction="#hideInspectMenu" StackPane.alignment="TOP_LEFT"/>
 
     </StackPane>
+    <StackPane fx:id="shopMenu" maxHeight="400" maxWidth="400" visible="false" StackPane.alignment="CENTER" styleClass="menu-box">
+        <Button fx:id="hideShop" text="X" onAction="#hideShop" StackPane.alignment="TOP_RIGHT"/>
+        <ScrollPane fx:id="itemAreaScroller" StackPane.alignment="CENTER_LEFT" styleClass="edge-to-edge" maxWidth="130">
+            <VBox fx:id="shopItemsArea" spacing="20"/>
+        </ScrollPane>
+        <ImageView fx:id="itemDisplay" visible="false" StackPane.alignment="CENTER" translateX="50" fitHeight="200" fitWidth="200"/>
+        <Label fx:id="nameDisplay" visible="false" StackPane.alignment="CENTER" translateX="50" translateY="-150" styleClass="description-text"/>
+        <Label fx:id="costDisplay" visible="false" StackPane.alignment="CENTER" translateX="50" translateY="-110" styleClass="description-text"/>
+        <Label fx:id="buy" visible="false" text="Buy" StackPane.alignment="BOTTOM_CENTER" translateY="-40" translateX="50" styleClass="banner-text"/>
+
+
+    </StackPane>
+    <StackPane fx:id="teamMenu" maxHeight="400" maxWidth="700" visible="false" StackPane.alignment="CENTER" styleClass="menu-box">
+      <VBox fx:id="teamArea" StackPane.alignment="CENTER_LEFT" maxWidth="200" maxHeight="300" translateX="40" styleClass="white-box"/>
+        <ScrollPane fx:id="standbyScroller" StackPane.alignment="CENTER_RIGHT" maxWidth="200" maxHeight="300" translateX="-40">
+            <VBox fx:id="standbyArea"/>
+        </ScrollPane>
+        <Label fx:id="transferButton" text="transfer" StackPane.alignment="CENTER" styleClass="banner-text" scaleX=".8" scaleY=".8" onMousePressed="#handleTransfer"/>
+        <Button fx:id="exitButton" text="X" StackPane.alignment="TOP_LEFT" onAction="#hideTeamMenu"/>
+    </StackPane>
+    <Label fx:id="walletDisplay" StackPane.alignment="TOP_CENTER"/>
 
 
 </StackPane>

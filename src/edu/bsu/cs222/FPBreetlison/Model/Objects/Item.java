@@ -9,6 +9,9 @@ public class Item implements java.io.Serializable {
     private String description;
     private String quickSummary;
     private int affectAmt;
+    private double buyPrice;
+    private double convertedBuyPrice;
+    private String buyPriceType;
     private String type;
     private String type2;
     private String imagePath;
@@ -20,9 +23,10 @@ public class Item implements java.io.Serializable {
         this.description = itemInfo.get(1);
         this.quickSummary = itemInfo.get(2);
         this.affectAmt = Integer.parseInt(itemInfo.get(3));
-        this.type = itemInfo.get(4);
-        this.type2 = itemInfo.get(5);
-        this.imagePath = itemInfo.get(6);
+        this.buyPrice = Integer.parseInt(itemInfo.get(4));
+        this.type = itemInfo.get(5);
+        this.type2 = itemInfo.get(6);
+        this.imagePath = itemInfo.get(7);
     }
 
 
@@ -56,10 +60,31 @@ public class Item implements java.io.Serializable {
         return Arrays.asList(info.split(","));
     }
 
+    public String getDisplayCost() {
+        buyPriceType="B";
+        convertedBuyPrice = buyPrice;
+        if(convertedBuyPrice>=1000){
+            System.out.println("Converting currency to KB...");
+            convertedBuyPrice = convertedBuyPrice/1000;
+            buyPriceType="KB";
+        }
+        if(convertedBuyPrice>=1000){
+            convertedBuyPrice = convertedBuyPrice/1000;
+            buyPriceType="MB";
+        }
+        if(convertedBuyPrice>=1000){
+            convertedBuyPrice = convertedBuyPrice/1000;
+            buyPriceType="GB";
+        }
+        return convertedBuyPrice + " " + buyPriceType;
+    }
     public String getName() {
         return name;
     }
     public String getImagePath() {
+        if(imagePath.equals("null")){
+            return "/images/system/system_undefined.png";
+        }
         return imagePath;
     }
     public String getDescription() {
@@ -68,4 +93,15 @@ public class Item implements java.io.Serializable {
     public String getQuickSummary() {
         return quickSummary;
     }
+    public String getType() {
+        return type;
+    }
+    public int getAffectAmt() {
+        return affectAmt;
+    }
+    public Double getBuyPrice() {
+        return buyPrice;
+    }
+
+
 }

@@ -1,5 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Event;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
 import org.w3c.dom.Document;
@@ -16,11 +17,12 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-class OverWorldParser {
+public class OverWorldParser {
 
     private Document document;
+    private GameData gameData;
 
-    public OverWorldParser(){
+    public OverWorldParser(GameData gameData){
         try {
             createDoc();
         } catch (ParserConfigurationException e) {
@@ -39,18 +41,19 @@ class OverWorldParser {
         this.document = builder.parse(inputStream);
     }
 
-    Map<String, Room> parseRoomInfo() throws ParserConfigurationException, IOException, SAXException {
+    Map<String, Room> parseRoomInfo(GameData gameData) throws ParserConfigurationException, IOException, SAXException {
         createDoc();
-        return createRoomMap();
+        return createRoomMap(gameData);
     }
 
-    private Map<String, Room> createRoomMap(){
+    private Map<String, Room> createRoomMap(GameData gameData){
         Map<String, Room> rooms = new HashMap<>();
         NodeList nodeList = this.document.getElementsByTagName("room");
         for(int i = 0; i< nodeList.getLength(); i++){
             Node roomInfo = nodeList.item(i);
             Element roomEle = (Element)roomInfo;
             Room room = new Room(createRoomString(roomEle));
+            room.loadEvents(gameData);
             rooms.put(room.getName(),room);
         }
         return rooms;
@@ -59,6 +62,7 @@ class OverWorldParser {
     private String createRoomString(Element roomElement) {
         return (roomElement.getAttribute("name") + "," +
                 roomElement.getAttribute("des") + "," +
+                roomElement.getAttribute("events") + ","+
                 roomElement.getAttribute("north") + "," +
                 roomElement.getAttribute("south") + "," +
                 roomElement.getAttribute("east") + "," +
@@ -80,16 +84,39 @@ class OverWorldParser {
         return items;
     }
 
+    public HashMap<String,Event> createEventDatabase(GameData gameData){
+        HashMap<String, Event> events = new HashMap<>();
+        NodeList nodeList = document.getElementsByTagName("event");
+        for(int i = 0; i<nodeList.getLength();i++){
+            Node eventInfo = nodeList.item(i);
+            System.out.println(eventInfo.getAttributes().getNamedItem("type"));
+            Element sourceEvent = (Element)eventInfo;
+            Event event = new Event(createEventString(sourceEvent),gameData);
+            events.put(event.getName(),event);
+        }
+        return events;
+
+    }
+
+    private String createEventString(Element sourceEvent) {
+        System.out.println(sourceEvent.getAttribute("name"));
+        return (sourceEvent.getAttribute("name") + "," +
+                sourceEvent.getAttribute("type") + "," +
+                sourceEvent.getAttribute("stock") + "," +
+                sourceEvent.getAttribute("sell") + "," +
+                sourceEvent.getAttribute("cluster")
+        );
+    }
+
     private String createItemString(Element sourceItem) {
         return (sourceItem.getAttribute("name") + ",") +
                 sourceItem.getAttribute("description") + "," +
                 sourceItem.getAttribute("quickSummary") + "," +
                 sourceItem.getAttribute("affectAmt") + "," +
+                sourceItem.getAttribute("buyPrice") + "," +
                 sourceItem.getAttribute("type") + "," +
                 sourceItem.getAttribute("type2") + "," +
                 sourceItem.getAttribute("imagePath") + ",";
     }
-
-
 
 }

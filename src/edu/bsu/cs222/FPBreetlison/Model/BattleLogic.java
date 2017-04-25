@@ -1,6 +1,7 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
 import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Skill;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
@@ -16,8 +17,6 @@ import java.util.Random;
 
 public class BattleManager {
 
-    //Bugs: Patch doesn't heal because it increases maxhp, not current. Using an item doesn't properly hide the back button
-
     private GameData gameData;
     private GameManager game;
     private BattleView battleView;
@@ -27,6 +26,8 @@ public class BattleManager {
     private Fighter target;
 
     private int targetNo;
+    private int finalQueue;
+    private boolean enemyLock;
     private Snapshot fighterSnapshot;
     private ArrayList<Snapshot> targetQueue;
     private ArrayList<String> messageQueue;
@@ -46,6 +47,7 @@ public class BattleManager {
 
         messageQueue = new ArrayList<>();
         targetQueue = new ArrayList<>();
+        gameData.resetHeroTP();
         battleView.updateTP();
         checkSpeeds();
     }
@@ -54,9 +56,11 @@ public class BattleManager {
 
         switch (phase) {
             case "hero":
+                System.out.println("It's hero time!");
                 enableCharacterMenu();
                 break;
             case "enemy":
+                System.out.println("Triggering enemy turn!");
                 disableCharacterMenu();
                 tryEnemyAttack();
                 resetTP();
@@ -73,24 +77,38 @@ public class BattleManager {
                 battleView.heroSelectorArea.setVisible(false);
                 battleView.uiLocked = true;
                 gainExp();
+                calculateRewards();
                 endBattle();
                 break;
         }
         animator.backButtonSlideIn();
     }
 
+    private void calculateRewards() {
+        int rewardAmt = 0;
+        for(int i = 0; i < gameData.getEnemyTeam().size();i++){
+            rewardAmt+=gameData.getEnemyTeam().get(i).getRewardAmt();
+        }
+        gameData.getWallet().collect(rewardAmt,"B");
+        messageQueue.add("You collected " + rewardAmt + " bytes!");
+    }
+
 
     public void endBattle(){
         revertFighterStats();
-        int dur = 1000;
+        gameData.revertMaxTP();
+        finalQueue = messageQueue.size();
+        battleView.queueMessages(messageQueue);
+        int dur = 80;
         battleView.uiLocked = true;
         animator.backButtonSlideIn();
-        if(heroWon){dur += 4000; heroWon = false;}
+        dur += finalQueue*1000;
         Timeline counter = new Timeline();
         counter.getKeyFrames().add(new KeyFrame(
                 Duration.millis(dur),
                 ae -> game.setUpOverworld()));
         counter.play();
+        finalQueue = 0;
         game.setBattleUnderway(false);
     }
 
@@ -106,7 +124,6 @@ public class BattleManager {
     }
 
     private void tryEnemyAttack() {
-
         for (int i = 0; i< gameData.getEnemyTeam().size();i++) {
             if(!gameData.getEnemyTeam().get(i).isKO()){
                 findLivingHero(i);
@@ -115,6 +132,7 @@ public class BattleManager {
     }
 
     private void findLivingHero(int i) {
+        System.out.println("Attacking Enemy: " + gameData.getEnemyTeam().get(i).getName());
         fighterSnapshot = new Snapshot();
         fighterSnapshot.setAttackerIndex(i);
         fighterSnapshot.setAnimType("enemyLunge");
@@ -124,6 +142,7 @@ public class BattleManager {
             target = findNextTarget();
         }
         if (target != null) {
+            System.out.println("Target: " + gameData.getTeam().get(targetNo).getName()+"\n");
             fighterSnapshot.setIndex(targetNo);
             doEnemyAttack(gameData.getEnemyTeam().get(i), target);
         }
@@ -152,7 +171,6 @@ public class BattleManager {
         fighterSnapshot.calcHPPercent(target);
         detectHeroKO();
         fighterSnapshot.setKOState(target.isKO());
-       // System.out.println("MaxHP: " + target.getHp() + "/CurrHP: " + target.getCurrStats().get("hp"));
         messageQueue.add(user.getName() + " strikes " + target.getName() + " !");
         targetQueue.add(fighterSnapshot);
 
@@ -172,16 +190,17 @@ public class BattleManager {
 
     private void endEnemyTurn() {
         battleView.heroSelectorArea.setVisible(true);
+        System.out.println("Is the enemy turn ending?" + "\n");
         if(detectHeroKO()){
             updateTurn("enemyWin");
             messageQueue.add("Everyone's trashed! You lose!");
-
         }
         else{
             messageQueue.add("It's your turn!");
             updateTurn("hero");
 
         }
+        System.out.println("This is being updated!");
         battleView.queueMessages(messageQueue);
         battleView.queueBarUpdates(targetQueue);
         battleView.uiLocked = true;
@@ -221,9 +240,19 @@ public class BattleManager {
     }
 
     public void checkPlayerTP(){
-//        if(gameData.getCurrentTp() <= 0){
-//            updateTurn("enemy");
-//        }
+        if(gameData.getCurrentTp() <= 0){
+            battleView.skillSelectorArea.setVisible(false);
+            prepareEndPlayerTurn();
+
+        }
+    }
+
+    private void enemyTurnDelay(){
+        Timeline counter = new Timeline();
+        counter.getKeyFrames().add(new KeyFrame(
+                Duration.millis(500),null));
+        counter.setOnFinished(ae->endPlayerTurn());
+        counter.play();
     }
 
     public void tryHeroBasicAttack(){
@@ -234,6 +263,7 @@ public class BattleManager {
             battleView.handleAnimation("heroLunge");
             messageQueue.add(attacker.getName() + " attacks " + target.getName() +"!");
             battleView.queueMessages(messageQueue);
+            detectEnemyKO();
             startHeroBasicAttack(cost);
         }
         else{
@@ -249,8 +279,8 @@ public class BattleManager {
         battleView.handleAnimation("heroLunge");
         updateUIForHeroAttack();
         detectEnemyKO();
-        //startDamageAnimation();
         battleView.queueMessages(messageQueue);
+        checkPlayerTP();
 
     }
 
@@ -286,21 +316,30 @@ public class BattleManager {
         }
         if (KOamt == fighters.size()) {
             messageQueue.add("The enemy team is down! You won!");
-            battleView.queueMessages(messageQueue);
             updateTurn("heroWin");
         }
     }
 
-    public void endPlayerTurn() {
+    public void prepareEndPlayerTurn(){
         battleView.blockEnemySelectors();
-        updateTurn("enemy");
         battleView.queueMessages(messageQueue);
         battleView.uiLocked = true;
-
+        enemyTurnDelay();
+    }
+    public void endPlayerTurn() {
+        updateTurn("enemy");
     }
 
     public void useItem(int itemNo) {
-        gameData.getInventory().get(itemNo).activate(gameData.getTeam().get(battleView.selectedUser));
+        Item item = gameData.getInventory().get(itemNo);
+        if(item.getType().equals("tpBuff")){
+            gameData.tempIncreaseMaxTP(item.getAffectAmt());
+            battleView.updateTP();
+        }
+        else{
+            item.activate(gameData.getTeam().get(battleView.selectedUser));
+        }
+
         gameData.removeObjectFromInventory(itemNo);
     }
 
@@ -318,6 +357,8 @@ public class BattleManager {
             detectEnemyKO();
             battleView.handleAnimation(skill.getAnimType());
             battleView.queueMessages(messageQueue);
+            //The skill is not trying to activate
+            checkPlayerTP();
         }
         else{
             battleView.pushMessage("There's not enough time to use that skill!");
@@ -331,6 +372,9 @@ public class BattleManager {
         gameData.subtractTP(skill.getTpCost());
         battleView.updateTP();
         messageQueue.add(user.getName() + " used " + skill.getName() + "!");
+        if(skill.getElement().equals(target.getWeakness())){
+        messageQueue.add(user.getName() + " hit " + target.getName() + "'s weakness! Double Damage!");
+        }
         extraMessage(skill);
         battleView.queueMessages(messageQueue);
     }

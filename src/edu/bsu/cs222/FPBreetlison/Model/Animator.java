@@ -10,6 +10,8 @@ import javafx.geometry.Bounds;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
@@ -74,10 +76,10 @@ public class Animator implements java.io.Serializable {
     public void heroLunge(){
         setUpHeroOrientation();
         Timeline timeline = new Timeline();
-        KeyValue userLunge = new KeyValue(user.translateXProperty(),50, Interpolator.EASE_BOTH);
-        KeyValue targetKnockback = new KeyValue(target.translateXProperty(),20,Interpolator.EASE_BOTH);
-        KeyValue userRetreat = new KeyValue(user.translateXProperty(),0,Interpolator.EASE_BOTH);
-        KeyValue targetRetreat = new KeyValue(target.translateXProperty(),0,Interpolator.EASE_BOTH);
+        KeyValue userLunge = new KeyValue(user.translateXProperty(),user.getTranslateX()+50, Interpolator.EASE_BOTH);
+        KeyValue targetKnockback = new KeyValue(target.translateXProperty(),target.getTranslateX()+20,Interpolator.EASE_BOTH);
+        KeyValue userRetreat = new KeyValue(user.translateXProperty(),user.getTranslateX(),Interpolator.EASE_BOTH);
+        KeyValue targetRetreat = new KeyValue(target.translateXProperty(),target.getTranslateX(),Interpolator.EASE_BOTH);
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100),userLunge);
         KeyFrame keyFrame2 = new KeyFrame(Duration.millis(200),userRetreat,targetKnockback);
         KeyFrame keyFrame3 = new KeyFrame(Duration.millis(350),targetRetreat);
@@ -89,10 +91,10 @@ public class Animator implements java.io.Serializable {
     public void enemyLunge(){
         setUpEnemyOrientation();
         Timeline timeline = new Timeline();
-        KeyValue userLunge = new KeyValue(user.translateXProperty(),-50, Interpolator.EASE_BOTH);
-        KeyValue targetKnockback = new KeyValue(target.translateXProperty(),-20,Interpolator.EASE_BOTH);
-        KeyValue userRetreat = new KeyValue(user.translateXProperty(),0,Interpolator.EASE_BOTH);
-        KeyValue targetRetreat = new KeyValue(target.translateXProperty(),0,Interpolator.EASE_BOTH);
+        KeyValue userLunge = new KeyValue(user.translateXProperty(),user.getTranslateX()-50, Interpolator.EASE_BOTH);
+        KeyValue targetKnockback = new KeyValue(target.translateXProperty(),target.getTranslateX()-20,Interpolator.EASE_BOTH);
+        KeyValue userRetreat = new KeyValue(user.translateXProperty(),user.getTranslateX(),Interpolator.EASE_BOTH);
+        KeyValue targetRetreat = new KeyValue(target.translateXProperty(),target.getTranslateX(),Interpolator.EASE_BOTH);
         KeyFrame keyFrame = new KeyFrame(Duration.millis(100),userLunge);
         KeyFrame keyFrame2 = new KeyFrame(Duration.millis(200),userRetreat,targetKnockback);
         KeyFrame keyFrame3 = new KeyFrame(Duration.millis(350),targetRetreat);
@@ -186,10 +188,10 @@ public class Animator implements java.io.Serializable {
         for(int i = 0; i<heroGraphicsArea.getChildren().size();i++){
             ImageView hero = (ImageView)heroGraphicsArea.getChildren().get(i);
             KeyValue spinV = new KeyValue(hero.scaleXProperty(),-1,Interpolator.EASE_BOTH);
-            KeyValue moveBackV = new KeyValue(hero.translateXProperty(),40,Interpolator.EASE_BOTH);
+            KeyValue moveBackV = new KeyValue(hero.translateXProperty(),hero.getTranslateX()+40,Interpolator.EASE_BOTH);
             KeyValue stillV = new KeyValue(hero.scaleXProperty(),-1,Interpolator.EASE_BOTH);
-            KeyValue tiltV = new KeyValue(hero.rotateProperty(),15,Interpolator.EASE_BOTH);
-            KeyValue moveFV = new KeyValue(hero.translateXProperty(),-800,Interpolator.EASE_BOTH);
+            KeyValue tiltV = new KeyValue(hero.rotateProperty(),hero.getRotate()+15,Interpolator.EASE_BOTH);
+            KeyValue moveFV = new KeyValue(hero.translateXProperty(),hero.getTranslateX()-9000,Interpolator.EASE_BOTH);
             KeyFrame spinK = new KeyFrame(Duration.millis(200),spinV,moveBackV);
             KeyFrame stillK = new KeyFrame(Duration.millis(400),stillV);
             KeyFrame tiltK = new KeyFrame(Duration.millis(700),tiltV);

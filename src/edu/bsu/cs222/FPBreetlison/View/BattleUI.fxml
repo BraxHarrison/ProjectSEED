@@ -13,6 +13,7 @@
 <?import javafx.scene.image.Image?>
 
 
+<?import javafx.scene.layout.AnchorPane?>
 <Group fx:controller="edu.bsu.cs222.FPBreetlison.Controller.BattleView" xmlns:fx="http://javafx.com/fxml" stylesheets="/stylesheets/customClasses.css">
     <StackPane minWidth="900" minHeight="600">
         <Pane fx:id="loaderScreen" maxWidth="900" maxHeight="600">
@@ -22,7 +23,10 @@
         <StackPane fx:id="battleDisplay" visible="false" maxHeight="600" maxWidth="900">
             <StackPane fx:id="backgrounds">
             </StackPane>
-            <HBox fx:id="heroGraphicsArea" StackPane.alignment="CENTER" spacing="2" translateY="50" translateX="-25" maxWidth="500" maxHeight="300"/>
+            <StackPane fx:id="viewWindow" maxWidth="800" StackPane.alignment="CENTER_RIGHT">
+                <HBox fx:id="heroGraphicsArea" StackPane.alignment="BOTTOM_LEFT" spacing="-20" scaleX=".75" scaleY=".75" alignment="BOTTOM_LEFT" translateY="-105" maxWidth="400" minWidth="400" maxHeight="300"/>
+
+            </StackPane>
 
             <ScrollPane fx:id="historyScroller" pickOnBounds="false" visible="false" maxWidth="300" hbarPolicy="NEVER" >
                 <Label fx:id="historyDisplay" wrapText="true" maxWidth="295"/>
@@ -67,7 +71,7 @@
 
 
             </StackPane>
-            <HBox fx:id="enemySelectorArea" pickOnBounds="false" spacing="40"  translateX="350" maxWidth="500" maxHeight="300" translateY="-20">
+            <HBox fx:id="enemySelectorArea" pickOnBounds="false" spacing="40"  translateX="240"  maxWidth="400" maxHeight="400" scaleX=".85" scaleY=".85">
                 <children>
 
                 </children>

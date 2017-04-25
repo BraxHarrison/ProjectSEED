@@ -29,6 +29,7 @@ public class Fighter implements java.io.Serializable {
     private Skill queuedSkill;
     private int sizeX;
     private int sizeY;
+    private double rewardAmt;
     private boolean KOState;
     private int KOLevel;
     private int lastDamage;
@@ -46,6 +47,11 @@ public class Fighter implements java.io.Serializable {
         associateStats();
     }
     public Fighter(Fighter fighter){
+        loadInfoForCopy(fighter);
+        associateStats();
+    }
+
+    private void loadInfoForCopy(Fighter fighter) {
         expToNextLevel=150;
         currStats = new HashMap<>();
         skillList =  new ArrayList<Skill>();
@@ -58,12 +64,12 @@ public class Fighter implements java.io.Serializable {
         this.attack = fighter.getAttack();
         this.defense = fighter.getDefense();
         this.tpCost = fighter.getTpCost();
-        this.expModifier = 2;
+        this.expModifier = fighter.getExpModifier();
         this.battlerGraphicPath = fighter.getBattlerGraphicPath();
         this.miniGraphicPath = fighter.getMiniGraphicPath();
         this.sizeX = fighter.getSizeX();
         this.sizeY = fighter.getSizeY();
-        associateStats();
+        this.rewardAmt = fighter.getRewardAmt();
     }
 
     private void loadInfo(List<String> characterInfo) {
@@ -72,19 +78,17 @@ public class Fighter implements java.io.Serializable {
         this.hp = maxHP;
         this.attack = Integer.parseInt(characterInfo.get(2));
         this.defense = Integer.parseInt(characterInfo.get(3));
-        //this.enAttack = Integer.parseInt(characterInfo.get(4));
-        //this.enDefense = Integer.parseInt(characterInfo.get(5));
-        //this.agility = Integer.parseInt(characterInfo.get(6));
         this.tpCost = Integer.parseInt(characterInfo.get(7));
         this.expModifier = Double.parseDouble(characterInfo.get(8));
         this.battlerGraphicPath = characterInfo.get(9);
         this.miniGraphicPath = characterInfo.get(10);
         this.sizeX = Integer.parseInt(characterInfo.get(11));
         this.sizeY = Integer.parseInt(characterInfo.get(12));
+        this.rewardAmt = Double.parseDouble(characterInfo.get(13));
     }
 
     public double calcHPPercentage(){
-        return (double)currStats.get(("hp"))/(double)hp;
+        return (double)currStats.get(("hp"))/(double)maxHP;
     }
 
     private void associateStats(){
@@ -97,14 +101,13 @@ public class Fighter implements java.io.Serializable {
     public void revertStats(){
         currStats.replace("attack",currStats.get("attack"),attack);
         currStats.replace("defense",currStats.get("defense"),defense);
-        currStats.replace("tpCost",currStats.get("tpCost"),tpCost);
     }
 
     //region In-Battle Functionality
 
     public void doBasicAttack(Fighter target){
         double damage = this.getCurrStats().get("attack")*2/target.getCurrStats().get("defense");
-        int finalDamage = (int)Math.round(damage);
+        int finalDamage = (int)Math.round(damage*1.5);
         lastDamage = finalDamage;
         target.takeDamage(finalDamage);
         chooseActionString();
@@ -123,7 +126,6 @@ public class Fighter implements java.io.Serializable {
         experience += amount;
     }
 
-
     public void checkLevel(){
         if(experience >= expToNextLevel){
             levelUp();
@@ -133,7 +135,7 @@ public class Fighter implements java.io.Serializable {
 
     private void levelUp(){
         lvl +=1;
-        hp+=5;
+        maxHP+=5;
         attack+=2;
         defense+=2;
         int levelDifference = experience-expToNextLevel;
@@ -156,12 +158,13 @@ public class Fighter implements java.io.Serializable {
             oldHP = currStats.get("hp");
             currStats.replace("hp",oldHP,0);
         }
+
     }
 
     void recoverHealth(int heal){
         int hp = currStats.get("hp");
-        currStats.replace("hp",currStats.get("hp"),hp+=heal);
-        if(currStats.get("hp") > maxHP){
+        currStats.replace("hp",currStats.get("hp"),hp+heal);
+        if(currStats.get("hp") > maxHP || heal == -1){
             currStats.replace("hp",currStats.get("hp"),maxHP);
         }
     }
@@ -205,7 +208,11 @@ public class Fighter implements java.io.Serializable {
 
     }
     public boolean isKO(){
-        return KOState;
+        if(currStats.get("hp") == 0){
+            return true;
+        }
+        return false;
+
     }
 
     //region Setters and Getters
@@ -243,6 +250,9 @@ public class Fighter implements java.io.Serializable {
         return KOLevel;
     }
     public String getBattlerGraphicPath() {
+        if(battlerGraphicPath.equals("null")){
+            battlerGraphicPath = "/images/system/system_undefined.png";
+        }
         return battlerGraphicPath;
     }
     public String getMiniGraphicPath(){return miniGraphicPath;}
@@ -274,6 +284,12 @@ public class Fighter implements java.io.Serializable {
     }
     public int getLastDamage() {
         return lastDamage;
+    }
+    public double getExpModifier() {
+        return expModifier;
+    }
+    public double getRewardAmt() {
+        return rewardAmt;
     }
     //endregion
 

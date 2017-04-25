@@ -12,6 +12,7 @@ import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -91,21 +92,24 @@ public class BattleView {
 
     public void queueBarUpdates(ArrayList<Snapshot> targets){
         this.targets = targets;
-        Timeline timeline = new Timeline();
-        timeline.setOnFinished(e -> clearBarInfo(targets));
-        int dur = 80;
-        for (int i = 0; i<targets.size();i++) {
-            int index = i;
-            //Only sets the enemy and user for the last event because it doesn't use a snapshot
-            timeline.getKeyFrames().add(new KeyFrame(
-                    Duration.millis(dur),
-                    ae -> convertSnapshot(index)));
-            timeline.getKeyFrames().add(new KeyFrame(
-                    Duration.millis(dur),
-                    ae -> updateHeroBars(targets.get(index))));
-            dur += 1000;
+        if(this.targets.size() != 0){
+            Timeline timeline = new Timeline();
+            timeline.setOnFinished(e -> clearBarInfo(targets));
+            int dur = 80;
+            for (int i = 0; i<targets.size();i++) {
+                int index = i;
+                System.out.println("Target no: " + targets.get(index).getIndex() + "/ Attacker: " + targets.get(index).getAttackerIndex());
+                timeline.getKeyFrames().add(new KeyFrame(
+                        Duration.millis(dur),
+                        ae -> convertSnapshot(index)));
+                timeline.getKeyFrames().add(new KeyFrame(
+                        Duration.millis(dur),
+                        ae -> updateHeroBars(targets.get(index))));
+                dur += 1000;
+            }
+            timeline.play();
         }
-        timeline.play();
+
     }
 
     private void convertSnapshot(int index){
@@ -257,6 +261,7 @@ public class BattleView {
     }
 
     private void setupBattle(){
+        //Put in code to check if there are more than three fighters, then resize it other
         createHeroButtons();
         createHeroGraphics();
         createEnemySelectors();
@@ -315,7 +320,23 @@ public class BattleView {
         hBar.getStyleClass().add("healthBar");
         hBar.getStyleClass().add("green-bar");
         hBar.setProgress(team.get(index).calcHPPercentage());
+        reloadBarColor(team.get(index).calcHPPercentage(),hBar);
 
+    }
+
+    private void reloadBarColor(Double hpPercent, ProgressBar hbar) {
+        if(hpPercent < .60 && hpPercent >= .30){
+            hbar.getStyleClass().remove(2);
+            hbar.getStyleClass().add("yellow-bar");
+        }
+        else if(hpPercent < .30){
+            hbar.getStyleClass().remove(2);
+            hbar.getStyleClass().add("red-bar");
+        }
+        else{
+            hbar.getStyleClass().remove(2);
+            hbar.getStyleClass().add("green-bar");
+        }
     }
 
     private void roundHPPercent(ProgressBar hbar, Snapshot heroSnapshot) {
@@ -330,9 +351,7 @@ public class BattleView {
             image.setId(Integer.toString(i));
             image.setOnMouseEntered(new EventHandler<MouseEvent>() {
                 @Override
-                public void handle(MouseEvent event) {
-                    showHeroInfo(image);
-                }
+                public void handle(MouseEvent event) {showHeroInfo(image);}
             });
             image.setOnMouseExited(new EventHandler<MouseEvent>() {
                 @Override
@@ -345,9 +364,30 @@ public class BattleView {
         }
     }
 
+    private void checkForScale(ImageView image) {
+        if(team.size()<3){
+            image.setTranslateX(-280);
+        }
+        if(team.size()==3){
+            heroGraphicsArea.setSpacing(-100);
+            image.setTranslateX(-200);
+            image.setTranslateY(20);
+            image.setScaleX(.85);
+            image.setScaleY(.85);
+        }
+        if(team.size()==4){
+            heroGraphicsArea.setSpacing(-150);
+            image.setTranslateX(-100);
+            image.setTranslateY(20);
+            image.setScaleX(.65);
+            image.setScaleY(.65);
+        }
+    }
+
     private void formatHeroGraphic(ImageView image, int index) {
         image.setFitHeight(team.get(index).getSizeY());
         image.setFitWidth(team.get(index).getSizeX());
+        StackPane.setAlignment(image, Pos.BOTTOM_CENTER);
         if(team.get(index).calcHPPercentage() == 0.00){
             image.setOpacity(.30);
         }
@@ -392,6 +432,7 @@ public class BattleView {
             populateEnemyUIElements(enemy);
             enemy.setOnMouseEntered(event -> showEnemyInfo(enemy));
             enemy.setOnMouseExited(event -> hideEnemyInfo());
+            HBox.setHgrow(enemy,Priority.ALWAYS);
             enemySelectorArea.getChildren().add(enemy);
 
         }
@@ -511,7 +552,7 @@ public class BattleView {
 
     public void selectEndTurn() {
         if(!uiLocked){
-            battleLogic.endPlayerTurn();
+            battleLogic.prepareEndPlayerTurn();
             animator.backButtonSlideIn();
         }
 
@@ -613,7 +654,7 @@ public class BattleView {
         StackPane hero = (StackPane)heroSelectorArea.getChildren().get(selectedUser);
         ProgressBar heroBar = (ProgressBar)hero.getChildren().get(1);
         Fighter user = team.get(selectedUser);
-        Double hpPercentage = (double)user.getHp()/(double)user.getMaxHP();
+        Double hpPercentage = user.calcHPPercentage();
         heroBar.setProgress(hpPercentage);
         updateColor(heroBar,hpPercentage);
     }
@@ -627,7 +668,7 @@ public class BattleView {
     }
 
     public void selectFlee(javafx.scene.input.MouseEvent event) {
-        pushMessage("You ran away. Everyone is disappointed.");
+        battleLogic.getMessageQueue().add("You ran away. Everyone is disappointed");
         animator.heroFlee();
         battleLogic.endBattle();
     }
@@ -662,10 +703,9 @@ public class BattleView {
     }
 
     public void updateTP(){
-        double percentage = (double)gameData.getCurrentTp()/(double)gameData.getMaxTP();
+        double percentage = (double)gameData.getCurrentTp()/(double)gameData.getTempMaxTP();
         tpBar.setProgress(percentage);
-        tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getMaxTP());
-        battleLogic.checkPlayerTP();
+        tpDisplay.setText("TP: " + gameData.getCurrentTp() + "/" + gameData.getTempMaxTP());
     }
 
     public void blockEnemySelectors(){

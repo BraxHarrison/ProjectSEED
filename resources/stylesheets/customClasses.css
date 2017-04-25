@@ -48,6 +48,10 @@
     -fx-background-color:"black";
 }
 
+.white-box{
+    -fx-background-color:"white";
+}
+
 .description-box{
     -fx-background-color:"black";
 }
@@ -73,6 +77,13 @@
 
 }
 
+.menu-text{
+    -fx-text-fill: white;
+    -fx-font-family: "Underwhelmed BRK";
+    -fx-font-size: 25pt;
+
+}
+
 .map{
 
     -fx-background-image: url("/images/system/system_map.png");
@@ -88,4 +99,12 @@
 
 .save-box{
     -fx-background-color:"black";
+}
+
+.item-area{
+    -fx-background-color:"grey";
+}
+
+.menu-box{
+    -fx-background-color:#424447;
 }
