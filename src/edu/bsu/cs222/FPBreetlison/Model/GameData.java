@@ -123,17 +123,15 @@ public class GameData implements java.io.Serializable {
     public void addEnemies(){
         enemyTeam.clear();
         if(currentRoom.getName().equals("Colossal Plains")){
-            enemyTeam.add(new Fighter(allEnemies.get("Blisterbulb")));
-            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
+            enemyTeam.add(new Fighter(allEnemies.get("Skraw")));
             enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
         }
         else if (currentRoom.getName().equals("Luminous Caves")){
             enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
-            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
-            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
+            enemyTeam.add(new Fighter(allEnemies.get("Oculith")));
         }
-        else if(currentRoom.getName().equals("Inverted Forest")) {
-            enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
+        else if(currentRoom.getName().equals("Forest Clearing")) {
+            enemyTeam.add(new Fighter(allEnemies.get("Blisterbulb")));
             enemyTeam.add(new Fighter(allEnemies.get("Eaflay")));
         }
         else if(currentRoom.getName().equals("Conchbreak Key")){
