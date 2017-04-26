@@ -8,7 +8,7 @@
 <StackPane fx:controller="edu.bsu.cs222.FPBreetlison.Controller.OverworldController" xmlns:fx="http://javafx.com/fxml" stylesheets="/stylesheets/customClasses.css" alignment="center">
 
     <StackPane fx:id="descriptionBox" StackPane.alignment="BOTTOM_CENTER" maxHeight="150" maxWidth="900"  styleClass="description-box">
-        <Label fx:id="roomDescription" StackPane.alignment="CENTER"  text="" styleClass="description-text" wrapText="true" maxWidth="800" textAlignment="CENTER"/>
+        <Label fx:id="roomDescription" StackPane.alignment="CENTER" styleClass="description-text" wrapText="true" maxWidth="800" textAlignment="CENTER"/>
     </StackPane>
     <ImageView fx:id="sideBarGraphic" StackPane.alignment="TOP_LEFT" fitWidth="85" fitHeight="400" translateX="-10" translateY="-10"/>
     <VBox fx:id="sideBar" StackPane.alignment="TOP_LEFT" spacing="20">

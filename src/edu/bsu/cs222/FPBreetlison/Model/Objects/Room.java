@@ -18,7 +18,6 @@ public class Room implements java.io.Serializable {
     private String imagePath;
     private String battleImagePath;
     private ArrayList<Event> events;
-    //private ArrayList<Item> itemsInRoom;
 
     public Room(String info){
 

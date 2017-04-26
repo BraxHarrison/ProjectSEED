@@ -135,7 +135,7 @@ public class BattleLogic {
         System.out.println("Attacking Enemy: " + gameData.getEnemyTeam().get(i).getName());
         fighterSnapshot = new Snapshot();
         fighterSnapshot.setAttackerIndex(i);
-        fighterSnapshot.setAnimType("enemyLunge");
+        fighterSnapshot.setAnimType();
         targetNo = makeRandom(gameData.getTeam().size());
         Fighter target = gameData.getTeam().get(targetNo);
         if (target.isKO()) {
@@ -148,7 +148,6 @@ public class BattleLogic {
         }
         else {
             fighterSnapshot.setIndex(targetNo);
-            fighterSnapshot.calcHPPercent(null);
             fighterSnapshot.setKOState(true);
             targetQueue.add(fighterSnapshot);
             updateTurn("enemyWin");
@@ -389,11 +388,11 @@ public class BattleLogic {
     private void gainExp() {
         for(int i = 0; i<gameData.getTeam().size();i++){
             Fighter fighter = gameData.getTeam().get(i);
-            fighter.getExp(200);
+            fighter.getExp();
             fighter.checkLevel();
             if(fighter.isLeveledUp()){
                 messageQueue.add(fighter.getName() + " leveled up!");
-                fighter.setLeveledUp(false);
+                fighter.setLeveledUp();
             }
         }
         battleController.queueMessages(messageQueue);

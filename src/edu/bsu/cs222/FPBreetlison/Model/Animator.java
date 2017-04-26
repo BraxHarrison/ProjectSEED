@@ -17,19 +17,16 @@ import javafx.util.Duration;
 
 public class Animator implements java.io.Serializable {
 
-    BattleController battleController;
-    HBox heroGraphicsArea;
-    HBox enemySelectorArea;
-    Group damageDisplayArea;
+    private BattleController battleController;
+    private HBox heroGraphicsArea;
+    private HBox enemySelectorArea;
+    private Group damageDisplayArea;
 
-    ImageView user;
-    ImageView target;
-    ImageView backButton;
-    ImageView airPuff;
-    Label damage;
+    private ImageView user;
+    private ImageView target;
+    private ImageView backButton;
 
-    GameData gameData;
-    GameLogic game;
+    private GameLogic game;
 
     public Animator(GameLogic game){
         this.game = game;
@@ -41,12 +38,10 @@ public class Animator implements java.io.Serializable {
 
     private void initAnimatorForBattle() {
         battleController = this.game.getBattleControl();
-        damage = battleController.damageDisplay;
         heroGraphicsArea = battleController.heroGraphicsArea;
         enemySelectorArea = battleController.enemySelectorArea;
         backButton = battleController.backButton;
         damageDisplayArea = battleController.damageDisplayArea;
-        gameData = battleController.getGameData();
     }
 
     private void initImages() {
@@ -54,9 +49,17 @@ public class Animator implements java.io.Serializable {
     }
 
     public void playAnimation(String animationType){
-        if(animationType.equals("heroLunge")){heroLunge();}
-        else if(animationType.equals("enemyLunge")){enemyLunge();}
-        else if(animationType.equals("heroQuickStretch")){heroQuickStretch();}
+        switch (animationType) {
+            case "heroLunge":
+                heroLunge();
+                break;
+            case "enemyLunge":
+                enemyLunge();
+                break;
+            case "heroQuickStretch":
+                heroQuickStretch();
+                break;
+        }
     }
 
     private void setUpHeroOrientation(){
@@ -69,7 +72,7 @@ public class Animator implements java.io.Serializable {
     }
 
 
-    public void heroLunge(){
+    private void heroLunge(){
         setUpHeroOrientation();
         Timeline timeline = new Timeline();
         KeyValue userLunge = new KeyValue(user.translateXProperty(),user.getTranslateX()+50, Interpolator.EASE_BOTH);
@@ -84,7 +87,7 @@ public class Animator implements java.io.Serializable {
         timeline.play();
     }
 
-    public void enemyLunge(){
+    private void enemyLunge(){
         setUpEnemyOrientation();
         Timeline timeline = new Timeline();
         KeyValue userLunge = new KeyValue(user.translateXProperty(),user.getTranslateX()-50, Interpolator.EASE_BOTH);
@@ -118,7 +121,7 @@ public class Animator implements java.io.Serializable {
         timeline.play();
     }
 
-    public void heroQuickStretch(){
+    private void heroQuickStretch(){
         setUpHeroOrientation();
 
         Timeline timeline = new Timeline();
@@ -137,18 +140,9 @@ public class Animator implements java.io.Serializable {
         timeline.play();
     }
 
-    public void airPuff(){
-        Timeline timeline = new Timeline();
-        KeyValue puffFade = new KeyValue(airPuff.opacityProperty(),.01,Interpolator.EASE_BOTH);
-        KeyValue puffMove = new KeyValue(airPuff.translateXProperty(),20,Interpolator.EASE_BOTH);
 
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(100),puffFade,puffMove);
 
-        timeline.getKeyFrames().addAll(keyFrame);
-        timeline.play();
-    }
-
-    public void animateDamageToEnemy(Snapshot info){
+    void animateDamageToEnemy(Snapshot info){
         Label damage = new Label(""+info.getDamage());
         ImageView target = (ImageView)enemySelectorArea.getChildren().get(info.getIndex());
 
@@ -173,7 +167,6 @@ public class Animator implements java.io.Serializable {
         System.out.println("Attacking " + target.getId());
 
         Bounds boundsInScene = target.localToScene(target.getLayoutBounds());
-        double locTemp = boundsInScene.getMaxX() - boundsInScene.getMinX();
         double locx = game.getStage().getWidth()- boundsInScene.getWidth();
         damage.setLayoutX(locx);
         damage.setLayoutY(boundsInScene.getMinY());
@@ -214,4 +207,5 @@ public class Animator implements java.io.Serializable {
         timeline.play();
 
     }
+
 }

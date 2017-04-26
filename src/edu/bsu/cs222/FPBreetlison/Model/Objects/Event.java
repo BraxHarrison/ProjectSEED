@@ -2,22 +2,16 @@ package edu.bsu.cs222.FPBreetlison.Model.Objects;
 
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
-import static java.awt.SystemColor.info;
 
-/**
- * Created by cacto on 4/16/2017.
- */
+
 public class Event implements java.io.Serializable {
 
     private String name;
     private String type;
     private ArrayList<Item> stock;
     private ArrayList<String> enemyPool;
-    private ArrayList<Item> itemPool;
-    private String displayImagePath;
 
     private GameData gameData;
 
@@ -46,17 +40,19 @@ public class Event implements java.io.Serializable {
 
     public void activate(GameData data){
         gameData = data;
-        if(type.equals("fountain")){
-            activateFountain();
-        }
-        else if(type.equals("item")){
-            searchItem();
-        }
-        else if(type.equals("enemy")){
-            generateEncounter();
-        }
-        else if(type.equals("shop")){
-            openShop();
+        switch (type) {
+            case "fountain":
+                activateFountain();
+                break;
+            case "item":
+                searchItem();
+                break;
+            case "enemy":
+                generateEncounter();
+                break;
+            case "shop":
+                openShop();
+                break;
         }
     }
 
@@ -75,8 +71,8 @@ public class Event implements java.io.Serializable {
         ArrayList<Fighter> enemyTeam = new ArrayList<>();
         String enemies = enemyPool.get(index);
         List<String> splitEnemies = Arrays.asList(enemies.split(","));
-        for(int i = 0;i<splitEnemies.size();i++){
-            enemyTeam.add(new Fighter(gameData.getAllEnemies().get(splitEnemies.get(i))));
+        for (String splitEnemy : splitEnemies) {
+            enemyTeam.add(new Fighter(gameData.getAllEnemies().get(splitEnemy)));
         }
         return enemyTeam;
     }
@@ -86,9 +82,8 @@ public class Event implements java.io.Serializable {
 
     private void activateFountain() {
         ArrayList<Fighter> team = gameData.getTeam();
-        HashMap<String,Fighter> allEnemies = gameData.getAllEnemies();
-        for(int i = 0; i<team.size();i++){
-            team.get(i).recoverHealth(-1);
+        for (Fighter aTeam : team) {
+            aTeam.recoverHealth(-1);
         }
     }
 
@@ -101,4 +96,5 @@ public class Event implements java.io.Serializable {
     public ArrayList<Item> getStock() {
         return stock;
     }
+
 }

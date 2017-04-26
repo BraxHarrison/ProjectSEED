@@ -1,6 +1,5 @@
 package edu.bsu.cs222.FPBreetlison.Model.Objects;
 
-import edu.bsu.cs222.FPBreetlison.Model.DamageCalculator;
 
 import java.util.*;
 
@@ -19,18 +18,14 @@ public class Fighter implements java.io.Serializable {
     private int expToNextLevel;
     private boolean isLeveledUp;
 
-    private ArrayList<String> battleStrings;
     private ArrayList<Skill> skillList;
     private HashMap<String,Integer> currStats;
-    private HashMap<String,Integer> baseStats;
-    private String skillAnim;
     private String battlerGraphicPath;
     private String miniGraphicPath;
     private Skill queuedSkill;
     private int sizeX;
     private int sizeY;
     private double rewardAmt;
-    private boolean KOState;
     private int KOLevel;
     private int lastDamage;
     private String weakness;
@@ -41,15 +36,13 @@ public class Fighter implements java.io.Serializable {
         List<String> characterInfo = stringParser(info);
         expToNextLevel=150;
         currStats = new HashMap<>();
-        skillList =  new ArrayList<Skill>();
-        ArrayList<Object> attributes = new ArrayList<>();
+        skillList = new ArrayList<>();
         KOLevel = 0;
         lvl = 1;
         loadInfo(characterInfo);
         associateStats();
     }
 
-    //For use when copying fighters(mainly used for enemies of the same species)
     public Fighter(Fighter fighter){
         loadInfoForCopy(fighter);
         associateStats();
@@ -58,8 +51,7 @@ public class Fighter implements java.io.Serializable {
     private void loadInfoForCopy(Fighter fighter) {
         expToNextLevel=150;
         currStats = new HashMap<>();
-        skillList =  new ArrayList<Skill>();
-        ArrayList<Object> attributes = new ArrayList<>();
+        skillList = new ArrayList<>();
         KOLevel = 0;
         lvl = 1;
         this.name = fighter.getName();
@@ -124,8 +116,8 @@ public class Fighter implements java.io.Serializable {
         skillList.add(skill);
     }
 
-    public void getExp(int amount){
-        experience += amount;
+    public void getExp(){
+        experience += 200;
     }
 
     public void checkLevel(){
@@ -195,21 +187,16 @@ public class Fighter implements java.io.Serializable {
 
     public int checkKOLevel(){
         if(currStats.get("hp")<=0 && KOLevel == 1){
-            KOState = true;
             KOLevel = 2;
         }
         else if(currStats.get("hp")==0 && KOLevel ==0){
-            KOState = true;
             KOLevel = 1;
         }
         return KOLevel;
 
     }
     public boolean isKO(){
-        if(currStats.get("hp") == 0){
-            return true;
-        }
-        return false;
+        return currStats.get("hp") == 0;
 
     }
 
@@ -223,7 +210,7 @@ public class Fighter implements java.io.Serializable {
     public String getName() {
         return name;
     }
-    public int getHp() {
+    int getHp() {
         return hp;
     }
     public int getMaxHP() {
@@ -238,11 +225,8 @@ public class Fighter implements java.io.Serializable {
     public int getTpCost() {
         return tpCost;
     }
-    public ArrayList<String> getBattleStrings() {
-        return battleStrings;
-    }
-    public void setBattleStrings(ArrayList<String> battleStrings) {
-        this.battleStrings = battleStrings;
+
+    public void setBattleStrings() {
     }
     public int getKOLvl() {
         return KOLevel;
@@ -268,22 +252,17 @@ public class Fighter implements java.io.Serializable {
     public boolean isLeveledUp() {
         return isLeveledUp;
     }
-    public void setLeveledUp(boolean leveledUp) {
-        isLeveledUp = leveledUp;
+    public void setLeveledUp() {
+        isLeveledUp = false;
     }
     public int getLvl() {
         return lvl;
     }
-    public String getSkillAnim() {
-        return skillAnim;
-    }
-    public void setSkillAnim(String skillAnim) {
-        this.skillAnim = skillAnim;
-    }
+
     public int getLastDamage() {
         return lastDamage;
     }
-    public double getExpModifier() {
+    private double getExpModifier() {
         return expModifier;
     }
     public double getRewardAmt() {

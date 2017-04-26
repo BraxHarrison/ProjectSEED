@@ -78,7 +78,7 @@ public class BattleParser {
 
     private void setBattleDescriptions (Fighter fighter){
         ArrayList<String> battleDescriptions = loadBattleDescriptions(fighter);
-        fighter.setBattleStrings(battleDescriptions);
+        fighter.setBattleStrings();
 
     }
 
