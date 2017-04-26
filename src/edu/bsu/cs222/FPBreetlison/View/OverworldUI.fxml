@@ -67,10 +67,11 @@
             <VBox fx:id="standbyArea"/>
         </ScrollPane>
         <Label fx:id="characterName" StackPane.alignment="TOP_CENTER" translateY="20" styleClass="description-text"/>
-        <Label fx:id="characterHP" StackPane.alignment="TOP_CENTER" translateY="40" styleClass="description-text"/>
-        <Label fx:id="characterAtk" StackPane.alignment="TOP_CENTER" translateY="60" styleClass="description-text"/>
-        <Label fx:id="characterDef" StackPane.alignment="TOP_CENTER" translateY="80" styleClass="description-text"/>
-        <Label fx:id="characterAgility" StackPane.alignment="TOP_CENTER" translateY="100" styleClass="description-text"/>
+        <Label fx:id="characterLevel" StackPane.alignment="TOP_CENTER" translateY="40" styleClass="description-text"/>
+        <Label fx:id="characterHP" StackPane.alignment="TOP_CENTER" translateY="60" styleClass="description-text"/>
+        <Label fx:id="characterAtk" StackPane.alignment="TOP_CENTER" translateY="80" styleClass="description-text"/>
+        <Label fx:id="characterDef" StackPane.alignment="TOP_CENTER" translateY="100" styleClass="description-text"/>
+        <Label fx:id="characterAgility" StackPane.alignment="TOP_CENTER" translateY="120" styleClass="description-text"/>
         <Label fx:id="transferButton" text="transfer" StackPane.alignment="CENTER" translateY="150" styleClass="banner-text" scaleX=".8" scaleY=".8" onMousePressed="#handleTransfer"/>
         <Button fx:id="exitButton" text="X" StackPane.alignment="TOP_LEFT" onAction="#hideTeamMenu"/>
     </StackPane>

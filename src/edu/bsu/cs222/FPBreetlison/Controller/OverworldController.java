@@ -113,11 +113,13 @@ public class OverworldController implements java.io.Serializable {
     private void populateCharacterStats(){
         Fighter selectedFighter = getFromProperList();
         Label nameLabel = (Label)teamMenu.getChildren().get(2);
-        Label hpLabel = (Label)teamMenu.getChildren().get(3);
-        Label atkLabel = (Label)teamMenu.getChildren().get(4);
-        Label defLabel = (Label)teamMenu.getChildren().get(5);
-        Label agilityLabel = (Label)teamMenu.getChildren().get(6);
+        Label levelLabel = (Label)teamMenu.getChildren().get(3);
+        Label hpLabel = (Label)teamMenu.getChildren().get(4);
+        Label atkLabel = (Label)teamMenu.getChildren().get(5);
+        Label defLabel = (Label)teamMenu.getChildren().get(6);
+        Label agilityLabel = (Label)teamMenu.getChildren().get(7);
         nameLabel.setText(selectedFighter.getName());
+        levelLabel.setText("Lvl: " + selectedFighter.getLvl() );
         hpLabel.setText("HP: "+ selectedFighter.getCurrStats().get("hp")+"/"+selectedFighter.getMaxHP());
         atkLabel.setText("Attack: " + selectedFighter.getAttack());
         defLabel.setText("Def: " + selectedFighter.getDefense());
