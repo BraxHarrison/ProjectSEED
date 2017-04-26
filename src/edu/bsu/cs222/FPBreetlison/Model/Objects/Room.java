@@ -36,8 +36,8 @@ public class Room implements java.io.Serializable {
     }
 
     public void loadEvents(GameData gameData) {
-        for(int i = 0; i<eventList.size();i++){
-            Event event = gameData.getAllEvents().get(eventList.get(i));
+        for (String anEventList : eventList) {
+            Event event = gameData.getAllEvents().get(anEventList);
             events.add(event);
         }
     }
