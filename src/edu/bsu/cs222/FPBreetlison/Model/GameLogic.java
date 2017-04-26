@@ -19,7 +19,6 @@ public class GameLogic implements java.io.Serializable {
     private BattleLogic battleLogic;
     private BattleController battleControl;
     private Stage currentStage;
-    private Room currentRoom;
     private boolean battleUnderway;
 
 
@@ -138,16 +137,16 @@ public class GameLogic implements java.io.Serializable {
     public void setStage(Stage stage){
         currentStage = stage;
     }
-    public boolean isBattleUnderway(){
+    boolean isBattleUnderway(){
         return battleUnderway;
     }
-    public void setBattleUnderway(boolean battle){
-        battleUnderway = battle;
+    void setBattleUnderway(){
+        battleUnderway = false;
     }
-    public Stage getStage(){
+    Stage getStage(){
         return currentStage;
     }
-    public Room getCurrentRoom() {return currentRoom;}
+
     public GameData getGameData(){
         return gameData;
     }

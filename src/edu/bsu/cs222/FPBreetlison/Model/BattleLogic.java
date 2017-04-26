@@ -109,7 +109,7 @@ public class BattleLogic {
                 ae -> game.setUpOverworld()));
         counter.play();
         finalQueue = 0;
-        game.setBattleUnderway(false);
+        game.setBattleUnderway();
     }
 
     private void revertFighterStats() {
