@@ -169,10 +169,10 @@ public class Fighter implements java.io.Serializable {
         currStats.replace(stat,oldValue,newValue);
     }
 
-    void weakenStat(String stat, int factor){
-        int oldValue = currStats.get(stat);
+    void weakenStat(int factor){
+        int oldValue = currStats.get("attack");
         int newValue = oldValue - factor;
-        currStats.replace(stat,oldValue,newValue);
+        currStats.replace("attack",oldValue,newValue);
     }
 
     //endregion

@@ -37,7 +37,7 @@ public class Skill implements java.io.Serializable {
                 target.takeDamage(finalDamage);
                 break;
             case "debuff":
-                target.weakenStat("attack", affectAmt);
+                target.weakenStat(affectAmt);
                 break;
             case "buff":
                 user.strengthenStat("attack", affectAmt);
