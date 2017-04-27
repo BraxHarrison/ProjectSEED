@@ -21,7 +21,7 @@
     </VBox>
     <StackPane fx:id="navBanner" maxWidth="400" maxHeight="80" StackPane.alignment="TOP_LEFT" translateX="900" translateY="20">
         <ImageView fx:id="bannerGraphic" fitWidth="400" fitHeight="100"/>
-        <Label fx:id="bannerDisplay" styleClass="banner-text"/>
+        <Label fx:id="bannerDisplay" translateX="20" styleClass="banner-text"/>
 
     </StackPane>
     <StackPane fx:id="travelPane" StackPane.alignment="TOP_LEFT"  maxHeight="150" maxWidth="150" translateX="70" visible="false" styleClass="map">
@@ -39,8 +39,8 @@
         <Label fx:id="load" text="Load" StackPane.alignment="TOP_CENTER" translateY="100" onMousePressed="#loadGame" styleClass="menu-text"/>
         <Button fx:id="exitLoadSaveMenu" text="X" StackPane.alignment="TOP_LEFT"   onAction="#hideLoadSaveMenu"/>
     </StackPane>
-    <StackPane fx:id="inspectMenu" StackPane.alignment="TOP_CENTER" visible="false" translateY="50" translateX="-200" maxHeight="300" maxWidth="100" styleClass="save-box">
-        <ScrollPane fx:id="eventScroller" vbarPolicy="never" hbarPolicy="never">
+    <StackPane fx:id="inspectMenu" StackPane.alignment="TOP_CENTER" visible="false" translateY="50" translateX="-200" maxHeight="300" maxWidth="300">
+        <ScrollPane fx:id="eventScroller" vbarPolicy="never" hbarPolicy="never" StackPane.alignment="TOP_CENTER" maxWidth="100" stylesheets="/stylesheets/eventsPanel.css">
             <VBox fx:id="events">
 
             </VBox>
@@ -57,6 +57,7 @@
         <Label fx:id="shopNameDisplay" visible="false" StackPane.alignment="CENTER" translateX="50" translateY="-150" styleClass="description-text"/>
         <Label fx:id="costDisplay" visible="false" StackPane.alignment="CENTER" translateX="50" translateY="-110" styleClass="description-text"/>
         <Label fx:id="buy" visible="false" text="Buy" StackPane.alignment="BOTTOM_CENTER" translateY="-40" translateX="50" styleClass="banner-text"/>
+        <Label fx:id="shopName" visible="true" StackPane.alignment="TOP_CENTER" translateY="10" translateX="10" styleClass="description-text"/>
 
 
     </StackPane>
