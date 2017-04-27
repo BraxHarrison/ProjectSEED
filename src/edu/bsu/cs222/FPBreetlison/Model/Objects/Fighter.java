@@ -108,6 +108,9 @@ public class Fighter implements java.io.Serializable {
     public void doBasicAttack(Fighter target){
         double damage = this.getCurrStats().get("attack")*2/target.getCurrStats().get("defense");
         int finalDamage = (int)Math.round(damage*1.5);
+        if(finalDamage<1){
+            finalDamage=1;
+        }
         lastDamage = finalDamage;
         target.takeDamage(finalDamage);
     }

@@ -34,6 +34,9 @@ public class Skill implements java.io.Serializable {
             case "attack":
                 double damage = user.getCurrStats().get("attack") * affectAmt / target.getCurrStats().get("defense");
                 int finalDamage = (int) Math.round(damage * 1.5 * elementModifier(target));
+                if(finalDamage < 1){
+                    finalDamage = 1;
+                }
                 target.takeDamage(finalDamage);
                 break;
             case "debuff":

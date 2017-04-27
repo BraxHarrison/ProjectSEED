@@ -61,7 +61,6 @@ public class Item implements java.io.Serializable {
         String buyPriceType = "B";
         double convertedBuyPrice = buyPrice;
         if(convertedBuyPrice >=1000){
-            System.out.println("Converting currency to KB...");
             convertedBuyPrice = convertedBuyPrice /1000;
             buyPriceType ="KB";
         }

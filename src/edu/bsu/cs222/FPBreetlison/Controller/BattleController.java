@@ -95,7 +95,6 @@ public class BattleController {
             int dur = 80;
             for (int i = 0; i<targets.size();i++) {
                 int index = i;
-                System.out.println("Target no: " + targets.get(index).getIndex() + "/ Attacker: " + targets.get(index).getAttackerIndex());
                 timeline.getKeyFrames().add(new KeyFrame(
                         Duration.millis(dur),
                         ae -> convertSnapshot(index)));

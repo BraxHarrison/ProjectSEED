@@ -261,14 +261,14 @@ public class OverworldController implements java.io.Serializable {
         for(int i = 0; i<gameData.getCurrentRoom().getEvents().size();i++){
             int index = i;
             ImageView event = new ImageView();
-            formatEvent(event);
+            formatEvent(event,index);
             event.setOnMousePressed(e->startEvent(index));
             events.getChildren().add(event);
         }
     }
 
-    private void formatEvent(ImageView event) {
-        event.setImage(new Image("/images/system/system_undefined.png"));
+    private void formatEvent(ImageView event,int index) {
+        event.setImage(new Image(gameData.getCurrentRoom().getEvents().get(index).getImagePath()));
         event.setFitWidth(100);
         event.setFitHeight(100);
     }
@@ -278,6 +278,9 @@ public class OverworldController implements java.io.Serializable {
         if(loadedEvent.getType().equals("shop")){
             loadShop(loadedEvent);
             shopMenu.setVisible(true);
+        }
+        else if(loadedEvent.getType().equals("battle")){
+            startBattle();
         }
     }
 
@@ -340,7 +343,6 @@ public class OverworldController implements java.io.Serializable {
     }
 
     private void useItem(int index){
-        System.out.println("Test" +index);
         gameData.getInventory().get(index).activate(getFromProperList());
         gameData.getInventory().remove(index);
         inventoryItemDisplay.setImage(null);
@@ -435,6 +437,10 @@ public class OverworldController implements java.io.Serializable {
 
     public void hideShop() {
         shopMenu.setVisible(false);
+        shopMenu.getChildren().get(2).setVisible(false);
+        shopMenu.getChildren().get(3).setVisible(false);
+        shopMenu.getChildren().get(4).setVisible(false);
+        shopMenu.getChildren().get(5).setVisible(false);
     }
 
     public void hideTeamMenu() {

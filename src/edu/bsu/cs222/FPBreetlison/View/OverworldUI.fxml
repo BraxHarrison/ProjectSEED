@@ -84,17 +84,10 @@
             <Label fx:id="inventoryNameDisplay" visible="false" StackPane.alignment="TOP_CENTER" translateX="0" translateY="110" styleClass="description-text"/>
             <Label fx:id="inventoryQuickSummaryDisplay" visible="false" StackPane.alignment="TOP_RIGHT" maxWidth="150" translateX="0" translateY="150" styleClass="description-text"/>
             <Label fx:id="use" visible="true" text="Use Item" StackPane.alignment="BOTTOM_CENTER" translateY="0" translateX="25" styleClass="banner-text"/>
-
-
         </StackPane>
-
-
 
         <ScrollPane fx:id="itesmsMenu" StackPane.alignment="CENTER" maxWidth="200" maxHeight="300" visible="false" opacity="1">
             <VBox fx:id="inventoryItemdsArea" StackPane.alignment="TOP_CENTER">
-                <children>
-
-                </children>
             </VBox>
             <ImageView fx:id="itemDisplay" visible="true" StackPane.alignment="CENTER"  translateX="0" fitHeight="0" fitWidth="200"/>
             <Label fx:id="nameDisplay" visible="true" StackPane.alignment="CENTER" text="TEST***************" translateX="0" translateY="0" styleClass="description-text"/>

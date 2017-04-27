@@ -164,8 +164,6 @@ public class Animator implements java.io.Serializable {
         damage.getStyleClass().add("damage-text");
         damage.setVisible(true);
 
-        System.out.println("Attacking " + target.getId());
-
         Bounds boundsInScene = target.localToScene(target.getLayoutBounds());
         double locx = game.getStage().getWidth()- boundsInScene.getWidth();
         damage.setLayoutX(locx);

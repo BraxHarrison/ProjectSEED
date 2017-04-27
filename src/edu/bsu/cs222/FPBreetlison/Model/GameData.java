@@ -42,7 +42,6 @@ public class GameData implements java.io.Serializable {
         calcTP();
         wallet = new Wallet();
         wallet.collect(20,"B");
-        System.out.println(allEvents.get("Buried Vending Machine").getType());
 
     }
 
@@ -118,7 +117,7 @@ public class GameData implements java.io.Serializable {
         switch (currentRoom.getName()) {
             case "Colossal Plains":
                 enemyTeam.add(new Fighter(allEnemies.get("Skraw")));
-                enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
+                enemyTeam.add(new Fighter(allEnemies.get("Jag")));
                 break;
             case "Luminous Caves":
                 enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
@@ -133,7 +132,7 @@ public class GameData implements java.io.Serializable {
                 enemyTeam.add(new Fighter(allEnemies.get("Apparacean")));
                 break;
             default:
-                enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
+                enemyTeam.add(new Fighter(allEnemies.get("Jag")));
                 break;
         }
     }
@@ -144,9 +143,6 @@ public class GameData implements java.io.Serializable {
 
     private void initItems() {
         inventory.add(allItems.get("Patch"));
-        inventory.add(allItems.get("Chorps"));
-        inventory.add(allItems.get("BluRasp Sapphire"));
-        inventory.add(allItems.get("Overclock"));
     }
 
     void resetHeroTP(){

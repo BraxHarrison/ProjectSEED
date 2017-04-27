@@ -84,7 +84,6 @@ public class OverWorldParser {
         NodeList nodeList = document.getElementsByTagName("event");
         for(int i = 0; i<nodeList.getLength();i++){
             Node eventInfo = nodeList.item(i);
-            System.out.println(eventInfo.getAttributes().getNamedItem("type"));
             Element sourceEvent = (Element)eventInfo;
             Event event = new Event(createEventString(sourceEvent),gameData);
             events.put(event.getName(),event);
@@ -94,12 +93,12 @@ public class OverWorldParser {
     }
 
     private String createEventString(Element sourceEvent) {
-        System.out.println(sourceEvent.getAttribute("name"));
         return (sourceEvent.getAttribute("name") + "," +
                 sourceEvent.getAttribute("type") + "," +
                 sourceEvent.getAttribute("stock") + "," +
                 sourceEvent.getAttribute("sell") + "," +
-                sourceEvent.getAttribute("cluster")
+                sourceEvent.getAttribute("cluster") + "," +
+                sourceEvent.getAttribute("imagePath")
         );
     }
 

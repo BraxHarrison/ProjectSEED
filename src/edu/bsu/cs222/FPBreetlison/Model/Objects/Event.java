@@ -12,6 +12,7 @@ public class Event implements java.io.Serializable {
     private String type;
     private ArrayList<Item> stock;
     private ArrayList<String> enemyPool;
+    private String imagePath;
 
     private GameData gameData;
 
@@ -22,6 +23,7 @@ public class Event implements java.io.Serializable {
         this.type = info.get(1);
         String stockString = info.get(2);
         this.stock = buildStock(stockString);
+        this.imagePath = info.get(5);
     }
 
     private List<String> stringParser(String info){
@@ -33,7 +35,6 @@ public class Event implements java.io.Serializable {
         ArrayList<Item> builtStock = new ArrayList<>();
         for(int i = 0; i<stockList.size();i++){
             builtStock.add(gameData.getAllItems().get(stockList.get(i)));
-            System.out.println(builtStock.get(i).getName());
         }
         return builtStock;
     }
@@ -96,5 +97,7 @@ public class Event implements java.io.Serializable {
     public ArrayList<Item> getStock() {
         return stock;
     }
-
+    public String getImagePath() {
+        return imagePath;
+    }
 }

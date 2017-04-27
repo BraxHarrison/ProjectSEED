@@ -56,11 +56,9 @@ public class BattleLogic {
 
         switch (phase) {
             case "hero":
-                System.out.println("It's hero time!");
                 enableCharacterMenu();
                 break;
             case "enemy":
-                System.out.println("Triggering enemy turn!");
                 disableCharacterMenu();
                 tryEnemyAttack();
                 resetTP();
@@ -132,7 +130,6 @@ public class BattleLogic {
     }
 
     private void findLivingHero(int i) {
-        System.out.println("Attacking Enemy: " + gameData.getEnemyTeam().get(i).getName());
         fighterSnapshot = new Snapshot();
         fighterSnapshot.setAttackerIndex(i);
         fighterSnapshot.setAnimType();
@@ -142,7 +139,6 @@ public class BattleLogic {
             target = findNextTarget();
         }
         if (target != null) {
-            System.out.println("Target: " + gameData.getTeam().get(targetNo).getName()+"\n");
             fighterSnapshot.setIndex(targetNo);
             doEnemyAttack(gameData.getEnemyTeam().get(i), target);
         }
@@ -189,7 +185,6 @@ public class BattleLogic {
 
     private void endEnemyTurn() {
         battleController.heroSelectorArea.setVisible(true);
-        System.out.println("Is the enemy turn ending?" + "\n");
         if(detectHeroKO()){
             updateTurn("enemyWin");
             messageQueue.add("Everyone's trashed! You lose!");
@@ -199,7 +194,6 @@ public class BattleLogic {
             updateTurn("hero");
 
         }
-        System.out.println("This is being updated!");
         battleController.queueMessages(messageQueue);
         battleController.queueBarUpdates(targetQueue);
         battleController.uiLocked = true;
