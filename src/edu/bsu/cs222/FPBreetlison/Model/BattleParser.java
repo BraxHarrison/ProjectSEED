@@ -44,7 +44,7 @@ public class BattleParser {
         enemies = loadFighters("enemy");
     }
 
-    public HashMap<String,Skill> loadSkills() {
+    private HashMap<String,Skill> loadSkills() {
         HashMap<String,Skill> skills = new HashMap<>();
         NodeList nodeList = this.document.getElementsByTagName("Skill");
         for(int i = 0; i< nodeList.getLength();i++){
@@ -68,7 +68,6 @@ public class BattleParser {
             Element battler = (Element)battleInfo;
             Fighter fighter = new Fighter(createFighterString(battler));
             fighters.put(fighter.getName(),fighter);
-            setBattleDescriptions(fighter);
             setStarterSkills(fighter,i);
 
         }
@@ -76,30 +75,11 @@ public class BattleParser {
 
     }
 
-    private void setBattleDescriptions (Fighter fighter){
-        ArrayList<String> battleDescriptions = loadBattleDescriptions(fighter);
-        fighter.setBattleStrings();
-
-    }
-
-    private ArrayList<String> loadBattleDescriptions(Fighter fighter) {
-        String elementName = fighter.getName() +
-                "BattleString";
-        ArrayList<String> strings = new ArrayList<>();
-        NodeList nodeList = this.document.getElementsByTagName(elementName);
-        for(int i = 0; i<nodeList.getLength();i++){
-            Element battleDesc = (Element)nodeList.item(i);
-            strings.add(battleDesc.getAttribute("string"));
-
-        }
-        return strings;
-    }
-
     private void setStarterSkills(Fighter fighter, int index){
         List<String> starterSkillNames = loadStarterSkills(index);
         ArrayList<Skill> skills = fetchSkills(starterSkillNames);
-        for(int i = 0; i<skills.size();i++){
-            fighter.addSkill(skills.get(i));
+        for (Skill skill : skills) {
+            fighter.addSkill(skill);
 
         }
     }
@@ -114,8 +94,7 @@ public class BattleParser {
 
     private ArrayList<Skill> fetchSkills(List<String> skillStrings){
         ArrayList<Skill> fullSkills = new ArrayList<>();
-        for(int i = 0; i<skillStrings.size();i++){
-            String skillName = skillStrings.get(i);
+        for (String skillName : skillStrings) {
             fullSkills.add(skills.get(skillName));
         }
         return fullSkills;
@@ -165,7 +144,4 @@ public class BattleParser {
         return enemies;
     }
 
-    public HashMap<String, Skill> getSkills() {
-        return skills;
-    }
 }

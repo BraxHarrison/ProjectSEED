@@ -212,7 +212,6 @@ public class Fighter implements java.io.Serializable {
     public ArrayList<Skill> getSkillList() {
         return skillList;
     }
-
     public String getName() {
         return name;
     }
@@ -230,9 +229,6 @@ public class Fighter implements java.io.Serializable {
     }
     public int getTpCost() {
         return tpCost;
-    }
-
-    public void setBattleStrings() {
     }
     public int getKOLvl() {
         return KOLevel;
@@ -264,7 +260,6 @@ public class Fighter implements java.io.Serializable {
     public int getLvl() {
         return lvl;
     }
-
     public int getLastDamage() {
         return lastDamage;
     }

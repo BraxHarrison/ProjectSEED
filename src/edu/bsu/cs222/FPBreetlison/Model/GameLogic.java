@@ -143,10 +143,6 @@ public class GameLogic implements java.io.Serializable {
     void setBattleUnderway(){
         battleUnderway = false;
     }
-    Stage getStage(){
-        return currentStage;
-    }
-
     public GameData getGameData(){
         return gameData;
     }

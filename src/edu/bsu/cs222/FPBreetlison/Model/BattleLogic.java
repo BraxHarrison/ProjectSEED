@@ -26,13 +26,11 @@ public class BattleLogic {
     private Fighter target;
 
     private int targetNo;
-    private int finalQueue;
-    private boolean enemyLock;
     private Snapshot fighterSnapshot;
     private ArrayList<Snapshot> targetQueue;
     private ArrayList<String> messageQueue;
 
-    boolean heroWon;
+    private boolean heroWon;
 
     public void getGameInfo(GameLogic game){
         this.game = game;
@@ -95,12 +93,12 @@ public class BattleLogic {
     public void endBattle(){
         revertFighterStats();
         gameData.revertMaxTP();
-        finalQueue = messageQueue.size();
+        int finalQueue = messageQueue.size();
         battleController.queueMessages(messageQueue);
         int dur = 80;
         battleController.uiLocked = true;
         animator.backButtonSlideIn();
-        dur += finalQueue*1000;
+        dur += finalQueue *1000;
         Timeline counter = new Timeline();
         counter.getKeyFrames().add(new KeyFrame(
                 Duration.millis(dur),
@@ -232,7 +230,7 @@ public class BattleLogic {
         battleController.actionMenu.setVisible(false);
     }
 
-    public void checkPlayerTP(){
+    private void checkPlayerTP(){
         if(gameData.getCurrentTp() <= 0){
             battleController.skillSelectorArea.setVisible(false);
             prepareEndPlayerTurn();
@@ -314,7 +312,7 @@ public class BattleLogic {
         battleController.uiLocked = true;
         enemyTurnDelay();
     }
-    public void endPlayerTurn() {
+    private void endPlayerTurn() {
         updateTurn("enemy");
     }
 

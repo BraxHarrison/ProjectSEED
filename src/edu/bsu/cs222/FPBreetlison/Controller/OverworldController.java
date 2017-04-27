@@ -385,7 +385,7 @@ public class OverworldController implements java.io.Serializable {
 
     }
 
-    public void startBattle(){
+    private void startBattle(){
         game.createBattle();
     }
 

@@ -164,13 +164,9 @@ public class GameData implements java.io.Serializable {
     public ArrayList<Fighter> getEnemyTeam() {
         return enemyTeam;
     }
-    public HashMap<String, Fighter> getAllEnemies() {
-        return allEnemies;
-    }
     public HashMap<String, Fighter> getAllHeroes() {
         return allHeroes;
     }
-
     public int getTempMaxTP() {
         return tempMaxTP;
     }
