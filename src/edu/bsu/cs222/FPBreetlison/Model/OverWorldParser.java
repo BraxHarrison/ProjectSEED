@@ -20,16 +20,11 @@ import java.util.Map;
 public class OverWorldParser {
 
     private Document document;
-    private GameData gameData;
 
-    public OverWorldParser(GameData gameData){
+    OverWorldParser(){
         try {
             createDoc();
-        } catch (ParserConfigurationException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (SAXException e) {
+        } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
         }
     }
@@ -72,7 +67,7 @@ public class OverWorldParser {
 
     }
 
-    public HashMap<String, Item> createItemDatabase(){
+    HashMap<String, Item> createItemDatabase(){
         HashMap<String, Item> items = new HashMap<>();
         NodeList nodeList = document.getElementsByTagName("item");
         for(int i = 0; i< nodeList.getLength(); i++){
@@ -84,12 +79,11 @@ public class OverWorldParser {
         return items;
     }
 
-    public HashMap<String,Event> createEventDatabase(GameData gameData){
+    HashMap<String,Event> createEventDatabase(GameData gameData){
         HashMap<String, Event> events = new HashMap<>();
         NodeList nodeList = document.getElementsByTagName("event");
         for(int i = 0; i<nodeList.getLength();i++){
             Node eventInfo = nodeList.item(i);
-            System.out.println(eventInfo.getAttributes().getNamedItem("type"));
             Element sourceEvent = (Element)eventInfo;
             Event event = new Event(createEventString(sourceEvent),gameData);
             events.put(event.getName(),event);
@@ -99,12 +93,12 @@ public class OverWorldParser {
     }
 
     private String createEventString(Element sourceEvent) {
-        System.out.println(sourceEvent.getAttribute("name"));
         return (sourceEvent.getAttribute("name") + "," +
                 sourceEvent.getAttribute("type") + "," +
                 sourceEvent.getAttribute("stock") + "," +
                 sourceEvent.getAttribute("sell") + "," +
-                sourceEvent.getAttribute("cluster")
+                sourceEvent.getAttribute("cluster") + "," +
+                sourceEvent.getAttribute("imagePath")
         );
     }
 

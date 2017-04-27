@@ -1,9 +1,9 @@
 package edu.bsu.cs222.FPBreetlison.Controller;
 
 import edu.bsu.cs222.FPBreetlison.Model.Animator;
-import edu.bsu.cs222.FPBreetlison.Model.BattleManager;
+import edu.bsu.cs222.FPBreetlison.Model.BattleLogic;
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
-import edu.bsu.cs222.FPBreetlison.Model.GameManager;
+import edu.bsu.cs222.FPBreetlison.Model.GameLogic;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 
@@ -11,7 +11,6 @@ import edu.bsu.cs222.FPBreetlison.Model.Objects.Skill;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.control.Label;
@@ -19,7 +18,6 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -28,7 +26,7 @@ import javafx.util.Duration;
 
 import java.util.ArrayList;
 
-public class BattleView {
+public class BattleController {
     public VBox skillSelectorArea;
     public Group skillInfoDisplay;
     public Group damageDisplayArea;
@@ -62,12 +60,11 @@ public class BattleView {
     public int selectedTarget;
     private int selectedItem;
     public boolean uiLocked;
-    private boolean finishedLoading;
 
     private GameData gameData;
-    private GameManager game;
-    private BattleManager battleLogic;
-    Animator animator;
+    private GameLogic game;
+    private BattleLogic battleLogic;
+    private Animator animator;
 
     private Font darwinFont;
     private boolean usingSkill;
@@ -98,7 +95,6 @@ public class BattleView {
             int dur = 80;
             for (int i = 0; i<targets.size();i++) {
                 int index = i;
-                System.out.println("Target no: " + targets.get(index).getIndex() + "/ Attacker: " + targets.get(index).getAttackerIndex());
                 timeline.getKeyFrames().add(new KeyFrame(
                         Duration.millis(dur),
                         ae -> convertSnapshot(index)));
@@ -191,7 +187,7 @@ public class BattleView {
     //endregion
     //region Initialization Functions
 
-    public void initialize(GameManager game){
+    public void initialize(GameLogic game){
         transferBattleData(game);
         this.game = game;
         readBattleData();
@@ -208,7 +204,7 @@ public class BattleView {
         backButton.setOnMouseClicked(e->goBack());
     }
 
-    private void transferBattleData(GameManager game) {
+    private void transferBattleData(GameLogic game) {
         this.game = game;
         this.game.setBattleControl(this);
         this.gameData = game.getGameData();
@@ -224,11 +220,6 @@ public class BattleView {
         inventory = gameData.getInventory();
     }
 
-    private void getEnemies(){
-
-    }
-
-
     private void loadFonts() {
         darwinFont = Font.loadFont(getClass().getResource("/fonts/Darwin.ttf").toExternalForm(), 10);
     }
@@ -242,14 +233,12 @@ public class BattleView {
             Label action = (Label)actionMenu.getChildren().get(i);
             action.setFont(darwinFont);
         }
-
     }
 
     private void formatTPArea() {
         tpBar.getTransforms().add(new Shear(0.95, 0));
         tpDisplay.setFont(darwinFont);
         tpDisplay.getStyleClass().add("black-text");
-
     }
 
     private void setBackground() {
@@ -257,11 +246,9 @@ public class BattleView {
         BackgroundImage battleBack = new BackgroundImage(new Image(imageURL,900,500,false,true), BackgroundRepeat.NO_REPEAT,BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT,BackgroundSize.DEFAULT);
         backgroundImage.setBackground(new Background(battleBack));
         backgroundImage.toBack();
-
     }
 
     private void setupBattle(){
-        //Put in code to check if there are more than three fighters, then resize it other
         createHeroButtons();
         createHeroGraphics();
         createEnemySelectors();
@@ -272,7 +259,6 @@ public class BattleView {
     }
 
     private void createHeroButtons() {
-
         for(int i = 0; i<team.size();i++){
             StackPane hero =  new StackPane();
             hero.setId(Integer.toString(i));
@@ -299,7 +285,6 @@ public class BattleView {
         ProgressBar hbar = new ProgressBar();
         hero.getChildren().add(hLabel);
         hero.getChildren().add(hbar);
-
     }
 
     private void formatHeroButton(Label hero) {
@@ -321,7 +306,6 @@ public class BattleView {
         hBar.getStyleClass().add("green-bar");
         hBar.setProgress(team.get(index).calcHPPercentage());
         reloadBarColor(team.get(index).calcHPPercentage(),hBar);
-
     }
 
     private void reloadBarColor(Double hpPercent, ProgressBar hbar) {
@@ -349,38 +333,10 @@ public class BattleView {
         for (int i = 0; i < team.size(); i++) {
             ImageView image = new ImageView(new Image(team.get(i).getBattlerGraphicPath()));
             image.setId(Integer.toString(i));
-            image.setOnMouseEntered(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {showHeroInfo(image);}
-            });
-            image.setOnMouseExited(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    hideCharacterInfo();
-                }
-            });
+            image.setOnMouseEntered(event -> showHeroInfo(image));
+            image.setOnMouseExited(event -> hideCharacterInfo());
             formatHeroGraphic(image,i);
             heroGraphicsArea.getChildren().add(image);
-        }
-    }
-
-    private void checkForScale(ImageView image) {
-        if(team.size()<3){
-            image.setTranslateX(-280);
-        }
-        if(team.size()==3){
-            heroGraphicsArea.setSpacing(-100);
-            image.setTranslateX(-200);
-            image.setTranslateY(20);
-            image.setScaleX(.85);
-            image.setScaleY(.85);
-        }
-        if(team.size()==4){
-            heroGraphicsArea.setSpacing(-150);
-            image.setTranslateX(-100);
-            image.setTranslateY(20);
-            image.setScaleX(.65);
-            image.setScaleY(.65);
         }
     }
 
@@ -399,7 +355,6 @@ public class BattleView {
         showCharacterMiniImage(index);
         showHeroUpperLabels(index);
         showHeroLowerLabels();
-
     }
 
     private void showCharacterMiniImage(int index){
@@ -408,6 +363,7 @@ public class BattleView {
         display.setFitHeight(80);
         display.setFitWidth(80);
     }
+
     private void showHeroUpperLabels(int index){
         Label name = (Label)battlerInfoDisplay.getChildren().get(1);
         Label lvl = (Label)battlerInfoDisplay.getChildren().get(2);
@@ -416,8 +372,8 @@ public class BattleView {
         lvl.setText("Lvl: "+team.get(index).getLvl());
         hp.setText("HP: " + team.get(index).getCurrStats().get("hp") + "/" + team.get(index).getMaxHP());
     }
-    private void showHeroLowerLabels(){
 
+    private void showHeroLowerLabels(){
     }
 
     private void hideCharacterInfo(){
@@ -434,7 +390,6 @@ public class BattleView {
             enemy.setOnMouseExited(event -> hideEnemyInfo());
             HBox.setHgrow(enemy,Priority.ALWAYS);
             enemySelectorArea.getChildren().add(enemy);
-
         }
     }
 
@@ -442,7 +397,6 @@ public class BattleView {
         int index = Integer.parseInt(enemy.getId());
         enemy.setFitHeight(enemyTeam.get(index).getSizeY());
         enemy.setFitWidth(enemyTeam.get(index).getSizeX());
-
     }
 
     private void selectEnemy(ImageView enemy) {
@@ -455,7 +409,6 @@ public class BattleView {
         else{
             triggerAttack();
         }
-
     }
 
     private void showEnemyInfo(ImageView enemy){
@@ -463,7 +416,6 @@ public class BattleView {
         battlerInfoDisplay.setVisible(true);
         showEnemyMiniImage(index);
         showEnemyUpperLabels(index);
-
     }
 
     private void showEnemyMiniImage(int index){
@@ -472,6 +424,7 @@ public class BattleView {
         display.setFitHeight(80);
         display.setFitWidth(80);
     }
+
     private void showEnemyUpperLabels(int index){
         Label name = (Label)battlerInfoDisplay.getChildren().get(1);
         Label lvl = (Label)battlerInfoDisplay.getChildren().get(2);
@@ -480,7 +433,6 @@ public class BattleView {
         lvl.setText("Lvl: " + enemyTeam.get(index).getLvl());
         hp.setText("HP: " + enemyTeam.get(index).getCurrStats().get("hp") + "/" + enemyTeam.get(index).getMaxHP());
     }
-
 
     private void hideEnemyInfo(){
         battlerInfoDisplay.setVisible(false);
@@ -536,18 +488,14 @@ public class BattleView {
         infoText.setText(gameData.getInventory().get(index).getDescription());
 
     }
-
     //endregion
     //region Button Logic
-
     public void selectAttack() {
         if(!uiLocked){
             usingSkill = false;
             pushMessage("Who will " + team.get(selectedUser).getName() + " attack?");
             unblockEnemySelectors();
-
         }
-
     }
 
     public void selectEndTurn() {
@@ -555,7 +503,6 @@ public class BattleView {
             battleLogic.prepareEndPlayerTurn();
             animator.backButtonSlideIn();
         }
-
     }
 
     public void selectSkills() {
@@ -564,11 +511,9 @@ public class BattleView {
             skillSelectorArea.setVisible(true);
             actionMenu.setVisible(false);
         }
-
     }
 
     private void populateSkills() {
-        finishedLoading = false;
         skillSelectorArea.getChildren().clear();
         Fighter user = team.get(selectedUser);
         for (int i = 0; i<user.getSkillList().size();i++){
@@ -579,7 +524,6 @@ public class BattleView {
             skill.setOnMousePressed(event -> selectSkill(skill));
             skillSelectorArea.getChildren().add(skill);
         }
-        finishedLoading = true;
     }
 
     private void selectSkill(Label skillLabel) {
@@ -621,13 +565,10 @@ public class BattleView {
     }
 
     private void showSkillInfo(Label skill) {
-
         int index = skillSelectorArea.getChildren().indexOf(skill);
         Label skillQuickInfo = (Label)skillInfoDisplay.getChildren().get(1);
         skillQuickInfo.setText(team.get(selectedUser).getSkillList().get(index).getQuickInfo());
         skillInfoDisplay.setVisible(true);
-
-
     }
 
     public void selectBag() {
@@ -637,7 +578,6 @@ public class BattleView {
             itemSelectorArea.setVisible(true);
             actionMenu.setVisible(false);
         }
-
     }
 
     private void selectItem(Label item){
@@ -646,8 +586,6 @@ public class BattleView {
         battleLogic.useItem(selectedItem);
         updateSingleHeroBar();
         animator.backButtonSlideIn();
-
-
     }
 
     private void updateSingleHeroBar() {
@@ -664,10 +602,9 @@ public class BattleView {
         itemSelectorArea.getChildren().remove(selectedItem);
         itemSelectorArea.setVisible(false);
         heroSelectorArea.setVisible(true);
-
     }
 
-    public void selectFlee(javafx.scene.input.MouseEvent event) {
+    public void selectFlee() {
         battleLogic.getMessageQueue().add("You ran away. Everyone is disappointed");
         animator.heroFlee();
         battleLogic.endBattle();
@@ -680,7 +617,6 @@ public class BattleView {
             heroSelectorArea.setVisible(false);
             showActionMenu();
         }
-
     }
 
 
@@ -688,14 +624,10 @@ public class BattleView {
         Fighter user = team.get(selectedUser);
         Fighter target = enemyTeam.get(index);
         battleLogic.tryActivateSkill(user,target);
-//        skillSelectorArea.setVisible(false);
-//        skillInfoDisplay.setVisible(false);
-//        heroSelectorArea.setVisible(true);
     }
 
     private void triggerAttack() {
         battleLogic.tryHeroBasicAttack();
-
     }
 
     public void handleAnimation(String animationType){
@@ -744,18 +676,15 @@ public class BattleView {
             actionMenu.setVisible(false);
             blockEnemySelectors();
             animator.backButtonSlideIn();
-
         }
         else if(itemSelectorArea.isVisible()){
             actionMenu.setVisible(true);
             itemSelectorArea.setVisible(false);
-
         }
         else if(skillSelectorArea.isVisible()){
             actionMenu.setVisible(true);
             skillSelectorArea.setVisible(false);
         }
-
     }
 
     public void updateEnemyQuickInfo(Snapshot enemyState) {

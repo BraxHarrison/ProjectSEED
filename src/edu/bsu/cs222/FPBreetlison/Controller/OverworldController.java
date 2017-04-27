@@ -2,11 +2,12 @@ package edu.bsu.cs222.FPBreetlison.Controller;
 
 import edu.bsu.cs222.FPBreetlison.Model.Animator;
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
-import edu.bsu.cs222.FPBreetlison.Model.GameManager;
+import edu.bsu.cs222.FPBreetlison.Model.GameLogic;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Event;
-import javafx.event.ActionEvent;
+import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
@@ -16,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Map;
 
 
-public class OverworldView implements java.io.Serializable {
+public class OverworldController implements java.io.Serializable {
 
 
     public VBox sideBar;
@@ -25,39 +26,46 @@ public class OverworldView implements java.io.Serializable {
     public ImageView travelButton;
     public ImageView saveLoadButton;
     public ImageView inspectButton;
+    public ImageView inventoryItemDisplay;
 
-    public StackPane BagMenu;
-    public VBox invItemsArea;
     public StackPane shopMenu;
+    public StackPane travelPane;
     public VBox shopItemsArea;
 
     public Label roomDescription;
-    public StackPane travelPane;
+    public Label inventoryNameDisplay;
+    public Label inventoryQuickSummaryDisplay;
+
     public Button north;
     public Button south;
     public Button east;
     public Button west;
+    public Button closeItemsButton;
+    public Button openItemsButton;
     public HBox backgroundImage;
+    public VBox inventoryItemsArea;
+    public VBox events;
+    public VBox teamArea;
+    public VBox standbyArea;
     public StackPane loadSaveMenu;
     public StackPane inspectMenu;
     public StackPane navBanner;
-    public Label walletDisplay;
-    public VBox events;
-
     public StackPane teamMenu;
-    public VBox teamArea;
-    public VBox standbyArea;
+    public StackPane itemsMenu;
+    public ScrollPane inventoryAreaScroller;
+    public Label walletDisplay;
+    public Label transferButton;
+
     private boolean movingFromStandby;
     private boolean movingFromTeam;
-    private boolean usingItem;
     private int indexToTransfer;
 
-    private GameManager game;
+    private GameLogic game;
     private GameData gameData;
     private Animator animator;
     private Event loadedEvent;
 
-    public void initialize(GameManager game){
+    public void initialize(GameLogic game){
         indexToTransfer = 0;
         this.game = game;
         this.gameData = game.getGameData();
@@ -74,7 +82,6 @@ public class OverworldView implements java.io.Serializable {
 
 
     private void initializePartyButton() {
-        //partyButton.setOnMousePressed(e->openTravel());
         partyButton.setOnMouseEntered(e->optionHover(partyButton));
         partyButton.setOnMouseExited(e->optionUnhover(partyButton));
         partyButton.setOnMouseClicked(e->openTeamMenu());
@@ -93,8 +100,8 @@ public class OverworldView implements java.io.Serializable {
             int index = i;
             HBox standbyCharacterSelector = new HBox();
             ImageView image = new ImageView(new Image(gameData.getStandby().get(i).getMiniGraphicPath()));
-            image.setFitWidth(30);
-            image.setFitHeight(30);
+            image.setFitWidth(60);
+            image.setFitHeight(60);
             Label name = new Label(gameData.getStandby().get(i).getName());
             standbyCharacterSelector.setOnMousePressed(e->selectStandbyToTransfer(index));
             standbyCharacterSelector.getChildren().addAll(image,name);
@@ -105,6 +112,38 @@ public class OverworldView implements java.io.Serializable {
     private void selectStandbyToTransfer(int index) {
         indexToTransfer = index;
         movingFromStandby = true;
+        movingFromTeam = false;
+        populateCharacterStats();
+    }
+
+    private void populateCharacterStats(){
+        Fighter selectedFighter = getFromProperList();
+        Label nameLabel = (Label)teamMenu.getChildren().get(2);
+        Label levelLabel = (Label)teamMenu.getChildren().get(3);
+        Label hpLabel = (Label)teamMenu.getChildren().get(4);
+        Label atkLabel = (Label)teamMenu.getChildren().get(5);
+        Label defLabel = (Label)teamMenu.getChildren().get(6);
+        Label agilityLabel = (Label)teamMenu.getChildren().get(7);
+        nameLabel.setText(selectedFighter.getName());
+        levelLabel.setText("Lvl: " + selectedFighter.getLvl() );
+        hpLabel.setText("HP: "+ selectedFighter.getCurrStats().get("hp")+"/"+selectedFighter.getMaxHP());
+        atkLabel.setText("Attack: " + selectedFighter.getAttack());
+        defLabel.setText("Def: " + selectedFighter.getDefense());
+        agilityLabel.setText("Agility: " + selectedFighter.getAgility());
+
+    }
+
+    private Fighter getFromProperList() {
+        Fighter fighter;
+        if(movingFromTeam){
+            fighter = gameData.getTeam().get(indexToTransfer);
+            return fighter;
+        }
+        else{
+            fighter = gameData.getStandby().get(indexToTransfer);
+            return fighter;
+        }
+
     }
 
     private void populateTeamArea() {
@@ -113,8 +152,8 @@ public class OverworldView implements java.io.Serializable {
             int index = i;
             HBox teamCharacterSelector = new HBox();
             ImageView image = new ImageView(new Image(gameData.getTeam().get(i).getMiniGraphicPath()));
-            image.setFitWidth(30);
-            image.setFitHeight(30);
+            image.setFitWidth(60);
+            image.setFitHeight(60);
             Label name = new Label(gameData.getTeam().get(i).getName());
             teamCharacterSelector.setOnMousePressed(e-> selectTeamMember(index));
             teamCharacterSelector.getChildren().addAll(image,name);
@@ -125,6 +164,8 @@ public class OverworldView implements java.io.Serializable {
     private void selectTeamMember(int index) {
         indexToTransfer = index;
         movingFromTeam = true;
+        movingFromStandby = false;
+        populateCharacterStats();
 
     }
 
@@ -220,14 +261,14 @@ public class OverworldView implements java.io.Serializable {
         for(int i = 0; i<gameData.getCurrentRoom().getEvents().size();i++){
             int index = i;
             ImageView event = new ImageView();
-            formatEvent(event);
+            formatEvent(event,index);
             event.setOnMousePressed(e->startEvent(index));
             events.getChildren().add(event);
         }
     }
 
-    private void formatEvent(ImageView event) {
-        event.setImage(new Image("/images/system/system_undefined.png"));
+    private void formatEvent(ImageView event,int index) {
+        event.setImage(new Image(gameData.getCurrentRoom().getEvents().get(index).getImagePath()));
         event.setFitWidth(100);
         event.setFitHeight(100);
     }
@@ -238,22 +279,24 @@ public class OverworldView implements java.io.Serializable {
             loadShop(loadedEvent);
             shopMenu.setVisible(true);
         }
+        else if(loadedEvent.getType().equals("battle")){
+            startBattle();
+        }
     }
 
     private void loadShop(Event shop) {
         shopItemsArea.getChildren().clear();
         for(int i=0;i<shop.getStock().size();i++){
             int index = i;
-            System.out.println(shop.getStock().get(i).getName());
             HBox itemButton = new HBox();
-            populateItemButton(itemButton,i);
+            populateShopItemButton(itemButton,i);
             itemButton.setOnMousePressed(e->selectItemFromShop(index));
             shopItemsArea.getChildren().add(itemButton);
         }
 
     }
 
-    private void populateItemButton(HBox button, int index) {
+    private void populateShopItemButton(HBox button, int index) {
         ImageView buttonGraphic = new ImageView(new Image(loadedEvent.getStock().get(index).getImagePath()));
         buttonGraphic.setFitHeight(20);
         buttonGraphic.setFitWidth(20);
@@ -275,6 +318,23 @@ public class OverworldView implements java.io.Serializable {
         buyButton.setOnMousePressed(e->buyItem(index));
 
     }
+    private void selectItemFromInventory(int index) {
+        setAllInventoryItemInfoVisible();
+        ImageView itemDisplay = (ImageView)itemsMenu.getChildren().get(1);
+        Label nameDisplay = (Label)itemsMenu.getChildren().get(2);
+        Label quickSummary = (Label)itemsMenu.getChildren().get(3);
+        Label useButton = (Label)itemsMenu.getChildren().get(4);
+        nameDisplay.setText(gameData.getInventory().get(index).getName());
+        quickSummary.setText(gameData.getInventory().get(index).getQuickSummary());
+        itemDisplay.setImage(new Image(gameData.getInventory().get(index).getImagePath()));
+        useButton.setOnMousePressed(e->useItem(index));
+
+    }
+    private void setAllInventoryItemInfoVisible() {
+        for(int i = 0; i<itemsMenu.getChildren().size();i++){
+            itemsMenu.getChildren().get(i).setVisible(true);
+        }
+    }
 
     private void setAllItemInfoVisible() {
         for(int i = 0; i<shopMenu.getChildren().size();i++){
@@ -282,6 +342,15 @@ public class OverworldView implements java.io.Serializable {
         }
     }
 
+    private void useItem(int index){
+        gameData.getInventory().get(index).activate(getFromProperList());
+        gameData.getInventory().remove(index);
+        inventoryItemDisplay.setImage(null);
+        inventoryNameDisplay.setText("");
+        inventoryQuickSummaryDisplay.setText("");
+        closeItemsMenu();
+
+    }
     private void buyItem(int index) {
         if(gameData.getWallet().getRawAmount()>loadedEvent.getStock().get(index).getBuyPrice()){
             gameData.getInventory().add(loadedEvent.getStock().get(index));
@@ -316,11 +385,11 @@ public class OverworldView implements java.io.Serializable {
 
     }
 
-    public void startBattle(){
+    private void startBattle(){
         game.createBattle();
     }
 
-    public void openTravel() {
+    private void openTravel() {
         travelPane.setVisible(true);
     }
 
@@ -358,22 +427,60 @@ public class OverworldView implements java.io.Serializable {
         initialize(this.game);
     }
 
-    public void hideLoadSaveMenu(ActionEvent actionEvent) {
+    public void hideLoadSaveMenu() {
         loadSaveMenu.setVisible(false);
     }
 
-    public void hideInspectMenu(ActionEvent actionEvent) {
+    public void hideInspectMenu() {
         inspectMenu.setVisible(false);
     }
 
-    public void hideShop(ActionEvent actionEvent) {
+    public void hideShop() {
         shopMenu.setVisible(false);
+        shopMenu.getChildren().get(2).setVisible(false);
+        shopMenu.getChildren().get(3).setVisible(false);
+        shopMenu.getChildren().get(4).setVisible(false);
+        shopMenu.getChildren().get(5).setVisible(false);
     }
 
-    public void hideTeamMenu(ActionEvent actionEvent) {
+    public void hideTeamMenu() {
         movingFromTeam = false;
-        usingItem = false;
         movingFromStandby = false;
         teamMenu.setVisible(false);
+    }
+
+    public void openItemsMenu() {
+        inventoryItemsArea.getChildren().clear();
+        itemsMenu.setVisible(true);
+        transferButton.setVisible(false);
+        closeItemsButton.setVisible(true);
+        openItemsButton.setVisible(false);
+        for(int i=0;i<gameData.getInventory().size();i++){
+            int index = i;
+            HBox itemButton = new HBox();
+            populateItemsButton(itemButton,i);
+            itemButton.setOnMousePressed(e->selectItemFromInventory(index));
+            inventoryItemsArea.getChildren().add(itemButton);
+        }
+
+
+    }
+
+    private void populateItemsButton(HBox button, int index){
+        ImageView buttonGraphic = new ImageView(new Image(gameData.getInventory().get(index).getImagePath()));
+        buttonGraphic.setFitHeight(30);
+        buttonGraphic.setFitWidth(30);
+        button.getChildren().addAll(buttonGraphic);
+        button.setSpacing(3);
+
+    }
+
+    public void closeItemsMenu() {
+
+        itemsMenu.setVisible(false);
+        transferButton.setVisible(true);
+        openItemsButton.setVisible(true);
+        closeItemsButton.setVisible(false);
+
     }
 }

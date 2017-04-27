@@ -1,9 +1,8 @@
 package Model.Tests;
 
 
-import edu.bsu.cs222.FPBreetlison.Model.BattleXMLParser;
+import edu.bsu.cs222.FPBreetlison.Model.BattleParser;
 import edu.bsu.cs222.FPBreetlison.Model.GameData;
-import edu.bsu.cs222.FPBreetlison.Model.GameManager;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Fighter;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Room;
@@ -25,7 +24,7 @@ public class RoomTests {
     private HashMap<String,Fighter> allHeroes;
     private HashMap<String,Item> allItems;
     private OverWorldParser roomParser;
-    private BattleXMLParser battleParser;
+    private BattleParser battleParser;
     private Room testRoom;
     private GameData gameData = new GameData();
 

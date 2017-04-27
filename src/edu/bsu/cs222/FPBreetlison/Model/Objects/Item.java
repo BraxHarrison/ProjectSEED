@@ -10,8 +10,6 @@ public class Item implements java.io.Serializable {
     private String quickSummary;
     private int affectAmt;
     private double buyPrice;
-    private double convertedBuyPrice;
-    private String buyPriceType;
     private String type;
     private String type2;
     private String imagePath;
@@ -31,17 +29,19 @@ public class Item implements java.io.Serializable {
 
 
     public void activate(Fighter user){
-        if(type.equals("heal")){
-            triggerHeal(user);
-        }
-        else if(type.equals("buff")){
-            triggerBuff(user);
-        }
-        else if(type.equals("debuff")){
+        switch (type) {
+            case "heal":
+                triggerHeal(user);
+                break;
+            case "buff":
+                triggerBuff(user);
+                break;
+            case "debuff":
 
-        }
-        else if(type.equals("selfDebuff")){
+                break;
+            case "selfDebuff":
 
+                break;
         }
     }
     private void triggerHeal(Fighter user){
@@ -49,9 +49,6 @@ public class Item implements java.io.Serializable {
     }
     private void triggerBuff(Fighter user){
         user.strengthenStat(type2, affectAmt);
-    }
-    private void triggerDebuff(Fighter target){
-        target.weakenStat(type2,affectAmt);
     }
 
 
@@ -61,20 +58,19 @@ public class Item implements java.io.Serializable {
     }
 
     public String getDisplayCost() {
-        buyPriceType="B";
-        convertedBuyPrice = buyPrice;
-        if(convertedBuyPrice>=1000){
-            System.out.println("Converting currency to KB...");
-            convertedBuyPrice = convertedBuyPrice/1000;
-            buyPriceType="KB";
+        String buyPriceType = "B";
+        double convertedBuyPrice = buyPrice;
+        if(convertedBuyPrice >=1000){
+            convertedBuyPrice = convertedBuyPrice /1000;
+            buyPriceType ="KB";
         }
-        if(convertedBuyPrice>=1000){
-            convertedBuyPrice = convertedBuyPrice/1000;
-            buyPriceType="MB";
+        if(convertedBuyPrice >=1000){
+            convertedBuyPrice = convertedBuyPrice /1000;
+            buyPriceType ="MB";
         }
-        if(convertedBuyPrice>=1000){
-            convertedBuyPrice = convertedBuyPrice/1000;
-            buyPriceType="GB";
+        if(convertedBuyPrice >=1000){
+            convertedBuyPrice = convertedBuyPrice /1000;
+            buyPriceType ="GB";
         }
         return convertedBuyPrice + " " + buyPriceType;
     }

@@ -18,7 +18,6 @@ public class Room implements java.io.Serializable {
     private String imagePath;
     private String battleImagePath;
     private ArrayList<Event> events;
-    //private ArrayList<Item> itemsInRoom;
 
     public Room(String info){
 
@@ -36,8 +35,8 @@ public class Room implements java.io.Serializable {
     }
 
     public void loadEvents(GameData gameData) {
-        for(int i = 0; i<eventList.size();i++){
-            Event event = gameData.getAllEvents().get(eventList.get(i));
+        for (String anEventList : eventList) {
+            Event event = gameData.getAllEvents().get(anEventList);
             events.add(event);
         }
     }

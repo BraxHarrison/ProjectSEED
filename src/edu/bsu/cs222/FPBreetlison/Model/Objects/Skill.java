@@ -4,14 +4,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Skill implements java.io.Serializable {
-    String name;
-    int affectAmt;
-    int tpCost;
-    String type;
-    String type2;
-    String quickInfo;
-    String extraMessage;
-    String animType;
+    private String name;
+    private int affectAmt;
+    private int tpCost;
+    private String type;
+    private String quickInfo;
+    private String extraMessage;
+    private String animType;
+    private String element;
 
 
     public Skill(String info){
@@ -19,31 +19,46 @@ public class Skill implements java.io.Serializable {
         this.name = skillInfo.get(0);
         this.affectAmt = Integer.parseInt(skillInfo.get(1));
         this.tpCost = Integer.parseInt(skillInfo.get(2));
-        this.type = skillInfo.get(3);
-        this.type2 = skillInfo.get(4);
-        this.quickInfo = skillInfo.get(5);
-        this.extraMessage =  skillInfo.get(6);
-        this.animType = skillInfo.get(7);
+        this.element = skillInfo.get(3);
+        this.type = skillInfo.get(4);
+        this.quickInfo = skillInfo.get(6);
+        this.extraMessage =  skillInfo.get(7);
+        this.animType = skillInfo.get(8);
     }
 
     public void use(Fighter user, Fighter target){
-        if(type.equals("heal")){
-            user.recoverHealth(affectAmt);
-        }
-        else if(type.equals("attack")){
-            double damage = user.getCurrStats().get("attack")*affectAmt/target.getCurrStats().get("defense");
-            int finalDamage = (int)Math.round(damage*1.5);
-            target.takeDamage(finalDamage);
-        }
-        else if(type.equals("debuff")){
-            target.weakenStat("attack",affectAmt);
-        }
-        else if(type.equals("buff")){
-            user.strengthenStat("attack",affectAmt);
-        }
-        else if(type.equals("selfDebuff")){
+        switch (type) {
+            case "heal":
+                user.recoverHealth(affectAmt);
+                break;
+            case "attack":
+                double damage = user.getCurrStats().get("attack") * affectAmt / target.getCurrStats().get("defense");
+                int finalDamage = (int) Math.round(damage * 1.5 * elementModifier(target));
+                if(finalDamage < 1){
+                    finalDamage = 1;
+                }
+                target.takeDamage(finalDamage);
+                break;
+            case "debuff":
+                target.weakenStat(affectAmt);
+                break;
+            case "buff":
+                user.strengthenStat("attack", affectAmt);
+                break;
+            case "selfDebuff":
 
+                break;
         }
+    }
+
+    private double elementModifier(Fighter target) {
+        if(element.equals(target.getWeakness())){
+            return 1.5;
+        }
+        else if(element.equals(target.getStrength())){
+            return .5;
+        }
+        return 1;
     }
 
     private List<String> stringParser(String info){
@@ -67,5 +82,8 @@ public class Skill implements java.io.Serializable {
     }
     public String getAnimType() {
         return animType;
+    }
+    public String getElement() {
+        return element;
     }
 }

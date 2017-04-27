@@ -1,6 +1,5 @@
 package edu.bsu.cs222.FPBreetlison.Model.Objects;
 
-import edu.bsu.cs222.FPBreetlison.Model.DamageCalculator;
 
 import java.util.*;
 
@@ -19,33 +18,32 @@ public class Fighter implements java.io.Serializable {
     private int expToNextLevel;
     private boolean isLeveledUp;
 
-    private ArrayList<String> battleStrings;
     private ArrayList<Skill> skillList;
     private HashMap<String,Integer> currStats;
-    private HashMap<String,Integer> baseStats;
-    private String skillAnim;
     private String battlerGraphicPath;
     private String miniGraphicPath;
     private Skill queuedSkill;
     private int sizeX;
     private int sizeY;
     private double rewardAmt;
-    private boolean KOState;
     private int KOLevel;
     private int lastDamage;
+    private String weakness;
+    private String strength;
+    private int agility;
 
     public Fighter(String info){
 
         List<String> characterInfo = stringParser(info);
         expToNextLevel=150;
         currStats = new HashMap<>();
-        skillList =  new ArrayList<Skill>();
-        ArrayList<Object> attributes = new ArrayList<>();
+        skillList = new ArrayList<>();
         KOLevel = 0;
         lvl = 1;
         loadInfo(characterInfo);
         associateStats();
     }
+
     public Fighter(Fighter fighter){
         loadInfoForCopy(fighter);
         associateStats();
@@ -54,8 +52,7 @@ public class Fighter implements java.io.Serializable {
     private void loadInfoForCopy(Fighter fighter) {
         expToNextLevel=150;
         currStats = new HashMap<>();
-        skillList =  new ArrayList<Skill>();
-        ArrayList<Object> attributes = new ArrayList<>();
+        skillList = new ArrayList<>();
         KOLevel = 0;
         lvl = 1;
         this.name = fighter.getName();
@@ -63,8 +60,11 @@ public class Fighter implements java.io.Serializable {
         this.hp = fighter.getHp();
         this.attack = fighter.getAttack();
         this.defense = fighter.getDefense();
+        this.agility = fighter.getAgility();
         this.tpCost = fighter.getTpCost();
         this.expModifier = fighter.getExpModifier();
+        this.weakness = fighter.getWeakness();
+        this.strength = fighter.getStrength();
         this.battlerGraphicPath = fighter.getBattlerGraphicPath();
         this.miniGraphicPath = fighter.getMiniGraphicPath();
         this.sizeX = fighter.getSizeX();
@@ -78,13 +78,16 @@ public class Fighter implements java.io.Serializable {
         this.hp = maxHP;
         this.attack = Integer.parseInt(characterInfo.get(2));
         this.defense = Integer.parseInt(characterInfo.get(3));
+        this.agility = Integer.parseInt(characterInfo.get(6));
         this.tpCost = Integer.parseInt(characterInfo.get(7));
         this.expModifier = Double.parseDouble(characterInfo.get(8));
-        this.battlerGraphicPath = characterInfo.get(9);
-        this.miniGraphicPath = characterInfo.get(10);
-        this.sizeX = Integer.parseInt(characterInfo.get(11));
-        this.sizeY = Integer.parseInt(characterInfo.get(12));
-        this.rewardAmt = Double.parseDouble(characterInfo.get(13));
+        this.weakness = characterInfo.get(9);
+        this.strength = characterInfo.get(10);
+        this.battlerGraphicPath = characterInfo.get(11);
+        this.miniGraphicPath = characterInfo.get(12);
+        this.sizeX = Integer.parseInt(characterInfo.get(13));
+        this.sizeY = Integer.parseInt(characterInfo.get(14));
+        this.rewardAmt = Double.parseDouble(characterInfo.get(15));
     }
 
     public double calcHPPercentage(){
@@ -108,22 +111,19 @@ public class Fighter implements java.io.Serializable {
     public void doBasicAttack(Fighter target){
         double damage = this.getCurrStats().get("attack")*2/target.getCurrStats().get("defense");
         int finalDamage = (int)Math.round(damage*1.5);
+        if(finalDamage<1){
+            finalDamage=1;
+        }
         lastDamage = finalDamage;
         target.takeDamage(finalDamage);
-        chooseActionString();
-    }
-
-    public void useSkill(int index){
-        Skill usedSkill = skillList.get(index);
-        usedSkill.use(this,this );
     }
 
     public void addSkill(Skill skill){
         skillList.add(skill);
     }
 
-    public void getExp(int amount){
-        experience += amount;
+    public void getExp(){
+        experience += 200;
     }
 
     public void checkLevel(){
@@ -175,19 +175,15 @@ public class Fighter implements java.io.Serializable {
         currStats.replace(stat,oldValue,newValue);
     }
 
-    void weakenStat(String stat, int factor){
-        int oldValue = currStats.get(stat);
+    void weakenStat(int factor){
+        int oldValue = currStats.get("attack");
         int newValue = oldValue - factor;
-        currStats.replace(stat,oldValue,newValue);
+        currStats.replace("attack",oldValue,newValue);
     }
 
     //endregion
 
     //region Text-Related Functionality
-
-    private void chooseActionString(){
-
-    }
 
     private List<String> stringParser(String info){
         return Arrays.asList(info.split(","));
@@ -197,21 +193,16 @@ public class Fighter implements java.io.Serializable {
 
     public int checkKOLevel(){
         if(currStats.get("hp")<=0 && KOLevel == 1){
-            KOState = true;
             KOLevel = 2;
         }
         else if(currStats.get("hp")==0 && KOLevel ==0){
-            KOState = true;
             KOLevel = 1;
         }
         return KOLevel;
 
     }
     public boolean isKO(){
-        if(currStats.get("hp") == 0){
-            return true;
-        }
-        return false;
+        return currStats.get("hp") == 0;
 
     }
 
@@ -221,11 +212,10 @@ public class Fighter implements java.io.Serializable {
     public ArrayList<Skill> getSkillList() {
         return skillList;
     }
-
     public String getName() {
         return name;
     }
-    public int getHp() {
+    int getHp() {
         return hp;
     }
     public int getMaxHP() {
@@ -239,12 +229,6 @@ public class Fighter implements java.io.Serializable {
     }
     public int getTpCost() {
         return tpCost;
-    }
-    public ArrayList<String> getBattleStrings() {
-        return battleStrings;
-    }
-    public void setBattleStrings(ArrayList<String> battleStrings) {
-        this.battleStrings = battleStrings;
     }
     public int getKOLvl() {
         return KOLevel;
@@ -270,26 +254,30 @@ public class Fighter implements java.io.Serializable {
     public boolean isLeveledUp() {
         return isLeveledUp;
     }
-    public void setLeveledUp(boolean leveledUp) {
-        isLeveledUp = leveledUp;
+    public void setLeveledUp() {
+        isLeveledUp = false;
     }
     public int getLvl() {
         return lvl;
     }
-    public String getSkillAnim() {
-        return skillAnim;
-    }
-    public void setSkillAnim(String skillAnim) {
-        this.skillAnim = skillAnim;
-    }
     public int getLastDamage() {
         return lastDamage;
     }
-    public double getExpModifier() {
+    private double getExpModifier() {
         return expModifier;
     }
     public double getRewardAmt() {
         return rewardAmt;
+    }
+    public String getWeakness() {
+        return weakness;
+    }
+    public int getAgility() {
+        return agility;
+    }
+
+    public String getStrength() {
+        return strength;
     }
     //endregion
 

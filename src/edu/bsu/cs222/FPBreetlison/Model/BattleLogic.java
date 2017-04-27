@@ -1,6 +1,6 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
-import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
+import edu.bsu.cs222.FPBreetlison.Controller.BattleController;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Item;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Skill;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
@@ -15,30 +15,28 @@ import java.util.ArrayList;
 import java.util.Random;
 
 
-public class BattleManager {
+public class BattleLogic {
 
     private GameData gameData;
-    private GameManager game;
-    private BattleView battleView;
+    private GameLogic game;
+    private BattleController battleController;
     private Animator animator;
 
     private Fighter attacker;
     private Fighter target;
 
     private int targetNo;
-    private int finalQueue;
-    private boolean enemyLock;
     private Snapshot fighterSnapshot;
     private ArrayList<Snapshot> targetQueue;
     private ArrayList<String> messageQueue;
 
-    boolean heroWon;
+    private boolean heroWon;
 
-    public void getGameInfo(GameManager game){
+    public void getGameInfo(GameLogic game){
         this.game = game;
         this.gameData = game.getGameData();
         gameData.addEnemies();
-        this.battleView = game.getBattleControl();
+        this.battleController = game.getBattleControl();
         animator = new Animator(game);
 
     }
@@ -48,7 +46,7 @@ public class BattleManager {
         messageQueue = new ArrayList<>();
         targetQueue = new ArrayList<>();
         gameData.resetHeroTP();
-        battleView.updateTP();
+        battleController.updateTP();
         checkSpeeds();
     }
 
@@ -56,26 +54,24 @@ public class BattleManager {
 
         switch (phase) {
             case "hero":
-                System.out.println("It's hero time!");
                 enableCharacterMenu();
                 break;
             case "enemy":
-                System.out.println("Triggering enemy turn!");
                 disableCharacterMenu();
                 tryEnemyAttack();
                 resetTP();
                 endEnemyTurn();
                 break;
             case "enemyWin":
-                battleView.blockEnemySelectors();
-                battleView.uiLocked = true;
+                battleController.blockEnemySelectors();
+                battleController.uiLocked = true;
                 endBattle();
                 break;
             case "heroWin":
                 heroWon = true;
-                battleView.blockEnemySelectors();
-                battleView.heroSelectorArea.setVisible(false);
-                battleView.uiLocked = true;
+                battleController.blockEnemySelectors();
+                battleController.heroSelectorArea.setVisible(false);
+                battleController.uiLocked = true;
                 gainExp();
                 calculateRewards();
                 endBattle();
@@ -97,19 +93,19 @@ public class BattleManager {
     public void endBattle(){
         revertFighterStats();
         gameData.revertMaxTP();
-        finalQueue = messageQueue.size();
-        battleView.queueMessages(messageQueue);
+        int finalQueue = messageQueue.size();
+        battleController.queueMessages(messageQueue);
         int dur = 80;
-        battleView.uiLocked = true;
+        battleController.uiLocked = true;
         animator.backButtonSlideIn();
-        dur += finalQueue*1000;
+        dur += finalQueue *1000;
         Timeline counter = new Timeline();
         counter.getKeyFrames().add(new KeyFrame(
                 Duration.millis(dur),
                 ae -> game.setUpOverworld()));
         counter.play();
         finalQueue = 0;
-        game.setBattleUnderway(false);
+        game.setBattleUnderway();
     }
 
     private void revertFighterStats() {
@@ -120,7 +116,7 @@ public class BattleManager {
 
     private void resetTP() {
         gameData.resetHeroTP();
-        battleView.updateTP();
+        battleController.updateTP();
     }
 
     private void tryEnemyAttack() {
@@ -132,23 +128,20 @@ public class BattleManager {
     }
 
     private void findLivingHero(int i) {
-        System.out.println("Attacking Enemy: " + gameData.getEnemyTeam().get(i).getName());
         fighterSnapshot = new Snapshot();
         fighterSnapshot.setAttackerIndex(i);
-        fighterSnapshot.setAnimType("enemyLunge");
+        fighterSnapshot.setAnimType();
         targetNo = makeRandom(gameData.getTeam().size());
         Fighter target = gameData.getTeam().get(targetNo);
         if (target.isKO()) {
             target = findNextTarget();
         }
         if (target != null) {
-            System.out.println("Target: " + gameData.getTeam().get(targetNo).getName()+"\n");
             fighterSnapshot.setIndex(targetNo);
             doEnemyAttack(gameData.getEnemyTeam().get(i), target);
         }
         else {
             fighterSnapshot.setIndex(targetNo);
-            fighterSnapshot.calcHPPercent(null);
             fighterSnapshot.setKOState(true);
             targetQueue.add(fighterSnapshot);
             updateTurn("enemyWin");
@@ -189,21 +182,19 @@ public class BattleManager {
     }
 
     private void endEnemyTurn() {
-        battleView.heroSelectorArea.setVisible(true);
-        System.out.println("Is the enemy turn ending?" + "\n");
+        battleController.heroSelectorArea.setVisible(true);
         if(detectHeroKO()){
             updateTurn("enemyWin");
             messageQueue.add("Everyone's trashed! You lose!");
         }
-        else{
+        else if(!detectHeroKO() && !heroWon ){
             messageQueue.add("It's your turn!");
             updateTurn("hero");
 
         }
-        System.out.println("This is being updated!");
-        battleView.queueMessages(messageQueue);
-        battleView.queueBarUpdates(targetQueue);
-        battleView.uiLocked = true;
+        battleController.queueMessages(messageQueue);
+        battleController.queueBarUpdates(targetQueue);
+        battleController.uiLocked = true;
     }
 
     private boolean detectHeroKO() {
@@ -230,18 +221,18 @@ public class BattleManager {
     }
 
     private void enableCharacterMenu() {
-        battleView.heroSelectorArea.setVisible(true);
+        battleController.heroSelectorArea.setVisible(true);
         animator.backButtonSlideIn();
     }
 
     private void disableCharacterMenu(){
-        battleView.heroSelectorArea.setVisible(false);
-        battleView.actionMenu.setVisible(false);
+        battleController.heroSelectorArea.setVisible(false);
+        battleController.actionMenu.setVisible(false);
     }
 
-    public void checkPlayerTP(){
+    private void checkPlayerTP(){
         if(gameData.getCurrentTp() <= 0){
-            battleView.skillSelectorArea.setVisible(false);
+            battleController.skillSelectorArea.setVisible(false);
             prepareEndPlayerTurn();
 
         }
@@ -256,18 +247,18 @@ public class BattleManager {
     }
 
     public void tryHeroBasicAttack(){
-        attacker = gameData.getTeam().get(battleView.selectedUser);
+        attacker = gameData.getTeam().get(battleController.selectedUser);
         target = gameData.getEnemyTeam().get(gameData.getSelectedTarget());
         int cost = attacker.getTpCost();
         if(gameData.getCurrentTp() >= cost ){
-            battleView.handleAnimation("heroLunge");
+            battleController.handleAnimation("heroLunge");
             messageQueue.add(attacker.getName() + " attacks " + target.getName() +"!");
-            battleView.queueMessages(messageQueue);
+            battleController.queueMessages(messageQueue);
             detectEnemyKO();
             startHeroBasicAttack(cost);
         }
         else{
-            battleView.pushMessage("There's not enough time left for " + attacker.getName()
+            battleController.pushMessage("There's not enough time left for " + attacker.getName()
                     + " to attack!");
         }
 
@@ -276,32 +267,25 @@ public class BattleManager {
     private void startHeroBasicAttack(int cost) {
         gameData.subtractTp(cost);
         attacker.doBasicAttack(target);
-        battleView.handleAnimation("heroLunge");
+        battleController.handleAnimation("heroLunge");
         updateUIForHeroAttack();
         detectEnemyKO();
-        battleView.queueMessages(messageQueue);
+        battleController.queueMessages(messageQueue);
         checkPlayerTP();
 
-    }
-
-    private void startDamageAnimation() {
-        Snapshot snapshot = new Snapshot();
-        snapshot.setAttackerIndex(battleView.selectedUser);
-        snapshot.setIndex(battleView.selectedTarget);
-        animator.animateDamageToEnemy(snapshot);
     }
 
     private void updateUIForHeroAttack(){
         Snapshot enemyState = new Snapshot();
         enemyState.setIndex(gameData.getSelectedTarget());
         enemyState.calcHPPercent(target);
-        battleView.updateEnemyQuickInfo(enemyState);
-        battleView.blockEnemySelectors();
-        battleView.updateTP();
+        battleController.updateEnemyQuickInfo(enemyState);
+        battleController.blockEnemySelectors();
+        battleController.updateTP();
     }
 
     private void detectEnemyKO() {
-        ObservableList<Node> selectors = battleView.enemySelectorArea.getChildren();
+        ObservableList<Node> selectors = battleController.enemySelectorArea.getChildren();
         ArrayList<Fighter> fighters = gameData.getEnemyTeam();
         int KOamt = 0;
         for (int i = 0; i < fighters.size(); i++) {
@@ -315,18 +299,20 @@ public class BattleManager {
             }
         }
         if (KOamt == fighters.size()) {
+            heroWon = true;
             messageQueue.add("The enemy team is down! You won!");
             updateTurn("heroWin");
+
         }
     }
 
     public void prepareEndPlayerTurn(){
-        battleView.blockEnemySelectors();
-        battleView.queueMessages(messageQueue);
-        battleView.uiLocked = true;
+        battleController.blockEnemySelectors();
+        battleController.queueMessages(messageQueue);
+        battleController.uiLocked = true;
         enemyTurnDelay();
     }
-    public void endPlayerTurn() {
+    private void endPlayerTurn() {
         updateTurn("enemy");
     }
 
@@ -334,10 +320,10 @@ public class BattleManager {
         Item item = gameData.getInventory().get(itemNo);
         if(item.getType().equals("tpBuff")){
             gameData.tempIncreaseMaxTP(item.getAffectAmt());
-            battleView.updateTP();
+            battleController.updateTP();
         }
         else{
-            item.activate(gameData.getTeam().get(battleView.selectedUser));
+            item.activate(gameData.getTeam().get(battleController.selectedUser));
         }
 
         gameData.removeObjectFromInventory(itemNo);
@@ -355,13 +341,13 @@ public class BattleManager {
             activateSkill(user, target);
             updateUIForHeroAttack();
             detectEnemyKO();
-            battleView.handleAnimation(skill.getAnimType());
-            battleView.queueMessages(messageQueue);
+            battleController.handleAnimation(skill.getAnimType());
+            battleController.queueMessages(messageQueue);
             //The skill is not trying to activate
             checkPlayerTP();
         }
         else{
-            battleView.pushMessage("There's not enough time to use that skill!");
+            battleController.pushMessage("There's not enough time to use that skill!");
         }
 
 
@@ -370,13 +356,16 @@ public class BattleManager {
         Skill skill = user.getQueuedSkill();
         user.getQueuedSkill().use(user, target);
         gameData.subtractTP(skill.getTpCost());
-        battleView.updateTP();
+        battleController.updateTP();
         messageQueue.add(user.getName() + " used " + skill.getName() + "!");
         if(skill.getElement().equals(target.getWeakness())){
         messageQueue.add(user.getName() + " hit " + target.getName() + "'s weakness! Double Damage!");
         }
+        if(skill.getElement().equals((target.getStrength()))){
+            messageQueue.add(target.getName() +  " was strong against the attack. Half damage!");
+        }
         extraMessage(skill);
-        battleView.queueMessages(messageQueue);
+        battleController.queueMessages(messageQueue);
     }
 
     private void extraMessage(Skill skill){
@@ -389,14 +378,14 @@ public class BattleManager {
     private void gainExp() {
         for(int i = 0; i<gameData.getTeam().size();i++){
             Fighter fighter = gameData.getTeam().get(i);
-            fighter.getExp(200);
+            fighter.getExp();
             fighter.checkLevel();
             if(fighter.isLeveledUp()){
                 messageQueue.add(fighter.getName() + " leveled up!");
-                fighter.setLeveledUp(false);
+                fighter.setLeveledUp();
             }
         }
-        battleView.queueMessages(messageQueue);
+        battleController.queueMessages(messageQueue);
 
     }
 }

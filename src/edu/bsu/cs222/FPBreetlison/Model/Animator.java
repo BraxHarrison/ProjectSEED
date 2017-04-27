@@ -1,41 +1,29 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
-import edu.bsu.cs222.FPBreetlison.Controller.BattleView;
-import edu.bsu.cs222.FPBreetlison.Model.Objects.Snapshot;
+import edu.bsu.cs222.FPBreetlison.Controller.BattleController;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
-import javafx.geometry.Bounds;
-import javafx.scene.Group;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.util.Duration;
 
-import java.security.Key;
-
 
 public class Animator implements java.io.Serializable {
 
-    BattleView battleView;
-    HBox heroGraphicsArea;
-    HBox enemySelectorArea;
-    Group damageDisplayArea;
+    private BattleController battleController;
+    private HBox heroGraphicsArea;
+    private HBox enemySelectorArea;
 
-    ImageView user;
-    ImageView target;
-    ImageView backButton;
-    ImageView airPuff;
-    Label damage;
+    private ImageView user;
+    private ImageView target;
+    private ImageView backButton;
 
-    GameData gameData;
-    GameManager game;
+    private GameLogic game;
 
-    public Animator(GameManager game){
+    public Animator(GameLogic game){
         this.game = game;
         if(game.isBattleUnderway()){
             initAnimatorForBattle();
@@ -44,13 +32,10 @@ public class Animator implements java.io.Serializable {
     }
 
     private void initAnimatorForBattle() {
-        battleView = this.game.getBattleControl();
-        damage = battleView.damageDisplay;
-        heroGraphicsArea = battleView.heroGraphicsArea;
-        enemySelectorArea = battleView.enemySelectorArea;
-        backButton = battleView.backButton;
-        damageDisplayArea = battleView.damageDisplayArea;
-        gameData = battleView.getGameData();
+        battleController = this.game.getBattleControl();
+        heroGraphicsArea = battleController.heroGraphicsArea;
+        enemySelectorArea = battleController.enemySelectorArea;
+        backButton = battleController.backButton;
     }
 
     private void initImages() {
@@ -58,22 +43,30 @@ public class Animator implements java.io.Serializable {
     }
 
     public void playAnimation(String animationType){
-        if(animationType.equals("heroLunge")){heroLunge();}
-        else if(animationType.equals("enemyLunge")){enemyLunge();}
-        else if(animationType.equals("heroQuickStretch")){heroQuickStretch();}
+        switch (animationType) {
+            case "heroLunge":
+                heroLunge();
+                break;
+            case "enemyLunge":
+                enemyLunge();
+                break;
+            case "heroQuickStretch":
+                heroQuickStretch();
+                break;
+        }
     }
 
     private void setUpHeroOrientation(){
-        user = (ImageView)heroGraphicsArea.getChildren().get(battleView.selectedUser);
-        target = (ImageView)enemySelectorArea.getChildren().get(battleView.selectedTarget);
+        user = (ImageView)heroGraphicsArea.getChildren().get(battleController.selectedUser);
+        target = (ImageView)enemySelectorArea.getChildren().get(battleController.selectedTarget);
     }
     private void setUpEnemyOrientation(){
-        user = (ImageView)enemySelectorArea.getChildren().get(battleView.selectedTarget);
-        target = (ImageView)heroGraphicsArea.getChildren().get(battleView.selectedUser);
+        user = (ImageView)enemySelectorArea.getChildren().get(battleController.selectedTarget);
+        target = (ImageView)heroGraphicsArea.getChildren().get(battleController.selectedUser);
     }
 
 
-    public void heroLunge(){
+    private void heroLunge(){
         setUpHeroOrientation();
         Timeline timeline = new Timeline();
         KeyValue userLunge = new KeyValue(user.translateXProperty(),user.getTranslateX()+50, Interpolator.EASE_BOTH);
@@ -88,7 +81,7 @@ public class Animator implements java.io.Serializable {
         timeline.play();
     }
 
-    public void enemyLunge(){
+    private void enemyLunge(){
         setUpEnemyOrientation();
         Timeline timeline = new Timeline();
         KeyValue userLunge = new KeyValue(user.translateXProperty(),user.getTranslateX()-50, Interpolator.EASE_BOTH);
@@ -122,7 +115,7 @@ public class Animator implements java.io.Serializable {
         timeline.play();
     }
 
-    public void heroQuickStretch(){
+    private void heroQuickStretch(){
         setUpHeroOrientation();
 
         Timeline timeline = new Timeline();
@@ -141,48 +134,6 @@ public class Animator implements java.io.Serializable {
         timeline.play();
     }
 
-    public void airPuff(){
-        Timeline timeline = new Timeline();
-        KeyValue puffFade = new KeyValue(airPuff.opacityProperty(),.01,Interpolator.EASE_BOTH);
-        KeyValue puffMove = new KeyValue(airPuff.translateXProperty(),20,Interpolator.EASE_BOTH);
-
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(100),puffFade,puffMove);
-
-        timeline.getKeyFrames().addAll(keyFrame);
-        timeline.play();
-    }
-
-    public void animateDamageToEnemy(Snapshot info){
-        Label damage = new Label(""+info.getDamage());
-        ImageView target = (ImageView)enemySelectorArea.getChildren().get(info.getIndex());
-
-        formatLabel(damage, target);
-
-        Timeline timeline = new Timeline();
-        KeyValue damageFade = new KeyValue(damage.opacityProperty(),.01,Interpolator.EASE_BOTH);
-        KeyValue damageMove = new KeyValue(damage.translateYProperty(),-50,Interpolator.EASE_BOTH);
-
-        KeyFrame keyFrame = new KeyFrame(Duration.millis(800),damageFade,damageMove);
-
-        timeline.getKeyFrames().addAll(keyFrame);
-        timeline.play();
-    }
-
-    private void formatLabel(Label damage, ImageView target) {
-
-        damageDisplayArea.getChildren().add(damage);
-        damage.getStyleClass().add("damage-text");
-        damage.setVisible(true);
-
-        System.out.println("Attacking " + target.getId());
-
-        Bounds boundsInScene = target.localToScene(target.getLayoutBounds());
-        double locTemp = boundsInScene.getMaxX() - boundsInScene.getMinX();
-        double locx = game.getStage().getWidth()- boundsInScene.getWidth();
-        damage.setLayoutX(locx);
-        damage.setLayoutY(boundsInScene.getMinY());
-    }
-
     public void heroFlee(){
         Timeline timeline = new Timeline();
         for(int i = 0; i<heroGraphicsArea.getChildren().size();i++){
@@ -199,8 +150,6 @@ public class Animator implements java.io.Serializable {
             timeline.getKeyFrames().addAll(spinK,stillK,tiltK,moveFK);
         }
         timeline.play();
-
-
     }
 
     public void showBanner(StackPane navBanner) {
@@ -218,4 +167,5 @@ public class Animator implements java.io.Serializable {
         timeline.play();
 
     }
+
 }

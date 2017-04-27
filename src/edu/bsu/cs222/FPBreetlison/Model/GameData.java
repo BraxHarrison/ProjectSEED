@@ -1,6 +1,5 @@
 package edu.bsu.cs222.FPBreetlison.Model;
 
-import edu.bsu.cs222.FPBreetlison.Controller.OverworldView;
 import edu.bsu.cs222.FPBreetlison.Model.Objects.*;
 import org.xml.sax.SAXException;
 
@@ -20,7 +19,6 @@ public class GameData implements java.io.Serializable {
 
     private HashMap<String,Fighter> allHeroes;
     private HashMap<String,Fighter> allEnemies;
-    private HashMap<String,Skill> allSkills;
     private HashMap<String,Item> allItems;
     private HashMap<String,Event> allEvents;
     private ArrayList<Item> inventory;
@@ -41,38 +39,39 @@ public class GameData implements java.io.Serializable {
         loadData();
         addHeroes();
         initItems();
-        maxTP = 10;
-        tp = maxTP;
-        tempMaxTP = maxTP;
+        calcTP();
         wallet = new Wallet();
-        wallet.collect(20,"B");
-        System.out.println(allEvents.get("Buried Vending Machine").getType());
 
     }
 
     private void loadData() throws ParserConfigurationException, SAXException, IOException {
-        OverWorldParser overworldLoader = new OverWorldParser(this);
-        BattleXMLParser battleLoader = new BattleXMLParser();
+        OverWorldParser overworldLoader = new OverWorldParser();
+        BattleParser battleLoader = new BattleParser();
         loadItems(overworldLoader);
-        loadSkills(battleLoader);
+        loadSkills();
         loadFighters(battleLoader);
         loadEvents(overworldLoader);
         loadRooms(overworldLoader);
     }
 
-    public void subtractTP(int amount){
+    public void calcTP(){
+        maxTP = 0;
+        for (Fighter aTeam : team) {
+            maxTP += aTeam.getAgility();
+        }
+        tp = maxTP;
+        tempMaxTP = maxTP;
+    }
+
+    void subtractTP(int amount){
         tp -= amount;
     }
 
-    public void increaseMaxTP(int amount){
-        maxTP+=amount;
-    }
-
-    public void tempIncreaseMaxTP(int amount){
+    void tempIncreaseMaxTP(int amount){
         tempMaxTP+=amount;
     }
 
-    public void revertMaxTP(){
+    void revertMaxTP(){
         tempMaxTP=maxTP;
     }
 
@@ -84,14 +83,12 @@ public class GameData implements java.io.Serializable {
         allEvents = loader.createEventDatabase(this);
     }
 
-    private void loadSkills(BattleXMLParser loader) {
-        allSkills = loader.getSkills();
+    private void loadSkills() {
     }
 
     private void initLists() {
         team = new ArrayList<>();
         standby = new ArrayList<>();
-        allSkills = new HashMap<>();
         allItems = new HashMap<>();
         allEvents = new HashMap<>();
         inventory = new ArrayList<>();
@@ -102,7 +99,7 @@ public class GameData implements java.io.Serializable {
         allRooms = loader.parseRoomInfo(this);
     }
 
-    private void loadFighters(BattleXMLParser loader) throws IOException, SAXException, ParserConfigurationException {
+    private void loadFighters(BattleParser loader) throws IOException, SAXException, ParserConfigurationException {
         loader.parseBattleData();
         allHeroes = loader.getHeroes();
         allEnemies = loader.getEnemies();
@@ -114,28 +111,28 @@ public class GameData implements java.io.Serializable {
         standby.add(allHeroes.get("Blake"));
     }
 
-    public void addEnemies(){
+    void addEnemies(){
         enemyTeam.clear();
-        if(currentRoom.getName().equals("Colossal Plains")){
-            enemyTeam.add(new Fighter(allEnemies.get("Blisterbulb")));
-            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
-            enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
-        }
-        else if (currentRoom.getName().equals("Luminous Caves")){
-            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
-            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
-            enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
-        }
-        else if(currentRoom.getName().equals("Inverted Forest")) {
-            enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
-            enemyTeam.add(new Fighter(allEnemies.get("Eaflay")));
-        }
-        else if(currentRoom.getName().equals("Conchbreak Key")){
-            enemyTeam.add(new Fighter(allEnemies.get("Apparacean")));
-            enemyTeam.add(new Fighter(allEnemies.get("Apparacean")));
-        }
-        else{
-            enemyTeam.add(new Fighter(allEnemies.get("Jag Inf.")));
+        switch (currentRoom.getName()) {
+            case "Colossal Plains":
+                enemyTeam.add(new Fighter(allEnemies.get("Skraw")));
+                enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+                break;
+            case "Luminous Caves":
+                enemyTeam.add(new Fighter(allEnemies.get("Harshmallow")));
+                enemyTeam.add(new Fighter(allEnemies.get("Oculith")));
+                break;
+            case "Forest Clearing":
+                enemyTeam.add(new Fighter(allEnemies.get("Blisterbulb")));
+                enemyTeam.add(new Fighter(allEnemies.get("Eaflay")));
+                break;
+            case "Conchbreak Key":
+                enemyTeam.add(new Fighter(allEnemies.get("Apparacean")));
+                enemyTeam.add(new Fighter(allEnemies.get("Apparacean")));
+                break;
+            default:
+                enemyTeam.add(new Fighter(allEnemies.get("Jag")));
+                break;
         }
     }
 
@@ -145,9 +142,6 @@ public class GameData implements java.io.Serializable {
 
     private void initItems() {
         inventory.add(allItems.get("Patch"));
-        inventory.add(allItems.get("Chorps"));
-        inventory.add(allItems.get("BluRasp Sapphire"));
-        inventory.add(allItems.get("Overclock"));
     }
 
     void resetHeroTP(){
@@ -158,7 +152,7 @@ public class GameData implements java.io.Serializable {
     public Room getCurrentRoom() {
         return currentRoom;
     }
-    public void setCurrentRoom(Room currentRoom) {
+    void setCurrentRoom(Room currentRoom) {
         this.currentRoom = currentRoom;
     }
     public ArrayList<Fighter> getTeam() {
@@ -170,14 +164,8 @@ public class GameData implements java.io.Serializable {
     public ArrayList<Fighter> getEnemyTeam() {
         return enemyTeam;
     }
-    public HashMap<String, Fighter> getAllEnemies() {
-        return allEnemies;
-    }
     public HashMap<String, Fighter> getAllHeroes() {
         return allHeroes;
-    }
-    public int getMaxTP() {
-        return maxTP;
     }
     public int getTempMaxTP() {
         return tempMaxTP;
