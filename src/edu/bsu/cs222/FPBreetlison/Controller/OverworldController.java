@@ -85,7 +85,7 @@ public class OverworldController implements java.io.Serializable {
         partyButton.setOnMouseEntered(e->optionHover(partyButton));
         partyButton.setOnMouseExited(e->optionUnhover(partyButton));
         partyButton.setOnMouseClicked(e->openTeamMenu());
-        partyButton.setImage(new Image("/images/system/system_undefined.png"));
+        partyButton.setImage(new Image("/images/system/system_sidebar_partymenu.png"));
     }
 
     private void openTeamMenu() {

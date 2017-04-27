@@ -73,7 +73,7 @@
 .banner-text{
     -fx-text-fill: white;
     -fx-font-family: "Underwhelmed BRK";
-    -fx-font-size: 25pt;
+    -fx-font-size: 22pt;
 
 }
 
@@ -107,4 +107,8 @@
 
 .menu-box{
     -fx-background-color:#424447;
+}
+
+.events-listing{
+
 }
