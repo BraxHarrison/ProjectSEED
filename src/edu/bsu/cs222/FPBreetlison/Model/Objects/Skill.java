@@ -55,6 +55,9 @@ public class Skill implements java.io.Serializable {
         if(element.equals(target.getWeakness())){
             return 1.5;
         }
+        else if(element.equals(target.getStrength())){
+            return .5;
+        }
         return 1;
     }
 

@@ -29,6 +29,7 @@ public class Fighter implements java.io.Serializable {
     private int KOLevel;
     private int lastDamage;
     private String weakness;
+    private String strength;
     private int agility;
 
     public Fighter(String info){
@@ -63,6 +64,7 @@ public class Fighter implements java.io.Serializable {
         this.tpCost = fighter.getTpCost();
         this.expModifier = fighter.getExpModifier();
         this.weakness = fighter.getWeakness();
+        this.strength = fighter.getStrength();
         this.battlerGraphicPath = fighter.getBattlerGraphicPath();
         this.miniGraphicPath = fighter.getMiniGraphicPath();
         this.sizeX = fighter.getSizeX();
@@ -80,11 +82,12 @@ public class Fighter implements java.io.Serializable {
         this.tpCost = Integer.parseInt(characterInfo.get(7));
         this.expModifier = Double.parseDouble(characterInfo.get(8));
         this.weakness = characterInfo.get(9);
-        this.battlerGraphicPath = characterInfo.get(10);
-        this.miniGraphicPath = characterInfo.get(11);
-        this.sizeX = Integer.parseInt(characterInfo.get(12));
-        this.sizeY = Integer.parseInt(characterInfo.get(13));
-        this.rewardAmt = Double.parseDouble(characterInfo.get(14));
+        this.strength = characterInfo.get(10);
+        this.battlerGraphicPath = characterInfo.get(11);
+        this.miniGraphicPath = characterInfo.get(12);
+        this.sizeX = Integer.parseInt(characterInfo.get(13));
+        this.sizeY = Integer.parseInt(characterInfo.get(14));
+        this.rewardAmt = Double.parseDouble(characterInfo.get(15));
     }
 
     public double calcHPPercentage(){
@@ -276,6 +279,10 @@ public class Fighter implements java.io.Serializable {
     }
     public int getAgility() {
         return agility;
+    }
+
+    public String getStrength() {
+        return strength;
     }
     //endregion
 

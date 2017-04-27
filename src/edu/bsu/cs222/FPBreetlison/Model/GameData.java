@@ -41,7 +41,6 @@ public class GameData implements java.io.Serializable {
         initItems();
         calcTP();
         wallet = new Wallet();
-        wallet.collect(20,"B");
 
     }
 

@@ -189,7 +189,7 @@ public class BattleLogic {
             updateTurn("enemyWin");
             messageQueue.add("Everyone's trashed! You lose!");
         }
-        else{
+        else if(!detectHeroKO() && !heroWon ){
             messageQueue.add("It's your turn!");
             updateTurn("hero");
 
@@ -277,13 +277,6 @@ public class BattleLogic {
 
     }
 
-    private void startDamageAnimation() {
-        Snapshot snapshot = new Snapshot();
-        snapshot.setAttackerIndex(battleController.selectedUser);
-        snapshot.setIndex(battleController.selectedTarget);
-        animator.animateDamageToEnemy(snapshot);
-    }
-
     private void updateUIForHeroAttack(){
         Snapshot enemyState = new Snapshot();
         enemyState.setIndex(gameData.getSelectedTarget());
@@ -308,8 +301,10 @@ public class BattleLogic {
             }
         }
         if (KOamt == fighters.size()) {
+            heroWon = true;
             messageQueue.add("The enemy team is down! You won!");
             updateTurn("heroWin");
+
         }
     }
 
@@ -367,6 +362,9 @@ public class BattleLogic {
         messageQueue.add(user.getName() + " used " + skill.getName() + "!");
         if(skill.getElement().equals(target.getWeakness())){
         messageQueue.add(user.getName() + " hit " + target.getName() + "'s weakness! Double Damage!");
+        }
+        if(skill.getElement().equals((target.getStrength()))){
+            messageQueue.add(target.getName() +  " was strong against the attack. Half damage!");
         }
         extraMessage(skill);
         battleController.queueMessages(messageQueue);

@@ -24,7 +24,6 @@
         <Label fx:id="bannerDisplay" styleClass="banner-text"/>
 
     </StackPane>
-    <Button fx:id="clickToBattle" StackPane.alignment="CENTER" translateY="50" text="Click to start battle" onAction="#startBattle"/>
     <StackPane fx:id="travelPane" StackPane.alignment="TOP_LEFT"  maxHeight="150" maxWidth="150" translateX="70" visible="false" styleClass="map">
         <Button fx:id="closeTravelButton" StackPane.alignment="BOTTOM_RIGHT" text="   X   " translateX="-5" translateY="-5" onAction="#closeTravel"/>
         <Button fx:id="north" StackPane.alignment="TOP_CENTER"  translateY="20" text="N" onAction="#travelNorth"/>

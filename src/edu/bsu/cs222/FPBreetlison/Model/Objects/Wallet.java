@@ -7,7 +7,7 @@ public class Wallet implements java.io.Serializable {
     private String type;
 
     public Wallet(){
-        amount = 60000;
+        amount = 500;
         type = "B";
     }
 

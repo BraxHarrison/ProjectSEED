@@ -135,6 +135,7 @@ public class BattleParser {
                 battler.getAttribute("tpCost") + "," +
                 battler.getAttribute("expModifier") + "," +
                 battler.getAttribute("weakness") + "," +
+                battler.getAttribute("strength") + "," +
                 battler.getAttribute("battlerGraphicPath") + "," +
                 battler.getAttribute("miniGraphicPath") + "," +
                 battler.getAttribute("sizeX") + "," +
