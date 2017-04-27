@@ -65,7 +65,7 @@
 .damage-text{
     -fx-text-fill: blue;
     -fx-font-family: "Underwhelmed BRK";
-    -fx-font-size: 20pt;
+    -fx-font-size: 20.pt;
 
 }
 
@@ -86,7 +86,7 @@
 
 .map{
 
-    -fx-background-image: url("/images/system/system_map.png");
+    -fx-background-color:#454e5b;
 
 
 }
