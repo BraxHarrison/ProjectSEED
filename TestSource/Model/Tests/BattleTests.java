@@ -37,19 +37,19 @@ public class BattleTests {
         battleLogic = new BattleLogic();
         heroTeam = new ArrayList<>();
         enemyTeam = new ArrayList<>();
-        initFighters();
+        //initFighters();
         initTeams();
 
     }
 
-    private void initFighters() throws IOException, SAXException, ParserConfigurationException {
-        attacker = new Fighter("Elmira,10,2,2,2,2,2,2,1.65,/images/system/system_undefined.png,/images/system/system_undefined.png,200,200");
-        defender = new Fighter("Thompson,10,2,2,2,2,2,2,1.65,/images/system/system_undefined.png,/images/system/system_undefined.png,200,200");
-        parser = new BattleParser();
-        parser.parseBattleData();
-        allHeroes = parser.getHeroes();
-        allEnemies = parser.getEnemies();
-    }
+//    private void initFighters() throws IOException, SAXException, ParserConfigurationException {
+//        attacker = new Fighter("Elmira,10,2,2,2,2,2,2,1.65,/images/system/system_undefined.png,/images/system/system_undefined.png,200,200");
+//        defender = new Fighter("Thompson,10,2,2,2,2,2,2,1.65,/images/system/system_undefined.png,/images/system/system_undefined.png,200,200");
+//        parser = new BattleParser();
+//        parser.parseBattleData();
+//        allHeroes = parser.getHeroes();
+//        allEnemies = parser.getEnemies();
+//    }
 
     private void initTeams() {
         heroTeam.add(new Fighter(allHeroes.get("Smitty")));

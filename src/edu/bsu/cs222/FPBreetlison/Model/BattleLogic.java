@@ -14,6 +14,7 @@ import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.Random;
 
+//Remember to
 
 public class BattleLogic {
 
@@ -234,7 +235,6 @@ public class BattleLogic {
         if(gameData.getCurrentTp() <= 0){
             battleController.skillSelectorArea.setVisible(false);
             prepareEndPlayerTurn();
-
         }
     }
 
@@ -337,14 +337,24 @@ public class BattleLogic {
         Skill skill = user.getQueuedSkill();
         attacker = user;
         this.target = target;
-        if(gameData.getCurrentTp() >= skill.getTpCost()){
+        if(skill.getType2().equals("all")&&gameData.getCurrentTp() >= skill.getTpCost()){
+            checkForElements(skill);
+            activateSkill(user, target);
+            updateUIForHeroAttack();
+            detectEnemyKO();
+            battleController.handleAnimation(skill.getAnimType());
+            checkPlayerTP();
+            battleController.queueMessages(messageQueue);
+            battleController.updateHeroBars();
+        }
+        else if(gameData.getCurrentTp() >= skill.getTpCost()){
             activateSkill(user, target);
             updateUIForHeroAttack();
             detectEnemyKO();
             battleController.handleAnimation(skill.getAnimType());
             battleController.queueMessages(messageQueue);
-            //The skill is not trying to activate
             checkPlayerTP();
+            battleController.updateHeroBars();
         }
         else{
             battleController.pushMessage("There's not enough time to use that skill!");
@@ -352,6 +362,17 @@ public class BattleLogic {
 
 
     }
+
+    private void checkForElements(Skill skill) {
+        for(int i = 0; i<gameData.getEnemyTeam().size();i++){
+            Fighter target = gameData.getEnemyTeam().get(i);
+            if (target.getWeakness().equals(skill.getElement())) {
+                messageQueue.add("The move hit " + target.getName() + "'s weakness!");
+            }
+        }
+
+    }
+
     private void activateSkill(Fighter user, Fighter target){
         Skill skill = user.getQueuedSkill();
         user.getQueuedSkill().use(user, target);

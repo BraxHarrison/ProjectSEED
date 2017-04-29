@@ -142,6 +142,21 @@ public class BattleController {
         }
     }
 
+    public void updateHeroBars() {
+        for(int i = 0; i<gameData.getTeam().size();i++){
+            updateSingleHeroBar(i);
+        }
+    }
+
+    private void updateSingleHeroBar(int index) {
+        StackPane hero = (StackPane)heroSelectorArea.getChildren().get(index);
+        ProgressBar heroBar = (ProgressBar)hero.getChildren().get(1);
+        Fighter user = gameData.getTeam().get(index);
+        Double hpPercentage = user.calcHPPercentage();
+        heroBar.setProgress(hpPercentage);
+        updateColor(heroBar,hpPercentage);
+    }
+
     private void updateHeroQuickInfo(Snapshot heroSnapshot){
         ImageView heroImage = (ImageView)heroGraphicsArea.getChildren().get(heroSnapshot.getIndex());
         if(heroImage.isHover()){
@@ -177,7 +192,6 @@ public class BattleController {
                 Duration.millis(1000),
                 ae -> endLoader()));
         timeline.play();
-
     }
 
     private void endLoader() {
@@ -539,14 +553,13 @@ public class BattleController {
 
     private void checkSkillType(Skill skill) {
         Fighter user = team.get(selectedUser);
-        if(skill.getType().equals("buff")){
+        if(skill.getType().equals("buff")||skill.getType().equals("heal")||skill.getType2().equals("all")){
             battleLogic.tryActivateSkill(user,user);
         }
         else{
             pushMessage("Who will " + user.getName() + " use this skill on?");
             unblockEnemySelectors();
         }
-
     }
 
     private void hideSkillInfo() {
@@ -584,17 +597,8 @@ public class BattleController {
         selectedItem = itemSelectorArea.getChildren().indexOf(item);
         updateInventoryUI();
         battleLogic.useItem(selectedItem);
-        updateSingleHeroBar();
+        updateSingleHeroBar(selectedUser);
         animator.backButtonSlideIn();
-    }
-
-    private void updateSingleHeroBar() {
-        StackPane hero = (StackPane)heroSelectorArea.getChildren().get(selectedUser);
-        ProgressBar heroBar = (ProgressBar)hero.getChildren().get(1);
-        Fighter user = team.get(selectedUser);
-        Double hpPercentage = user.calcHPPercentage();
-        heroBar.setProgress(hpPercentage);
-        updateColor(heroBar,hpPercentage);
     }
 
     private void updateInventoryUI(){
@@ -618,7 +622,6 @@ public class BattleController {
             showActionMenu();
         }
     }
-
 
     private void triggerSkill(int index){
         Fighter user = team.get(selectedUser);

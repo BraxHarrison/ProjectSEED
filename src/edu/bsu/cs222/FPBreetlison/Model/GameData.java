@@ -56,8 +56,8 @@ public class GameData implements java.io.Serializable {
 
     public void calcTP(){
         maxTP = 0;
-        for (Fighter aTeam : team) {
-            maxTP += aTeam.getAgility();
+        for (Fighter fighter : team) {
+            maxTP += fighter.getAgility();
         }
         tp = maxTP;
         tempMaxTP = maxTP;
@@ -100,15 +100,18 @@ public class GameData implements java.io.Serializable {
     }
 
     private void loadFighters(BattleParser loader) throws IOException, SAXException, ParserConfigurationException {
-        loader.parseBattleData();
+        loader.parseBattleData(this);
         allHeroes = loader.getHeroes();
         allEnemies = loader.getEnemies();
     }
 
     private void addHeroes(){
-        team.add(allHeroes.get("Roxy"));
-        team.add(allHeroes.get("Smitty"));
+
+        team.add(allHeroes.get("Prota"));
         standby.add(allHeroes.get("Blake"));
+        standby.add(allHeroes.get("Roxy"));
+        standby.add(allHeroes.get("Smitty"));
+        standby.add(allHeroes.get("Nicole"));
     }
 
     void addEnemies(){

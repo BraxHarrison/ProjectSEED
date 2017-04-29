@@ -236,10 +236,17 @@ public class Fighter implements java.io.Serializable {
     public String getBattlerGraphicPath() {
         if(battlerGraphicPath.equals("null")){
             battlerGraphicPath = "/images/system/system_undefined.png";
+            sizeX =150;
+            sizeY =200;
         }
         return battlerGraphicPath;
     }
-    public String getMiniGraphicPath(){return miniGraphicPath;}
+    public String getMiniGraphicPath(){
+        if(miniGraphicPath.equals("null")){
+            miniGraphicPath = "/images/system/system_undefined.png";
+        }
+        return miniGraphicPath;
+    }
     public int getSizeX(){return sizeX;}
     public int getSizeY(){return sizeY;}
     public Skill getQueuedSkill() {

@@ -37,21 +37,20 @@ public class BattleParser {
 
     //endregion
 
-    public void parseBattleData() throws ParserConfigurationException, IOException, SAXException {
+    public void parseBattleData(GameData gameData) throws ParserConfigurationException, IOException, SAXException {
         createDoc();
-        skills = loadSkills();
+        skills = loadSkills(gameData);
         heroes = loadFighters("hero");
         enemies = loadFighters("enemy");
     }
 
-    private HashMap<String,Skill> loadSkills() {
+    private HashMap<String,Skill> loadSkills(GameData gameData) {
         HashMap<String,Skill> skills = new HashMap<>();
         NodeList nodeList = this.document.getElementsByTagName("Skill");
         for(int i = 0; i< nodeList.getLength();i++){
-
             Node battleInfo = nodeList.item(i);
             Element skillSource = (Element)battleInfo;
-            Skill skill = new Skill(createSkillString(skillSource));
+            Skill skill = new Skill(createSkillString(skillSource),gameData);
             skills.put(skill.getName(),skill);
         }
         return skills;
@@ -132,6 +131,9 @@ public class BattleParser {
                 skill.getAttribute("element") + "," +
                 skill.getAttribute("type") + "," +
                 skill.getAttribute("type2") + "," +
+                skill.getAttribute("type3") + "," +
+                skill.getAttribute("type4f") + "," +
+                skill.getAttribute("chance") + "," +
                 skill.getAttribute("quickInfo") + "," +
                 skill.getAttribute("extraMessage") + "," +
                 skill.getAttribute("animType");
